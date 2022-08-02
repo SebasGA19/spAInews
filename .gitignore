@@ -1,0 +1,5 @@
+.idea/*
+.vs/*
+.code/*
+.vscode/*
+node_modules/*
