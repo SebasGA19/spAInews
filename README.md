@@ -1,14 +1,16 @@
 # spAInews
 
-## Production
+## Deploying
 
 Make sure you have `docker` and `docker-cli` installed (`docker desktop` should do the job on Windows).
+
+### Production
 
 ```shell
 TODO: DOCUMENT THIS
 ```
 
-## Development
+### Development
 
 No configuration needed. Just execute:
 
