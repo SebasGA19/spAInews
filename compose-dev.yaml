@@ -1,0 +1,35 @@
+version: "3.3"
+
+networks:
+  spainews:
+    external: false
+
+services:
+  mongo:
+    container_name: spainews-mongo
+    image: mongo
+    restart: unless-stopped
+    networks:
+      - spainews
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: spainews
+    volumes:
+      - ./mongo-data:/data
+      - ./mongo-initdb.d:/docker-entrypoint-initdb.d:ro
+  api:
+    depends_on:
+      - mongo
+    user: "api:api"
+    container_name: spainews-api
+    build:
+      dockerfile: api.Dockerfile
+    restart: unless-stopped
+    networks:
+      - spainews
+    environment:
+      MONGO_URL: "mongodb://api:api@mongo:27017/spainews"
+      LISTEN_ADDRESS: "api:5000"
+    ports:
+      - "127.0.0.1:5000:5000"
