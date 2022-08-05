@@ -12,10 +12,33 @@ TODO: DOCUMENT THIS
 
 ### Development
 
-No configuration needed. Just execute:
+- Frontend development:
+
+First install dependencies:
 
 ```shell
-./dev.ps1
+cd frontend
+npm install
+cd ..
 ```
 
-Changes on the `Go` backend should always be followed by the re-run of the mentioned command.
+Then start the services:
+
+```shell
+./dev-back.ps1 # This command may require admin rights
+./start-back.ps1
+./start-front.ps1
+```
+
+- Backend development:
+
+```shell
+./dev-back.ps1 # This command may require admin rights
+./start-back.ps1
+```
+
+On any Go code change re-run:
+
+```shell
+./start-back.ps1
+```

@@ -1,0 +1,52 @@
+version: "3.3"
+
+networks:
+  spainews:
+    external: false
+
+services:
+  redis:
+    networks:
+      - spainews
+    container_name: spainews-redis
+    image: redis:latest
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:6379:6379"
+  mongo:
+    container_name: spainews-mongo
+    image: mongo:latest
+    ports:
+      - "127.0.0.1:27017:27017"
+    restart: unless-stopped
+    networks:
+      - spainews
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: spainews
+    volumes:
+      - type: bind
+        source: ./mongo-initdb.d
+        target: /docker-entrypoint-initdb.d
+        read_only: true
+      - ./mongo-data:/data
+  mariadb:
+    networks:
+      - spainews
+    container_name: spainnews-mariadb
+    restart: unless-stopped
+    image: mariadb:latest
+    ports:
+      - "127.0.0.1:3306:3306"
+    volumes:
+      - type: bind
+        source: ./mariadb-init.d
+        target: /docker-entrypoint-initdb.d
+        read_only: true
+      - ./mariadb-data:/var/lib/mysql
+    environment:
+      MARIADB_ROOT_PASSWORD: spainews
+      MARIADB_DATABASE: spainews
+      MARIADB_USER: spainews
+      MARIADB_PASSWORD: spainews

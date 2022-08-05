@@ -60,4 +60,9 @@ erDiagram
 
 ## Redis
 
+| Numero | Nombre        | Descripción                                                  | Duración |
+| ------ | ------------- | ------------------------------------------------------------ | -------- |
+| 0      | Sessions      | Almacena las cookies como llaves y los id de usuarios como valores para el manejo de sesión de la aplicación web. | 30 dias  |
+| 1      | PendingEmails | Almacena los códigos temporales como llaves y la información de registro como valor. | 24 horas |
+
 ## MongoDB

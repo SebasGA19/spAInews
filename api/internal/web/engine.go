@@ -1,14 +1,16 @@
 package web
 
 import (
-	"github.com/SebasGA19/spAInews/api/internal/database"
+	"github.com/SebasGA19/spAInews/api/internal/controller"
 	"github.com/gin-gonic/gin"
 )
 
-func NewEngine(database *database.Database) *gin.Engine {
+func NewEngine(c *controller.Controller) *gin.Engine {
 	engine := gin.Default()
-	controller := NewController(database)
-	engine.POST(RegisterURI, controller.Register)
-	engine.POST(LoginURI, controller.Login)
+	backend := NewBackend(c)
+	engine.PUT(RegisterURI, backend.Register)
+	engine.POST(ConfirmAccountURI, backend.ConfirmAccount)
+	engine.GET(SessionURI, backend.Session)
+	engine.DELETE(SessionURI, backend.DeleteSession)
 	return engine
 }
