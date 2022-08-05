@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"database/sql"
 	"github.com/SebasGA19/spAInews/api/internal/config"
 	"github.com/SebasGA19/spAInews/api/internal/database"
 	"github.com/SebasGA19/spAInews/api/internal/web"
@@ -11,15 +12,19 @@ import (
 	"log"
 	"os"
 	"time"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 var (
-	ConnectionURL string
+	MariaURL      string
+	MongoURL      string
 	ListenAddress string
 )
 
 func init() {
-	ConnectionURL = os.Getenv(config.MongoURL)
+	MariaURL = os.Getenv(config.MariaURL)
+	MongoURL = os.Getenv(config.MongoURL)
 	ListenAddress = os.Getenv(config.ListenAddress)
 }
 
@@ -27,19 +32,26 @@ func init() {
 main: Set GIN_MODE=release for production
 */
 func main() {
+	sqlDB, err := sql.Open("mysql", MariaURL)
+	if err != nil {
+		log.Fatal(err)
+	}
+	pingError := sqlDB.Ping()
+	if pingError != nil {
+		log.Fatal(pingError)
+	}
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	client, connectionError := mongo.Connect(ctx, options.Client().ApplyURI(ConnectionURL))
+	mongoClient, connectionError := mongo.Connect(ctx, options.Client().ApplyURI(MongoURL))
 	if connectionError != nil {
 		log.Fatal(connectionError)
 	}
 	var readPref readpref.ReadPref
-	pingError := client.Ping(context.Background(), &readPref)
+	pingError = mongoClient.Ping(context.Background(), &readPref)
 	if pingError != nil {
 		log.Fatal(pingError)
 	}
-	db := database.NewDatabase(client)
+	db := database.NewDatabase(mongoClient, sqlDB)
 	engine := web.NewEngine(db)
-	err := engine.Run(ListenAddress)
-	log.Fatal(err)
+	log.Fatal(engine.Run(ListenAddress))
 }

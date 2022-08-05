@@ -7,8 +7,8 @@ import (
 
 func NewEngine(database *database.Database) *gin.Engine {
 	engine := gin.Default()
-	/*
-		TODO: implement me!!!!!
-	*/
+	controller := NewController(database)
+	engine.POST(RegisterURI, controller.Register)
+	engine.POST(LoginURI, controller.Login)
 	return engine
 }

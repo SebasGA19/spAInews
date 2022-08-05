@@ -1,15 +1,18 @@
 package database
 
 import (
+	"database/sql"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type Database struct {
 	Mongo *mongo.Client
+	SQL   *sql.DB
 }
 
-func NewDatabase(client *mongo.Client) *Database {
+func NewDatabase(mongoClient *mongo.Client, sqlDB *sql.DB) *Database {
 	return &Database{
-		Mongo: client,
+		Mongo: mongoClient,
+		SQL:   sqlDB,
 	}
 }
