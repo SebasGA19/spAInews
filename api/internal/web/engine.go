@@ -19,8 +19,10 @@ func NewEngine(c *controller.Controller) *gin.Engine {
 					"Origin",
 					"Content-Type",
 					"Content-Length",
+					"Authorization",
 					SessionHeader,
-					"Authorization"},
+					ConfirmAccountCodeHeader,
+				},
 				ExposeHeaders:    []string{"Content-Length", "Content-Type"},
 				AllowCredentials: true,
 				AllowOriginFunc: func(origin string) bool {
