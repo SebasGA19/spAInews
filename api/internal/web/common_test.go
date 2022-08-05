@@ -90,6 +90,19 @@ func newTestController() *controller.Controller {
 	return controller.NewController(mongoClient, sqlDB, sessions, pendingEmails, e)
 }
 
+func getRequest(uri string, header http.Header, jsonPayload any) *http.Request {
+	buffer, marshalError := json.Marshal(jsonPayload)
+	if marshalError != nil {
+		panic(marshalError)
+	}
+	body := bytes.NewBuffer(buffer)
+	req := httptest.NewRequest(http.MethodGet, uri, body)
+	if header != nil {
+		req.Header = header
+	}
+	return req
+}
+
 func postRequest(uri string, header http.Header, jsonPayload any) *http.Request {
 	buffer, marshalError := json.Marshal(jsonPayload)
 	if marshalError != nil {
@@ -97,6 +110,32 @@ func postRequest(uri string, header http.Header, jsonPayload any) *http.Request 
 	}
 	body := bytes.NewBuffer(buffer)
 	req := httptest.NewRequest(http.MethodPost, uri, body)
+	if header != nil {
+		req.Header = header
+	}
+	return req
+}
+
+func deleteRequest(uri string, header http.Header, jsonPayload any) *http.Request {
+	buffer, marshalError := json.Marshal(jsonPayload)
+	if marshalError != nil {
+		panic(marshalError)
+	}
+	body := bytes.NewBuffer(buffer)
+	req := httptest.NewRequest(http.MethodDelete, uri, body)
+	if header != nil {
+		req.Header = header
+	}
+	return req
+}
+
+func putRequest(uri string, header http.Header, jsonPayload any) *http.Request {
+	buffer, marshalError := json.Marshal(jsonPayload)
+	if marshalError != nil {
+		panic(marshalError)
+	}
+	body := bytes.NewBuffer(buffer)
+	req := httptest.NewRequest(http.MethodPut, uri, body)
 	if header != nil {
 		req.Header = header
 	}

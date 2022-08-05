@@ -15,7 +15,7 @@ const (
 const (
 	RegisterURI       = "/register"
 	ConfirmAccountURI = "/confirm"
-	LoginURI          = "/login"
+	SessionURI        = "/session"
 )
 
 const (
@@ -28,7 +28,7 @@ const (
 	UsernameNotAvailableError    = "Username not available"
 	EmailNotAvailableError       = "Email not available"
 	CredentialsNotSubmittedError = "Credentials not submitted"
-	InvalidCredentialsError      = "invalid username or password"
+	InvalidCredentialsError      = "Invalid username or password"
 )
 
 var (

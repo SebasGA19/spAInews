@@ -22,11 +22,13 @@ To configure the API client it is important to specify this environment variable
 
 Possible error messages are:
 
-| Code | Error                  | Description                                                  |
-| ---- | ---------------------- | ------------------------------------------------------------ |
-| 0    | Internal server error  | Internal server error means something went wrong with our databases connections or other kind OS operation |
-| 1    | Username not available | Means the username is not available                          |
-| 2    | Email not available    | Means the email is not available                             |
+| Code | Error                        | Description                                                  |
+| ---- | ---------------------------- | ------------------------------------------------------------ |
+| 0    | Internal server error        | Internal server error means something went wrong with our databases connections or other kind OS operation |
+| 1    | Username not available       | Means the username is not available                          |
+| 2    | Email not available          | Means the email is not available                             |
+| 3    | Credentials not submitted    | No credentials given in login                                |
+| 4    | Invalid username or password | Invalid username or password                                 |
 
 Error JSON structure is:
 
@@ -62,6 +64,8 @@ Requests a registration for a new user in the application. On success send confi
 
 #### Possible Errors
 
+Any non `200` response is considered an error.
+
 - `Internal server error`
 - `Username not available`
 - `Email not available`
@@ -70,4 +74,53 @@ Requests a registration for a new user in the application. On success send confi
 
 Empty `200 OK` response.
 
+### POST `/confirm`
+
+Confirm register request.
+
+#### Request
+
+- Method: `POST`
+- Headers:
+  - `Confirm-Code: CONFIRMATION_CODE_SENT_BY_EMAIL`
+
+#### Possible Errors
+
+Any non `200` response is considered an error.
+
+- `Internal server error`
+
+#### Response
+
+Empty `200 OK` response.
+
 ### GET `/session`
+
+Returns a new session cookie related to the user.
+
+#### Request
+
+- Method: `GET`
+- Headers:
+  - `Authorization: Basic base64(<username>:<password>)`
+
+#### Possible Errors
+
+Any non `200` response is considered an error.
+
+- `Internal server error`
+- `Credentials not submitted`
+
+- `Invalid username or password`
+
+#### Response
+
+- Status: 200
+- Body:
+
+```json
+{
+    "session": "COOKIE"
+}
+```
+

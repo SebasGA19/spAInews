@@ -8,8 +8,9 @@ import (
 func NewEngine(c *controller.Controller) *gin.Engine {
 	engine := gin.Default()
 	backend := NewBackend(c)
-	engine.POST(RegisterURI, backend.Register)
+	engine.PUT(RegisterURI, backend.Register)
 	engine.POST(ConfirmAccountURI, backend.ConfirmAccount)
-	engine.POST(LoginURI, backend.Login)
+	engine.GET(SessionURI, backend.Session)
+	engine.DELETE(SessionURI, backend.DeleteSession)
 	return engine
 }

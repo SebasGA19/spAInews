@@ -13,7 +13,7 @@ type (
 		Email    string `json:"email"`
 		Password string `json:"password"`
 	}
-	LoginResponse struct {
+	SessionResponse struct {
 		Session string `json:"session"`
 	}
 )
@@ -77,7 +77,7 @@ func (backend *Backend) ConfirmAccount(ctx *gin.Context) {
 	ctx.Done()
 }
 
-func (backend *Backend) Login(ctx *gin.Context) {
+func (backend *Backend) Session(ctx *gin.Context) {
 	username, password, ok := ctx.Request.BasicAuth()
 	if !ok {
 		ctx.AbortWithStatusJSON(http.StatusForbidden, NewError(CredentialsNotSubmitted))
@@ -103,8 +103,20 @@ func (backend *Backend) Login(ctx *gin.Context) {
 	}
 	// JSON
 	ctx.JSON(http.StatusOK,
-		LoginResponse{
+		SessionResponse{
 			Session: sessionCode,
 		},
 	)
+}
+
+func (backend *Backend) DeleteSession(ctx *gin.Context) {
+	session := ctx.GetHeader(SessionHeader)
+	destroyError := backend.Controller.DestroySession(session)
+	if destroyError != nil {
+		log.Print(destroyError)
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, NewError(InternalServerErrorCode))
+		return
+	}
+	// Done
+	ctx.Done()
 }

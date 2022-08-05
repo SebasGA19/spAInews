@@ -12,7 +12,13 @@ func (c *Controller) CreateSession(userId int) (string, error) {
 }
 
 func (c *Controller) DestroySession(session string) error {
-	return c.Session.Del(c.ctx, session).Err()
+
+	result := c.Session.Del(c.ctx, session)
+	removedKeys, err := result.Result()
+	if removedKeys != 1 {
+		err = NoSessionFoundError
+	}
+	return err
 }
 
 func (c *Controller) QuerySession(session string) (int, error) {
