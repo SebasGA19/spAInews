@@ -12,10 +12,22 @@ TODO: DOCUMENT THIS
 
 ### Development
 
-No configuration needed. Just execute:
+- Frontend development:
 
 ```shell
-./dev.ps1
+./dev-front.ps1
+./start-front.ps1
 ```
 
-Changes on the `Go` backend should always be followed by the re-run of the mentioned command.
+- Backend development:
+
+```shell
+./dev-back.ps1
+./start-back.ps1
+```
+
+On any Go code backend re-run:
+
+```shell
+./start-back.ps1
+```

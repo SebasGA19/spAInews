@@ -5,6 +5,14 @@ networks:
     external: false
 
 services:
+  redis:
+    networks:
+      - spainews
+    container_name: spainews-redis
+    image: redis:latest
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:6379:6379"
   mongo:
     container_name: spainews-mongo
     image: mongo:latest
@@ -24,6 +32,8 @@ services:
         read_only: true
       - ./mongo-data:/data
   mariadb:
+    networks:
+      - spainews
     container_name: spainnews-mariadb
     restart: unless-stopped
     image: mariadb:latest
@@ -52,6 +62,13 @@ services:
     networks:
       - spainews
     environment:
+      SMTP_HOST: ""
+      SMTP_PORT: ""
+      SMTP_FROM: "dashboard@dev-spainews.co"
+      SMTP_USERNAME: "dashboard@dev-spainews.co"
+      SMTP_PASSWORD: "password"
+      REDIS_ADDRESS: "redis:6379"
+      MARIA_URL: "spainews:spainews@tcp(mariadb:3306)/spainews?parseTime=true"
       MONGO_URL: "mongodb://api:api@mongo:27017/spainews"
       LISTEN_ADDRESS: "api:5000"
     ports:
