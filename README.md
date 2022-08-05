@@ -15,14 +15,15 @@ TODO: DOCUMENT THIS
 - Frontend development:
 
 ```shell
-./dev-front.ps1
+./dev-back.ps1 # This command may require admin rights
+./start-back.ps1
 ./start-front.ps1
 ```
 
 - Backend development:
 
 ```shell
-./dev-back.ps1
+./dev-back.ps1 # This command may require admin rights
 ./start-back.ps1
 ```
 

@@ -2,9 +2,9 @@
 FROM golang:1.18.5-alpine3.16 AS builder
 RUN apk add build-base
 WORKDIR /build
-WORKDIR /api
-COPY api .
-WORKDIR /api/cmd/api
+WORKDIR /spAInews
+COPY . .
+WORKDIR /spAInews/api/cmd/api
 RUN go build -ldflags="-s -w" -trimpath -buildvcs=false -o /build/server
 
 # Prepare image
