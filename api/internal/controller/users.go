@@ -1,6 +1,6 @@
 package controller
 
-func (c *Controller) RegisterUser(email, username, password string) error {
+func (c *Controller) RegisterUser(username, email, password string) error {
 	_, execError := c.SQL.Exec("CALL registrar_usuario(?, ?, ?)", username, email, password)
 	return execError
 }

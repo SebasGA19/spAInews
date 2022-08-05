@@ -22,9 +22,13 @@ const (
 	InternalServerErrorCode = iota
 	UsernameNotAvailableErrorCode
 	EmailNotAvailableErrorCode
-	InternalServerError       = "Internal server error"
-	UsernameNotAvailableError = "Username not available"
-	EmailNotAvailableError    = "Email not available"
+	CredentialsNotSubmitted
+	InvalidCredentialsErrorCode
+	InternalServerError          = "Internal server error"
+	UsernameNotAvailableError    = "Username not available"
+	EmailNotAvailableError       = "Email not available"
+	CredentialsNotSubmittedError = "Credentials not submitted"
+	InvalidCredentialsError      = "invalid username or password"
 )
 
 var (
@@ -32,6 +36,8 @@ var (
 		InternalServerErrorCode:       InternalServerError,
 		UsernameNotAvailableErrorCode: UsernameNotAvailableError,
 		EmailNotAvailableErrorCode:    EmailNotAvailableError,
+		CredentialsNotSubmitted:       CredentialsNotSubmittedError,
+		InvalidCredentialsErrorCode:   InvalidCredentialsError,
 	}
 )
 

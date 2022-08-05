@@ -13,6 +13,9 @@ type (
 		Email    string `json:"email"`
 		Password string `json:"password"`
 	}
+	LoginResponse struct {
+		Session string `json:"session"`
+	}
 )
 
 func (backend *Backend) Register(ctx *gin.Context) {
@@ -75,5 +78,33 @@ func (backend *Backend) ConfirmAccount(ctx *gin.Context) {
 }
 
 func (backend *Backend) Login(ctx *gin.Context) {
-
+	username, password, ok := ctx.Request.BasicAuth()
+	if !ok {
+		ctx.AbortWithStatusJSON(http.StatusForbidden, NewError(CredentialsNotSubmitted))
+		return
+	}
+	// Login
+	id, loginError := backend.Controller.Login(username, password)
+	if loginError != nil {
+		log.Print(loginError)
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, NewError(InternalServerErrorCode))
+		return
+	}
+	if id < 1 {
+		ctx.AbortWithStatusJSON(http.StatusForbidden, NewError(InvalidCredentialsErrorCode))
+		return
+	}
+	// Create session
+	sessionCode, createSessionError := backend.Controller.CreateSession(id)
+	if createSessionError != nil {
+		log.Print(createSessionError)
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, NewError(InternalServerErrorCode))
+		return
+	}
+	// JSON
+	ctx.JSON(http.StatusOK,
+		LoginResponse{
+			Session: sessionCode,
+		},
+	)
 }

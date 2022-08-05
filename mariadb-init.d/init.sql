@@ -24,8 +24,8 @@ CREATE TABLE IF NOT EXISTS usuarios
     usuario                   VARCHAR(1024) UNIQUE NOT NULL,
     contrasena_salt           VARCHAR(1024)        NOT NULL,
     contrasena                VARCHAR(1024)        NOT NULL,
-    CONSTRAINT usuarios_correo_valido CHECK ( correo RLIKE '^[a-zA-Z0-9._-]+$' ),
-    CONSTRAINT usuarios_usuario_valido CHECK ( usuario RLIKE
+    CONSTRAINT usuarios_usuario_valido CHECK ( usuario RLIKE '^[a-zA-Z0-9._-]+$' ),
+    CONSTRAINT usuarios_correo_valido CHECK ( correo RLIKE
                                                '^[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9]@[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9]\\.[a-zA-Z]{2,63}$' )
 );
 
