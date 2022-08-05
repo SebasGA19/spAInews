@@ -14,6 +14,16 @@ TODO: DOCUMENT THIS
 
 - Frontend development:
 
+First install dependencies:
+
+```shell
+cd frontend
+npm install
+cd ..
+```
+
+Then start the services:
+
 ```shell
 ./dev-back.ps1 # This command may require admin rights
 ./start-back.ps1
