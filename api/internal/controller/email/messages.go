@@ -12,6 +12,9 @@ var (
 )
 
 func (e *Email) SendConfirmationEmail(code string, to ...string) error {
+	if e.Dev {
+		e.ConfirmationCode = code
+	}
 	t := template.Must(template.ParseFS(Templates, "email-templates/email-confirmation.html"))
 	out := bytes.NewBuffer(nil)
 	executeError := t.Execute(out,

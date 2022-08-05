@@ -9,6 +9,7 @@ func NewEngine(database *controller.Controller) *gin.Engine {
 	engine := gin.Default()
 	c := NewController(database)
 	engine.POST(RegisterURI, c.Register)
+	engine.POST(ConfirmAccountURI, c.ConfirmAccount)
 	engine.POST(LoginURI, c.Login)
 	return engine
 }

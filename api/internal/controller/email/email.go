@@ -6,7 +6,9 @@ type Email struct {
 	SMTPAddress string
 	From        string
 	Auth        smtp.Auth
-	dev         bool
+	// Dev Only
+	Dev              bool
+	ConfirmationCode string
 }
 
 func NewEmail(address, from string, auth smtp.Auth) *Email {
@@ -14,6 +16,6 @@ func NewEmail(address, from string, auth smtp.Auth) *Email {
 		SMTPAddress: address,
 		From:        from,
 		Auth:        auth,
-		dev:         address == ":",
+		Dev:         address == ":",
 	}
 }

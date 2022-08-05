@@ -8,7 +8,7 @@ import (
 )
 
 func (e *Email) SendEmail(message []byte, to ...string) error {
-	if e.dev {
+	if e.Dev {
 		fmt.Println(string(message))
 		return nil
 	}

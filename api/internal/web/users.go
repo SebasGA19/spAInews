@@ -61,6 +61,19 @@ func (backend *Backend) Register(ctx *gin.Context) {
 	ctx.Done()
 }
 
+func (backend *Backend) ConfirmAccount(ctx *gin.Context) {
+	confirmCode := ctx.GetHeader(ConfirmAccountCodeHeader)
+	// Confirm account
+	confirmationError := backend.Controller.ConfirmEmail(confirmCode)
+	if confirmationError != nil {
+		log.Print(confirmationError)
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, NewError(InternalServerErrorCode))
+		return
+	}
+	// Done
+	ctx.Done()
+}
+
 func (backend *Backend) Login(ctx *gin.Context) {
 
 }

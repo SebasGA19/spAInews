@@ -26,7 +26,7 @@ TODO: DOCUMENT THIS
 ./start-back.ps1
 ```
 
-On any Go code backend re-run:
+On any Go code change re-run:
 
 ```shell
 ./start-back.ps1

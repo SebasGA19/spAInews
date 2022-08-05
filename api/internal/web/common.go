@@ -8,12 +8,14 @@ type (
 )
 
 const (
-	SessionHeader = "Session"
+	SessionHeader            = "Session"
+	ConfirmAccountCodeHeader = "Confirm-Code"
 )
 
 const (
-	RegisterURI = "/register"
-	LoginURI    = "/login"
+	RegisterURI       = "/register"
+	ConfirmAccountURI = "/confirm"
+	LoginURI          = "/login"
 )
 
 const (

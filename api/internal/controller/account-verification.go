@@ -32,10 +32,14 @@ func (c *Controller) ConfirmEmail(code string) error {
 	if err := cmd.Err(); err != nil {
 		return err
 	}
+	rawRegistrationData, bytesError := cmd.Bytes()
+	if bytesError != nil {
+		return bytesError
+	}
 	var registrationData RegistrationData
-	scanError := cmd.Scan(&registrationData)
-	if scanError != nil {
-		return scanError
+	unmarshallError := json.Unmarshal(rawRegistrationData, &registrationData)
+	if unmarshallError != nil {
+		return unmarshallError
 	}
 	return c.RegisterUser(registrationData.Username, registrationData.Email, registrationData.Password)
 }
