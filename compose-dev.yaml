@@ -7,7 +7,9 @@ networks:
 services:
   mongo:
     container_name: spainews-mongo
-    image: mongo
+    image: mongo:latest
+    ports:
+      - "127.0.0.1:27017:27017"
     restart: unless-stopped
     networks:
       - spainews
@@ -16,11 +18,32 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: root
       MONGO_INITDB_DATABASE: spainews
     volumes:
+      - type: bind
+        source: ./mongo-initdb.d
+        target: /docker-entrypoint-initdb.d
+        read_only: true
       - ./mongo-data:/data
-      - ./mongo-initdb.d:/docker-entrypoint-initdb.d:ro
+  mariadb:
+    container_name: spainnews-mariadb
+    restart: unless-stopped
+    image: mariadb:latest
+    ports:
+      - "127.0.0.1:3306:3306"
+    volumes:
+      - type: bind
+        source: ./mariadb-init.d
+        target: /docker-entrypoint-initdb.d
+        read_only: true
+      - ./mariadb-data:/var/lib/mysql
+    environment:
+      MARIADB_ROOT_PASSWORD: spainews
+      MARIADB_DATABASE: spainews
+      MARIADB_USER: spainews
+      MARIADB_PASSWORD: spainews
   api:
     depends_on:
       - mongo
+      - mariadb
     user: "api:api"
     container_name: spainews-api
     build:

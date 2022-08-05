@@ -3,3 +3,5 @@
 .code/*
 .vscode/*
 node_modules/*
+mongo-data/*
+mariadb-data/*

@@ -37,7 +37,15 @@ erDiagram
 	usuarios ||--o{ palabras_clave : tienen
 ```
 
+### Triggers
+
+#### BEFORE UPDATE `usuarios`
+
+- Usuarios desactivados no pueden actualizar atributos diferentes de `activo`.
+
 ### Funciones
+
+- `generar_salt() VARCHAR(1024)`: Retorna un salt para ser usado con la función hash.
 
 - `login(usuario, contrasena) id`: Esta función recibe de entrada el usuario y contraseña, retorna el `id` en caso de éxito y `-1` en caso de fracaso.
 - `usuario_disponible(usuario) BOOL`: Retorna verdadero si el usuario esta disponible para el registro.
@@ -46,7 +54,7 @@ erDiagram
 
 ### Procedimientos
 
-- `registrar(usuario, correo, contrasena)`: Confirma que el correo, usuario y contraseña satisfacen las expresiones regulares, luego registra al usuario en la base de datos.
+- `registrar_usuario(usuario, correo, contrasena)`: Confirma que el correo, usuario y contraseña satisfacen las expresiones regulares, luego registra al usuario en la base de datos.
 - `agregar_palabra_clave(usuario_o_id, palabra_clave)`: Agrega la palabra clave al arreglo de palabras claves del usuario.
 - `remover_palabra_clave(usuario_o_id, palabra_clave)`: Remueve la palabra clave del arreglo de palabras claves del usuario.
 
