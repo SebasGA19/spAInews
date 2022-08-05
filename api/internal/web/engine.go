@@ -5,11 +5,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func NewEngine(database *controller.Controller) *gin.Engine {
+func NewEngine(c *controller.Controller) *gin.Engine {
 	engine := gin.Default()
-	c := NewController(database)
-	engine.POST(RegisterURI, c.Register)
-	engine.POST(ConfirmAccountURI, c.ConfirmAccount)
-	engine.POST(LoginURI, c.Login)
+	backend := NewBackend(c)
+	engine.POST(RegisterURI, backend.Register)
+	engine.POST(ConfirmAccountURI, backend.ConfirmAccount)
+	engine.POST(LoginURI, backend.Login)
 	return engine
 }

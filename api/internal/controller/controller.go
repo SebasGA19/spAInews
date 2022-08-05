@@ -17,6 +17,13 @@ type Controller struct {
 	ctx           context.Context
 }
 
+func (c *Controller) Close() error {
+	_ = c.Mongo.Disconnect(c.ctx)
+	_ = c.SQL.Close()
+	_ = c.Session.Close()
+	return c.PendingEmails.Close()
+}
+
 func NewController(
 	mongoClient *mongo.Client,
 	sqlDB *sql.DB,

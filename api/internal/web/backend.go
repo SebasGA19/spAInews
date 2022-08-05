@@ -6,7 +6,7 @@ type Backend struct {
 	Controller *controller.Controller
 }
 
-func NewController(c *controller.Controller) *Backend {
+func NewBackend(c *controller.Controller) *Backend {
 	return &Backend{
 		Controller: c,
 	}
