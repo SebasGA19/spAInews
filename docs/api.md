@@ -29,6 +29,7 @@ Possible error messages are:
 | 2    | Email not available          | Means the email is not available                             |
 | 3    | Credentials not submitted    | No credentials given in login                                |
 | 4    | Invalid username or password | Invalid username or password                                 |
+| 5    | Permission denied            | User doesn't have permission to complete the transaction     |
 
 Error JSON structure is:
 
@@ -73,6 +74,10 @@ Any non `200` response is considered an error.
 #### Response
 
 Empty `200 OK` response.
+
+#### Email
+
+User receives an email with the confirmation URL / CODE
 
 ### POST `/confirm/registration`
 
@@ -124,3 +129,251 @@ Any non `200` response is considered an error.
 }
 ```
 
+### DELETE `/session`
+
+Destroys de cookies created by `GET /session`
+
+#### Possible Errors
+
+Any non `200` response is considered an error.
+
+- `Internal server error`
+
+#### Response
+
+- Status: 200
+
+### POST `/password`
+
+Changes the password of the account given the old one and the new one.
+
+#### Request
+
+- Method: `POST`
+- Headers:
+  - `Session: COOKIE`
+  - `Content-Type: application/json`
+- Body:
+
+```json
+{
+    "old-password": "user_old_password",
+    "new-password": "user_new_password"
+}
+```
+
+#### Possible Errors
+
+Any non `200` response is considered an error.
+
+- `Internal server error`
+- `Permission denied`
+
+#### Response
+
+- Status: 200
+
+### GET `/account`
+
+Returns account information of the related session given.
+
+#### Request
+
+- Method: `GET`
+- Headers:
+  - `Session: COOKIE`
+
+#### Possible Errors
+
+Any non `200` response is considered an error.
+
+- `Internal server error`
+- `Permission denied`
+
+#### Response
+
+- Status: 200
+- Body:
+
+```json
+{
+    "username": "username",
+    "email": "email@mail.com",
+    "creation-date": "31/12/2000"
+}
+```
+
+#### POST `/reset`
+
+Requests a password reset, useful in case the user forgets its credentials. It sent an email to the account with the code that will be used to reset the credentials.
+
+#### Request
+
+- Method: `POST`
+- Headers:
+  - `Content-Type: application/json`
+- Body:
+
+```json
+{
+    "email": "email@mail.com"
+}
+```
+
+#### Possible Errors
+
+Any non `200` response is considered an error.
+
+- `Internal server error`
+
+#### Response
+
+- Method: 200
+
+#### Email
+
+User receives an email with the reset URL / CODE
+
+#### POST `/confirm/reset`
+
+Ensures the reset of the credentials of the user using the CODE provided by email.
+
+#### Request
+
+- Method: `POST`
+- Headers:
+  - `Confirm-Code: RESET_CODE`
+  - `Content-Type: application/json`
+- Body:
+
+```json
+{
+    "new-password": "new_user_password"
+}
+```
+
+#### Possible Errors
+
+Any non `200` response is considered an error.
+
+- `Internal server error`
+- `Permission denied`
+
+#### Response
+
+- Status: 200
+
+### POST `/email`
+
+Requests an update for the email address. Send to the new email a confirmation URL / CODE
+
+#### Request
+
+- Method: `POST`
+- Headers:
+  - `Session: COOKIE`
+  - `Content-Type: application/json`
+- Body:
+
+```json
+{
+    "new-email": "email@mail.com"
+}
+```
+
+#### Possible Errors
+
+Any non `200` response is considered an error.
+
+- `Internal server error`
+- `Permission denied`
+
+#### Response
+
+- Method: 200
+
+#### Email
+
+User receives an email with the confirm email URL / CODE
+
+#### POST `/confirm/email`
+
+Ensures the new email provided if owned by the user
+
+#### Request
+
+- Method: `POST`
+- Headers:
+  - `Confirm-Code: RESET_CODE`
+
+#### Possible Errors
+
+Any non `200` response is considered an error.
+
+- `Internal server error`
+- `Permission denied`
+
+#### Response
+
+- Status: 200
+
+### GET `/words`
+
+Return the configured key words for the current account.
+
+#### Request
+
+- Method: `GET`
+- Headers:
+  - `Session COOKIE`
+
+#### Possible Errors
+
+Any non `200` response is considered an error.
+
+- `Internal server error`
+- `Permission denied`
+
+#### Response
+
+- Status: 200
+- Headers:
+  - `Content-Type: application/json`
+- Body:
+
+```json
+{
+    "automatic": true,
+    "words": ["word-1", "word-2", "..."]
+}
+```
+
+### POST `/words`
+
+Updates the selected words for the application.
+
+#### Request
+
+- Method: `POST`
+- Headers:
+  - `Session: COOKIE`
+  - `Content-Type: application/json`
+- Body:
+
+```json
+{
+    "automatic": true,
+    "words": ["word-1", "word-2", "..."]
+}
+```
+
+#### Possible Errors
+
+Any non `200` response is considered an error.
+
+- `Internal server error`
+- `Permission denied`
+
+#### Response
+
+- Status: 200
