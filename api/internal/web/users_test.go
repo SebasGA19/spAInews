@@ -29,7 +29,7 @@ func TestRegister(t *testing.T) {
 		t.Fatal("No registration code set")
 	}
 	// Confirm registration
-	req = postRequest(ConfirmAccountURI, http.Header{ConfirmAccountCodeHeader: []string{c.Email.ConfirmationCode}}, nil)
+	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmAccountCodeHeader: []string{c.Email.ConfirmationCode}}, nil)
 	w = httptest.NewRecorder()
 	engine.ServeHTTP(w, req)
 	response = w.Result()
@@ -85,7 +85,7 @@ func TestFailedRegister(t *testing.T) {
 	}
 	secondCode := c.Email.ConfirmationCode
 	// Confirm registration
-	req = postRequest(ConfirmAccountURI, http.Header{ConfirmAccountCodeHeader: []string{c.Email.ConfirmationCode}}, nil)
+	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmAccountCodeHeader: []string{c.Email.ConfirmationCode}}, nil)
 	w = httptest.NewRecorder()
 	engine.ServeHTTP(w, req)
 	response = w.Result()
@@ -94,7 +94,7 @@ func TestFailedRegister(t *testing.T) {
 	}
 	// Confirm second Code
 	// Confirm registration
-	req = postRequest(ConfirmAccountURI, http.Header{ConfirmAccountCodeHeader: []string{secondCode}}, nil)
+	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmAccountCodeHeader: []string{secondCode}}, nil)
 	w = httptest.NewRecorder()
 	engine.ServeHTTP(w, req)
 	response = w.Result()
@@ -148,7 +148,7 @@ func TestDeleteSession(t *testing.T) {
 		t.Fatal("No registration code set")
 	}
 	// Confirm registration
-	req = postRequest(ConfirmAccountURI, http.Header{ConfirmAccountCodeHeader: []string{c.Email.ConfirmationCode}}, nil)
+	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmAccountCodeHeader: []string{c.Email.ConfirmationCode}}, nil)
 	w = httptest.NewRecorder()
 	engine.ServeHTTP(w, req)
 	response = w.Result()

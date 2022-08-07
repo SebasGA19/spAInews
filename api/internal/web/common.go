@@ -13,9 +13,9 @@ const (
 )
 
 const (
-	RegisterURI       = "/register"
-	ConfirmAccountURI = "/confirm"
-	SessionURI        = "/session"
+	RegisterURI            = "/register"
+	ConfirmRegistrationURI = "/confirm/registration"
+	SessionURI             = "/session"
 )
 
 const (

@@ -74,7 +74,7 @@ Any non `200` response is considered an error.
 
 Empty `200 OK` response.
 
-### POST `/confirm`
+### POST `/confirm/registration`
 
 Confirm register request.
 
