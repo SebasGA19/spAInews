@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS usuarios
     contrasena                VARCHAR(1024)        NOT NULL,
     CONSTRAINT usuarios_usuario_valido CHECK ( usuario RLIKE '^[a-zA-Z0-9._-]+$' ),
     CONSTRAINT usuarios_correo_valido CHECK ( correo RLIKE
-                                               '^[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9]@[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9]\\.[a-zA-Z]{2,63}$' )
+                                              '^[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9]@[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9]\\.[a-zA-Z]{2,63}$' )
 );
 
 DELIMITER @@
@@ -118,6 +118,29 @@ BEGIN
                         AND usuarios.correo = v_correo
                       LIMIT 1);
     RETURN id_usuario IS NULL;
+END;
+@@
+
+CREATE OR REPLACE PROCEDURE
+    usuarios_cambiar_contrasena(
+    v_id_usuario INT,
+    v_contrasena VARCHAR(1024),
+    v_nueva_contrasena VARCHAR(1024)
+)
+    LANGUAGE SQL
+    NOT DETERMINISTIC
+BEGIN
+    DECLARE salt VARCHAR(1024);
+    IF LENGTH(v_nueva_contrasena) = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 30001, MESSAGE_TEXT = 'La contrasena no puede estar vacia';
+    END IF;
+    SET salt = generar_salt();
+    UPDATE
+        usuarios
+    SET usuarios.contrasena_salt = salt,
+        usuarios.contrasena      = ENCRYPT(v_nueva_contrasena, salt)
+    WHERE usuarios.id = v_id_usuario
+      AND usuarios.contrasena = ENCRYPT(v_contrasena, usuarios.contrasena_salt);
 END;
 @@
 
