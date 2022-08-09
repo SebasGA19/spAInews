@@ -1,6 +1,6 @@
-# API
+# Auth API
 
-This documentation container everything related to the .
+This documentation container everything related to the auth API.
 
 ## Config
 
@@ -39,8 +39,6 @@ Error JSON structure is:
     "message": "error message"
 }
 ```
-
-
 
 ## Routes
 
