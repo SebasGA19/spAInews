@@ -2,7 +2,7 @@ package controller
 
 import (
 	"encoding/json"
-	"github.com/SebasGA19/spAInews/api/internal/common"
+	"github.com/SebasGA19/spAInews/auth-api/internal/common"
 	"time"
 )
 

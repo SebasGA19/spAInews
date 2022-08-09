@@ -1,3 +1,6 @@
+# This docker compose will be used by API developers since it
+# only starts the Databases and expose their ports
+
 version: "3.3"
 
 networks:

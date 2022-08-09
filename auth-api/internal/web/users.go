@@ -1,7 +1,7 @@
 package web
 
 import (
-	"github.com/SebasGA19/spAInews/api/internal/controller"
+	"github.com/SebasGA19/spAInews/auth-api/internal/controller"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"

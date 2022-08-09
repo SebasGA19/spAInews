@@ -4,16 +4,12 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"github.com/SebasGA19/spAInews/api/internal/config"
+	"github.com/SebasGA19/spAInews/auth-api/internal/config"
 	"github.com/go-redis/redis/v9"
 	_ "github.com/go-sql-driver/mysql"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
-	"go.mongodb.org/mongo-driver/mongo/readpref"
 	"log"
 	"net/smtp"
 	"os"
-	"time"
 )
 
 func mariaDB() *sql.DB {
@@ -27,22 +23,6 @@ func mariaDB() *sql.DB {
 		log.Fatal(pingError)
 	}
 	return sqlDB
-}
-
-func mongoDB() *mongo.Client {
-	mongoURL := os.Getenv(config.MongoURL)
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	mongoClient, connectionError := mongo.Connect(ctx, options.Client().ApplyURI(mongoURL))
-	if connectionError != nil {
-		log.Fatal(connectionError)
-	}
-	var readPref readpref.ReadPref
-	pingError := mongoClient.Ping(context.Background(), &readPref)
-	if pingError != nil {
-		log.Fatal(pingError)
-	}
-	return mongoClient
 }
 
 func redisClients() (sessions *redis.Client, pendingEmails *redis.Client) {

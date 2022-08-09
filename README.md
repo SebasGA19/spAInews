@@ -12,9 +12,9 @@ TODO: DOCUMENT THIS
 
 ### Development
 
-- Frontend development:
+#### Frontend development:
 
-First install dependencies:
+1. First install dependencies:
 
 ```shell
 cd frontend
@@ -22,23 +22,36 @@ npm install
 cd ..
 ```
 
-Then start the services:
+2. Start the APIs:
 
 ```shell
-./dev-back.ps1 # This command may require admin rights
-./start-back.ps1
-./start-front.ps1
+./dev-apis.ps1 # This command may require admin rights
 ```
 
-- Backend development:
+3. Start the frontend:
 
 ```shell
-./dev-back.ps1 # This command may require admin rights
-./start-back.ps1
+cd frontend
+npm start
 ```
 
-On any Go code change re-run:
+#### Backend development:
+
+1. First start the databases services:
 
 ```shell
-./start-back.ps1
+./dev-databases.ps1 # This command may require admin rights, it may require you to wait some second until databases are initialized
 ```
+
+2. Start auth API:
+
+```shell
+./start-auth-api.ps1
+```
+
+3. Start news API:
+
+```shell
+./start-news-api.ps1
+```
+

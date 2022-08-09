@@ -1,7 +1,7 @@
 db.createUser(
     {
-        user: "api",
-        pwd: "api",
+        user: "news-api",
+        pwd: "news-api",
         roles: [
             {
                 role: "read",

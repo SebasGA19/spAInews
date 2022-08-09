@@ -1,3 +1,8 @@
+# This docker compose will only be used by frontend developers since it isolates the database by the API interfaces
+# Ports:
+# - Auth API -> 127.0.0.1:5000
+# - News API -> 127.0.0.1:6000
+
 version: "3.3"
 
 networks:
@@ -11,13 +16,9 @@ services:
     container_name: spainews-redis
     image: redis:latest
     restart: unless-stopped
-    ports:
-      - "127.0.0.1:6379:6379"
   mongo:
     container_name: spainews-mongo
     image: mongo:latest
-    ports:
-      - "127.0.0.1:27017:27017"
     restart: unless-stopped
     networks:
       - spainews
@@ -37,8 +38,6 @@ services:
     container_name: spainnews-mariadb
     restart: unless-stopped
     image: mariadb:latest
-    ports:
-      - "127.0.0.1:3306:3306"
     volumes:
       - type: bind
         source: ./mariadb-init.d
@@ -50,26 +49,24 @@ services:
       MARIADB_DATABASE: spainews
       MARIADB_USER: spainews
       MARIADB_PASSWORD: spainews
-  api:
+  auth-api:
     depends_on:
-      - mongo
       - mariadb
-    user: "api:api"
-    container_name: spainews-api
+    user: "auth-api:auth-api"
+    container_name: spainews-auth-api
     build:
-      dockerfile: api.Dockerfile
+      dockerfile: auth-api.Dockerfile
     restart: unless-stopped
     networks:
       - spainews
     environment:
-      SMTP_HOST: ""
-      SMTP_PORT: ""
-      SMTP_FROM: "dashboard@dev-spainews.co"
-      SMTP_USERNAME: "dashboard@dev-spainews.co"
-      SMTP_PASSWORD: "password"
+      SMTP_HOST: "" # TODO: FIX ME
+      SMTP_PORT: "" # TODO: FIX ME
+      SMTP_FROM: "dashboard@dev-spainews.co" # TODO: FIX ME
+      SMTP_USERNAME: "dashboard@dev-spainews.co" # TODO: FIX ME
+      SMTP_PASSWORD: "password" # TODO: FIX ME
       REDIS_ADDRESS: "redis:6379"
       MARIA_URL: "spainews:spainews@tcp(mariadb:3306)/spainews?parseTime=true"
-      MONGO_URL: "mongodb://api:api@mongo:27017/spainews"
-      LISTEN_ADDRESS: "api:5000"
+      LISTEN_ADDRESS: "auth-api:5000"
     ports:
       - "127.0.0.1:5000:5000"
