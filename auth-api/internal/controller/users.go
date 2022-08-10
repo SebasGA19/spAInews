@@ -25,3 +25,8 @@ func (c *Controller) EmailAvailable(email string) (bool, error) {
 	scanError := row.Scan(&result)
 	return result, scanError
 }
+
+func (c *Controller) ChangePassword(userId int, oldPassword, newPassword string) error {
+	_, err := c.SQL.Exec("CALL usuarios_cambiar_contrasena(?, ?, ?)", userId, oldPassword, newPassword)
+	return err
+}

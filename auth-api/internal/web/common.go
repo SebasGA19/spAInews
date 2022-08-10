@@ -16,6 +16,7 @@ const (
 	RegisterURI            = "/register"
 	ConfirmRegistrationURI = "/confirm/registration"
 	SessionURI             = "/session"
+	PasswordURI            = "/password"
 )
 
 const (
@@ -24,11 +25,13 @@ const (
 	EmailNotAvailableErrorCode
 	CredentialsNotSubmitted
 	InvalidCredentialsErrorCode
+	PermissionDeniedErrorCode
 	InternalServerError          = "Internal server error"
 	UsernameNotAvailableError    = "Username not available"
 	EmailNotAvailableError       = "Email not available"
 	CredentialsNotSubmittedError = "Credentials not submitted"
 	InvalidCredentialsError      = "Invalid username or password"
+	PermissionDeniedError        = "Permission denied"
 )
 
 var (
@@ -38,6 +41,7 @@ var (
 		EmailNotAvailableErrorCode:    EmailNotAvailableError,
 		CredentialsNotSubmitted:       CredentialsNotSubmittedError,
 		InvalidCredentialsErrorCode:   InvalidCredentialsError,
+		PermissionDeniedErrorCode:     PermissionDeniedError,
 	}
 )
 

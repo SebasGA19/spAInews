@@ -184,3 +184,160 @@ func TestDeleteSession(t *testing.T) {
 		t.Fatal("Delete should fail")
 	}
 }
+
+func TestChangePassword(t *testing.T) {
+	c := newTestController()
+	defer c.Close()
+	tests.ClearDB(c.SQL)
+	engine := NewEngine(c)
+	// Request register
+	req := putRequest(RegisterURI, nil, Register{
+		Username: "sulcud",
+		Email:    "sulcud@email.com",
+		Password: "password",
+	})
+	w := httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+	response := w.Result()
+	if response.StatusCode != http.StatusOK {
+		t.Fatal("Register request failed")
+	}
+	if c.Email.ConfirmationCode == "" {
+		t.Fatal("No registration code set")
+	}
+	// Confirm registration
+	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmAccountCodeHeader: []string{c.Email.ConfirmationCode}}, nil)
+	w = httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+	response = w.Result()
+	if response.StatusCode != http.StatusOK {
+		t.Fatal("Account confirmation failed")
+	}
+	// Login
+	req = getRequest(SessionURI, nil, nil)
+	req.SetBasicAuth("sulcud", "password")
+	w = httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+	response = w.Result()
+	if response.StatusCode != http.StatusOK {
+		t.Fatal("Login failed")
+	}
+	var session SessionResponse
+	decodeError := json.NewDecoder(response.Body).Decode(&session)
+	tests.FailOnError(decodeError)
+	// Change Password
+	req = postRequest(PasswordURI, http.Header{
+		SessionHeader:  []string{session.Session},
+		"Content-Type": []string{"application/json"},
+	}, ChangePassword{
+		OldPassword: "password",
+		NewPassword: "secret-password",
+	})
+	w = httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+	response = w.Result()
+	if response.StatusCode != http.StatusOK {
+		t.Fatal("Update password failed")
+	}
+	// Delete old session
+	req = deleteRequest(SessionURI, http.Header{SessionHeader: []string{session.Session}}, nil)
+	w = httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+	response = w.Result()
+	if response.StatusCode != http.StatusOK {
+		t.Fatal("Delete session failed")
+	}
+	// Login old credentials
+	req = getRequest(SessionURI, nil, nil)
+	req.SetBasicAuth("sulcud", "password")
+	w = httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+	response = w.Result()
+	if response.StatusCode == http.StatusOK {
+		t.Fatal("Login should fail")
+	}
+	// Login new credentials
+	req = getRequest(SessionURI, nil, nil)
+	req.SetBasicAuth("sulcud", "secret-password")
+	w = httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+	response = w.Result()
+	if response.StatusCode != http.StatusOK {
+		t.Fatal("Login failed")
+	}
+	decodeError = json.NewDecoder(response.Body).Decode(&session)
+	tests.FailOnError(decodeError)
+}
+
+func TestChangePasswordInvalidSession(t *testing.T) {
+	c := newTestController()
+	defer c.Close()
+	tests.ClearDB(c.SQL)
+	engine := NewEngine(c)
+	// Request register
+	req := putRequest(RegisterURI, nil, Register{
+		Username: "sulcud",
+		Email:    "sulcud@email.com",
+		Password: "password",
+	})
+	w := httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+	response := w.Result()
+	if response.StatusCode != http.StatusOK {
+		t.Fatal("Register request failed")
+	}
+	if c.Email.ConfirmationCode == "" {
+		t.Fatal("No registration code set")
+	}
+	// Confirm registration
+	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmAccountCodeHeader: []string{c.Email.ConfirmationCode}}, nil)
+	w = httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+	response = w.Result()
+	if response.StatusCode != http.StatusOK {
+		t.Fatal("Account confirmation failed")
+	}
+	// Login
+	req = getRequest(SessionURI, nil, nil)
+	req.SetBasicAuth("sulcud", "password")
+	w = httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+	response = w.Result()
+	if response.StatusCode != http.StatusOK {
+		t.Fatal("Login failed")
+	}
+	var session SessionResponse
+	decodeError := json.NewDecoder(response.Body).Decode(&session)
+	tests.FailOnError(decodeError)
+	// Delete old session
+	req = deleteRequest(SessionURI, http.Header{SessionHeader: []string{session.Session}}, nil)
+	w = httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+	response = w.Result()
+	if response.StatusCode != http.StatusOK {
+		t.Fatal("Delete session failed")
+	}
+	// Change Password
+	req = postRequest(PasswordURI, http.Header{
+		SessionHeader:  []string{session.Session},
+		"Content-Type": []string{"application/json"},
+	}, ChangePassword{
+		OldPassword: "password",
+		NewPassword: "secret-password",
+	})
+	w = httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+	response = w.Result()
+	if response.StatusCode == http.StatusOK {
+		t.Fatal("Update should fail")
+	}
+	// Login
+	req = getRequest(SessionURI, nil, nil)
+	req.SetBasicAuth("sulcud", "password")
+	w = httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+	response = w.Result()
+	if response.StatusCode != http.StatusOK {
+		t.Fatal("Login failed")
+	}
+}

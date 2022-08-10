@@ -16,6 +16,10 @@ type (
 	SessionResponse struct {
 		Session string `json:"session"`
 	}
+	ChangePassword struct {
+		OldPassword string `json:"old-password"`
+		NewPassword string `json:"new-password"`
+	}
 )
 
 func (backend *Backend) Register(ctx *gin.Context) {
@@ -115,6 +119,29 @@ func (backend *Backend) DeleteSession(ctx *gin.Context) {
 	if destroyError != nil {
 		log.Print(destroyError)
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, NewError(InternalServerErrorCode))
+		return
+	}
+	// Done
+	ctx.Done()
+}
+
+func (backend *Backend) ChangePassword(ctx *gin.Context) {
+	session := ctx.GetHeader(SessionHeader)
+	userId, queryError := backend.Controller.QuerySession(session)
+	if queryError != nil {
+		log.Print(queryError)
+		ctx.AbortWithStatusJSON(http.StatusForbidden, NewError(PermissionDeniedErrorCode))
+		return
+	}
+	var changePassword ChangePassword
+	bindError := ctx.Bind(&changePassword)
+	if bindError != nil {
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, NewError(InternalServerErrorCode))
+		return
+	}
+	updatePasswordError := backend.Controller.ChangePassword(userId, changePassword.OldPassword, changePassword.NewPassword)
+	if updatePasswordError != nil {
+		ctx.AbortWithStatusJSON(http.StatusForbidden, NewError(PermissionDeniedErrorCode))
 		return
 	}
 	// Done
