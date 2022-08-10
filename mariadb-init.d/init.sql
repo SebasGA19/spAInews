@@ -163,7 +163,8 @@ BEGIN
     SET usuarios.contrasena_salt = salt,
         usuarios.contrasena      = ENCRYPT(v_nueva_contrasena, salt)
     WHERE usuarios.id = v_id_usuario
-      AND usuarios.contrasena = ENCRYPT(v_contrasena, usuarios.contrasena_salt);
+      AND usuarios.contrasena = ENCRYPT(v_contrasena, usuarios.contrasena_salt)
+    LIMIT 1;
 END;
 @@
 
@@ -195,6 +196,39 @@ BEGIN
         SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 30001, MESSAGE_TEXT =
                 'El usuario esta desactivo, reactivar primero antes de actualizar';
     END IF;
+END;
+@@
+
+CREATE OR REPLACE FUNCTION
+    palabras_clave_de_usuario(
+    v_id_usuario INTEGER UNSIGNED
+)
+    RETURNS JSON
+    LANGUAGE SQL
+    NOT DETERMINISTIC
+BEGIN
+    DECLARE palabras_clave JSON;
+    SET palabras_clave = (SELECT palabras
+                          FROM palabras_clave AS pc
+                          WHERE pc.id_usuario = v_id_usuario
+                          LIMIT 1);
+    RETURN palabras_clave;
+END;
+@@
+
+CREATE OR REPLACE PROCEDURE
+    actualizar_palabras_clave(
+    v_id_usuario INTEGER UNSIGNED,
+    v_nuevas_palabras JSON
+)
+    LANGUAGE SQL
+    NOT DETERMINISTIC
+BEGIN
+    UPDATE
+        palabras_clave AS pc
+    SET pc.palabras = v_nuevas_palabras
+    WHERE pc.id_usuario = v_id_usuario
+    LIMIT 1;
 END;
 @@
 
