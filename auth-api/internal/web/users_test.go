@@ -458,3 +458,78 @@ func TestAccountInformationInvalidSession(t *testing.T) {
 		t.Fatal("Should fail")
 	}
 }
+
+func TestUpdateWords(t *testing.T) {
+	c := newTestController()
+	defer c.Close()
+	tests.ClearDB(c.SQL)
+	engine := NewEngine(c)
+	// Request register
+	req := putRequest(RegisterURI, nil, Register{
+		Username: "sulcud",
+		Email:    "sulcud@email.com",
+		Password: "password",
+	})
+	w := httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+	response := w.Result()
+	if response.StatusCode != http.StatusOK {
+		t.Fatal("Register request failed")
+	}
+	if c.Email.ConfirmationCode == "" {
+		t.Fatal("No registration code set")
+	}
+	// Confirm registration
+	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmAccountCodeHeader: []string{c.Email.ConfirmationCode}}, nil)
+	w = httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+	response = w.Result()
+	if response.StatusCode != http.StatusOK {
+		t.Fatal("Account confirmation failed")
+	}
+	// Login
+	req = getRequest(SessionURI, nil, nil)
+	req.SetBasicAuth("sulcud", "password")
+	w = httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+	response = w.Result()
+	if response.StatusCode != http.StatusOK {
+		t.Fatal("Login failed")
+	}
+	var session SessionResponse
+	decodeError := json.NewDecoder(response.Body).Decode(&session)
+	tests.FailOnError(decodeError)
+	// Update words
+	req = postRequest(WordsURI, http.Header{
+		SessionHeader:  []string{session.Session},
+		"Content-Type": []string{"application/json"},
+	}, UpdateWords{
+		Automatic: true,
+		Words:     []string{"Venezuela", "Colombia"},
+	})
+	w = httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+	response = w.Result()
+	if response.StatusCode != http.StatusOK {
+		t.Fatal("Update words failed")
+	}
+	// Get words
+	req = getRequest(WordsURI, http.Header{
+		SessionHeader: []string{session.Session},
+	}, nil)
+	w = httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+	response = w.Result()
+	if response.StatusCode != http.StatusOK {
+		t.Fatal("Get words failed")
+	}
+	var getWords GetWordsResponse
+	decodeError = json.NewDecoder(response.Body).Decode(&getWords)
+	tests.FailOnError(decodeError)
+	if getWords.Automatic != true {
+		t.Fatal("Invalid automatic")
+	}
+	if len(getWords.Words) == 2 && getWords.Words[0] != "Venezuela" && getWords.Words[1] != "Colombia" {
+		t.Fatal("Invalid words")
+	}
+}

@@ -46,11 +46,9 @@ erDiagram
 ### Funciones
 
 - `generar_salt() VARCHAR(1024)`: Retorna un salt para ser usado con la función hash.
-
 - `login(usuario, contrasena) id`: Esta función recibe de entrada el usuario y contraseña, retorna el `id` en caso de éxito y `-1` en caso de fracaso.
 - `usuario_disponible(usuario) BOOL`: Retorna verdadero si el usuario esta disponible para el registro.
 - `correo_disponible(usuario) BOOL`: Retorna verdadero si el correo esta disponible para el registro.
-- `palabras_clave(usuario_o_id) JSON`: Retorna las palabras claves del usuario.
 
 ### Procedimientos
 

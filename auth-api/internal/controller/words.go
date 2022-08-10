@@ -6,25 +6,24 @@ type (
 	Words []string
 )
 
-func (c *Controller) SetUserWords(userId int, newWords Words) error {
+func (c *Controller) SetUserWords(userId int, newWords Words, automatic bool) error {
 	asJsonObject, marshalError := json.Marshal(newWords)
 	if marshalError != nil {
 		return marshalError
 	}
-	_, err := c.SQL.Exec("CALL actualizar_palabras_clave(?, ?)", userId, asJsonObject)
+	_, err := c.SQL.Exec("CALL actualizar_palabras_clave(?, ?, ?)", userId, asJsonObject, automatic)
 	return err
 }
 
-func (c *Controller) GetUserWords(userId int) (Words, error) {
-	row := c.SQL.QueryRow("SELECT palabras_clave_de_usuario(?)", userId)
+func (c *Controller) GetUserWords(userId int) (words Words, auto bool, err error) {
+	row := c.SQL.QueryRow("SELECT pc.palabras, pc.automatico FROM palabras_clave AS pc WHERE pc.id_usuario = ? LIMIT 1", userId)
 	var rawWords string
-	scanError := row.Scan(&rawWords)
-	if scanError != nil {
-		return nil, scanError
+	err = row.Scan(&rawWords, &auto)
+	if err != nil {
+		return nil, false, err
 	}
-	var words Words
-	unmarshallError := json.Unmarshal([]byte(rawWords), &words)
-	return words, unmarshallError
+	err = json.Unmarshal([]byte(rawWords), &words)
+	return words, auto, err
 }
 
 func (c *Controller) Account(userId int) (username, email string, err error) {

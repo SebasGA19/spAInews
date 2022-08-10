@@ -55,3 +55,9 @@ npm start
 ./start-news-api.ps1
 ```
 
+4. Unit testing the APIs can be done by executing:
+
+```shell
+go test ./...
+```
+

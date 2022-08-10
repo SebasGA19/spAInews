@@ -202,34 +202,19 @@ BEGIN
 END;
 @@
 
-CREATE OR REPLACE FUNCTION
-    palabras_clave_de_usuario(
-    v_id_usuario INTEGER UNSIGNED
-)
-    RETURNS JSON
-    LANGUAGE SQL
-    NOT DETERMINISTIC
-BEGIN
-    DECLARE palabras_clave JSON;
-    SET palabras_clave = (SELECT palabras
-                          FROM palabras_clave AS pc
-                          WHERE pc.id_usuario = v_id_usuario
-                          LIMIT 1);
-    RETURN palabras_clave;
-END;
-@@
-
 CREATE OR REPLACE PROCEDURE
     actualizar_palabras_clave(
     v_id_usuario INTEGER UNSIGNED,
-    v_nuevas_palabras JSON
+    v_nuevas_palabras JSON,
+    v_automatico BOOL
 )
     LANGUAGE SQL
     NOT DETERMINISTIC
 BEGIN
     UPDATE
         palabras_clave AS pc
-    SET pc.palabras = v_nuevas_palabras
+    SET pc.palabras   = v_nuevas_palabras,
+        pc.automatico = v_automatico
     WHERE pc.id_usuario = v_id_usuario
     LIMIT 1;
 END;

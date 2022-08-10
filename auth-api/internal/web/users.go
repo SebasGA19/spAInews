@@ -24,6 +24,14 @@ type (
 		Username string `json:"username"`
 		Email    string `json:"email"`
 	}
+	GetWordsResponse struct {
+		Automatic bool     `json:"automatic"`
+		Words     []string `json:"words"`
+	}
+	UpdateWords struct {
+		Automatic bool     `json:"automatic"`
+		Words     []string `json:"words"`
+	}
 )
 
 func (backend *Backend) Register(ctx *gin.Context) {
@@ -169,4 +177,48 @@ func (backend *Backend) AccountInformation(ctx *gin.Context) {
 		Username: username,
 		Email:    password,
 	})
+}
+
+func (backend *Backend) GetWords(ctx *gin.Context) {
+	session := ctx.GetHeader(SessionHeader)
+	userId, queryError := backend.Controller.QuerySession(session)
+	if queryError != nil {
+		log.Print(queryError)
+		ctx.AbortWithStatusJSON(http.StatusForbidden, NewError(PermissionDeniedErrorCode))
+		return
+	}
+	userWords, auto, getWordsError := backend.Controller.GetUserWords(userId)
+	if getWordsError != nil {
+		log.Print(getWordsError)
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, NewError(InternalServerErrorCode))
+		return
+	}
+	ctx.JSON(http.StatusOK, GetWordsResponse{
+		Automatic: auto,
+		Words:     userWords,
+	})
+	ctx.Done()
+}
+
+func (backend *Backend) PostWords(ctx *gin.Context) {
+	session := ctx.GetHeader(SessionHeader)
+	userId, queryError := backend.Controller.QuerySession(session)
+	if queryError != nil {
+		log.Print(queryError)
+		ctx.AbortWithStatusJSON(http.StatusForbidden, NewError(PermissionDeniedErrorCode))
+		return
+	}
+	var updateWords UpdateWords
+	bindError := ctx.Bind(&updateWords)
+	if bindError != nil {
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, NewError(InternalServerErrorCode))
+		return
+	}
+	setWordsError := backend.Controller.SetUserWords(userId, updateWords.Words, updateWords.Automatic)
+	if setWordsError != nil {
+		log.Print(setWordsError)
+		ctx.AbortWithStatusJSON(http.StatusForbidden, NewError(PermissionDeniedErrorCode))
+		return
+	}
+	ctx.Done()
 }
