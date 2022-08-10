@@ -3,6 +3,7 @@ package tests
 import (
 	"database/sql"
 	_ "embed"
+	"strings"
 )
 
 var (
@@ -16,8 +17,10 @@ func FailOnError(err error) {
 	}
 }
 func ClearDB(db *sql.DB) {
-	_, execError := db.Exec(clearScript)
-	if execError != nil {
-		panic(execError)
+	for _, line := range strings.Split(clearScript, "\n") {
+		_, execError := db.Exec(line)
+		if execError != nil {
+			panic(execError)
+		}
 	}
 }

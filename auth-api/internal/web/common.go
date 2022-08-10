@@ -17,6 +17,8 @@ const (
 	ConfirmRegistrationURI = "/confirm/registration"
 	SessionURI             = "/session"
 	PasswordURI            = "/password"
+	AccountURI             = "/account"
+	WordsURI               = "/words"
 )
 
 const (

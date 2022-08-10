@@ -165,6 +165,9 @@ BEGIN
     WHERE usuarios.id = v_id_usuario
       AND usuarios.contrasena = ENCRYPT(v_contrasena, usuarios.contrasena_salt)
     LIMIT 1;
+    IF ROW_COUNT() != 1 THEN
+        SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 30001, MESSAGE_TEXT = 'Credenciales invalidas';
+    END IF;
 END;
 @@
 

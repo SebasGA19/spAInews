@@ -20,6 +20,10 @@ type (
 		OldPassword string `json:"old-password"`
 		NewPassword string `json:"new-password"`
 	}
+	AccountInformationResponse struct {
+		Username string `json:"username"`
+		Email    string `json:"email"`
+	}
 )
 
 func (backend *Backend) Register(ctx *gin.Context) {
@@ -146,4 +150,23 @@ func (backend *Backend) ChangePassword(ctx *gin.Context) {
 	}
 	// Done
 	ctx.Done()
+}
+
+func (backend *Backend) AccountInformation(ctx *gin.Context) {
+	session := ctx.GetHeader(SessionHeader)
+	userId, queryError := backend.Controller.QuerySession(session)
+	if queryError != nil {
+		log.Print(queryError)
+		ctx.AbortWithStatusJSON(http.StatusForbidden, NewError(PermissionDeniedErrorCode))
+		return
+	}
+	username, password, getInformationError := backend.Controller.Account(userId)
+	if getInformationError != nil {
+		ctx.AbortWithStatusJSON(http.StatusForbidden, NewError(PermissionDeniedErrorCode))
+		return
+	}
+	ctx.JSON(http.StatusOK, AccountInformationResponse{
+		Username: username,
+		Email:    password,
+	})
 }

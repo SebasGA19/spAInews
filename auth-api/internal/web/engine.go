@@ -38,5 +38,6 @@ func NewEngine(c *controller.Controller) *gin.Engine {
 	engine.GET(SessionURI, backend.Session)
 	engine.DELETE(SessionURI, backend.DeleteSession)
 	engine.POST(PasswordURI, backend.ChangePassword)
+	engine.GET(AccountURI, backend.AccountInformation)
 	return engine
 }
