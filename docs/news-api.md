@@ -87,8 +87,6 @@ It will return 10 or less news as results
   - `Content-Type: application/json`
 - Body:
 
-
-
 ```json
 {
     "filter": {
@@ -96,7 +94,7 @@ It will return 10 or less news as results
         "end-date": "DAY/MONTH/YEAR",
         "sources": ["CNN", "RT", "NYTIMES", "..."]
     },
-    "sort": "newest"
+    "sort": "new-first"
 }
 ```
 
