@@ -29,7 +29,21 @@ CREATE TABLE IF NOT EXISTS usuarios
                                               '^[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9]@[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9]\\.[a-zA-Z]{2,63}$' )
 );
 
+CREATE TABLE IF NOT EXISTS palabras_clave
+(
+    id                        INTEGER UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    fecha_creacion            TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    fecha_ultima_modificacion TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    activo                    BOOL             NOT NULL DEFAULT TRUE,
+    id_usuario                INTEGER UNSIGNED NOT NULL,
+    automatico                BOOL             NOT NULL DEFAULT FALSE,
+    palabras                  JSON             NOT NULL DEFAULT '[]',
+    CONSTRAINT fk_palabras_clave_id_usuario FOREIGN KEY (id_usuario) REFERENCES usuarios (id)
+);
+
 DELIMITER @@
+
+-- - Related to usuarios - --
 
 CREATE OR REPLACE TRIGGER before_update_usuarios
     BEFORE UPDATE
@@ -40,6 +54,15 @@ BEGIN
         SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 30001, MESSAGE_TEXT =
                 'El usuario esta desactivo, reactivar primero antes de actualizar';
     END IF;
+END;
+@@
+
+CREATE OR REPLACE TRIGGER after_insert_usuarios
+    AFTER INSERT
+    ON usuarios
+    FOR EACH ROW
+BEGIN
+    INSERT INTO palabras_clave (id_usuario) VALUES (NEW.id);
 END;
 @@
 
@@ -67,11 +90,11 @@ CREATE OR REPLACE FUNCTION
     v_usuario VARCHAR(1024),
     v_contrasena VARCHAR(1024)
 )
-    RETURNS INT
+    RETURNS INTEGER UNSIGNED
     LANGUAGE SQL
     NOT DETERMINISTIC
 BEGIN
-    DECLARE id_usuario INT;
+    DECLARE id_usuario INTEGER UNSIGNED;
     SET id_usuario = (SELECT id
                       FROM usuarios
                       WHERE usuarios.activo
@@ -79,7 +102,7 @@ BEGIN
                         AND usuarios.contrasena = ENCRYPT(v_contrasena, usuarios.contrasena_salt)
                       LIMIT 1);
     IF id_usuario IS NULL THEN
-        RETURN -1;
+        SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 30001, MESSAGE_TEXT = 'Usuario o contrasena invalidos';
     END IF;
     RETURN id_usuario;
 END;
@@ -93,7 +116,7 @@ CREATE OR REPLACE FUNCTION
     LANGUAGE SQL
     NOT DETERMINISTIC
 BEGIN
-    DECLARE id_usuario INT;
+    DECLARE id_usuario INTEGER UNSIGNED;
     SET id_usuario = (SELECT id
                       FROM usuarios
                       WHERE usuarios.activo
@@ -111,7 +134,7 @@ CREATE OR REPLACE FUNCTION
     LANGUAGE SQL
     NOT DETERMINISTIC
 BEGIN
-    DECLARE id_usuario INT;
+    DECLARE id_usuario INTEGER UNSIGNED;
     SET id_usuario = (SELECT id
                       FROM usuarios
                       WHERE usuarios.activo
@@ -123,7 +146,7 @@ END;
 
 CREATE OR REPLACE PROCEDURE
     usuarios_cambiar_contrasena(
-    v_id_usuario INT,
+    v_id_usuario INTEGER UNSIGNED,
     v_contrasena VARCHAR(1024),
     v_nueva_contrasena VARCHAR(1024)
 )
@@ -141,6 +164,37 @@ BEGIN
         usuarios.contrasena      = ENCRYPT(v_nueva_contrasena, salt)
     WHERE usuarios.id = v_id_usuario
       AND usuarios.contrasena = ENCRYPT(v_contrasena, usuarios.contrasena_salt);
+END;
+@@
+
+-- - Related to palabras_clave - --
+
+CREATE OR REPLACE TRIGGER before_update_palabras_clave
+    BEFORE UPDATE
+    ON palabras_clave
+    FOR EACH ROW
+BEGIN
+    DECLARE usuario_activo BOOL;
+    IF NOT OLD.activo AND NOT NEW.activo THEN
+        SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 30001, MESSAGE_TEXT =
+                'El registro esta desactivo, reactivar primero antes de actualizar';
+    END IF;
+    -- - El id_usuario es inmutable
+    IF OLD.id_usuario != NEW.id_usuario THEN
+        SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 30001, MESSAGE_TEXT =
+                'id_usuario es inmutable';
+    END IF;
+    -- - Si el usuario esta desactivado esto no se puede modificar
+    SET usuario_activo = (
+        SELECT usuarios.activo
+        FROM usuarios
+        WHERE usuarios.id = NEW.id_usuario
+        LIMIT 1
+    );
+    IF NOT usuario_activo THEN
+        SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 30001, MESSAGE_TEXT =
+                'El usuario esta desactivo, reactivar primero antes de actualizar';
+    END IF;
 END;
 @@
 

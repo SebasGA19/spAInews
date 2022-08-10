@@ -25,7 +25,7 @@ erDiagram
 		BOOL activo "NOT NULL, DEFAULT TRUE"
 		INTEGER id_usuario "NOT NULL, FOREIGN KEY usuarios"
 		BOOL automatico "NOT NULL, DEFAULT TRUE"
-		JSON words "NOT NULL, DEFAULT '[]', REGEXP (CHECKS IF IT IS A JSON ARRAY)"
+		JSON palabras "NOT NULL, DEFAULT '[]', REGEXP (CHECKS IF IT IS A JSON ARRAY)"
 	}
 	
 ```
