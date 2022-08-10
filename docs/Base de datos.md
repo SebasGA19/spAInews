@@ -57,6 +57,7 @@ erDiagram
 - `registrar_usuario(usuario, correo, contrasena)`: Confirma que el correo, usuario y contraseña satisfacen las expresiones regulares, luego registra al usuario en la base de datos.
 - `agregar_palabra_clave(usuario_o_id, palabra_clave)`: Agrega la palabra clave al arreglo de palabras claves del usuario.
 - `remover_palabra_clave(usuario_o_id, palabra_clave)`: Remueve la palabra clave del arreglo de palabras claves del usuario.
+- `usuarios_cambiar_contrasena(id_usuario, contrasena, nueva_contrasena)`: Cambia la contraseña actual del usuario por la especificada.
 
 ## Redis
 
