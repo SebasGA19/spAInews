@@ -26,3 +26,9 @@ func (c *Controller) GetUserWords(userId int) (Words, error) {
 	unmarshallError := json.Unmarshal([]byte(rawWords), &words)
 	return words, unmarshallError
 }
+
+func (c *Controller) Account(userId int) (username, email string, err error) {
+	row := c.SQL.QueryRow("SELECT usuarios.usuario, usuarios.correo FROM usuarios WHERE usuarios.id = ? LIMIT 1", userId)
+	scanError := row.Scan(&username, &email)
+	return username, email, scanError
+}
