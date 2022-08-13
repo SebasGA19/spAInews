@@ -55,6 +55,7 @@ services:
     user: "auth-api:auth-api"
     container_name: spainews-auth-api
     build:
+      context: .
       dockerfile: auth-api.Dockerfile
     restart: unless-stopped
     networks:
