@@ -4,7 +4,7 @@ import './App.css';
 
 function App(){
   return(
-    <button onClick={() => login("john", "super_password_123")}>Login</button>
+    <button onClick={() => login("john", "password")}>Login</button>
   )
 }
 /*
