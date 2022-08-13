@@ -26,6 +26,8 @@ const (
 	WordsURI                = "/words"
 	ResetPasswordURI        = "/reset/password"
 	ConfirmResetPasswordURI = "/confirm/reset/password"
+	EmailURI                = "/email"
+	ConfirmUpdateEmailURI   = "/confirm/email"
 )
 
 const (

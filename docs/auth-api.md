@@ -294,7 +294,7 @@ Any non `200` response is considered an error.
 
 User receives an email with the confirm email URL / CODE
 
-#### GET `/confirm/email`
+#### POST `/confirm/email`
 
 Ensures the new email provided if owned by the user
 

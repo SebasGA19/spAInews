@@ -397,7 +397,7 @@ func TestAccountInformation(t *testing.T) {
 		t.Fatal("Invalid username")
 	}
 	if accountInformation.Email != "sulcud@email.com" {
-		t.Fatal("Invalid username")
+		t.Fatal("Invalid email")
 	}
 }
 
@@ -587,5 +587,83 @@ func TestResetPassword(t *testing.T) {
 	response = w.Result()
 	if response.StatusCode != http.StatusOK {
 		t.Fatal("Login failed")
+	}
+}
+
+func TestUpdateEmail(t *testing.T) {
+	c := newTestController()
+	defer c.Close()
+	tests.ClearDB(c.SQL)
+	engine := NewEngine(c)
+	// Request register
+	req := putRequest(RegisterURI, nil, Register{
+		Username: "sulcud",
+		Email:    "sulcud@email.com",
+		Password: "password",
+	})
+	w := httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+	response := w.Result()
+	if response.StatusCode != http.StatusOK {
+		t.Fatal("Register request failed")
+	}
+	if c.Email.ConfirmationCode == "" {
+		t.Fatal("No registration code set")
+	}
+	// Confirm registration
+	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmCodeHeader: []string{c.Email.ConfirmationCode}}, nil)
+	w = httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+	response = w.Result()
+	if response.StatusCode != http.StatusOK {
+		t.Fatal("Account confirmation failed")
+	}
+	// Login
+	req = getRequest(SessionURI, nil, nil)
+	req.SetBasicAuth("sulcud", "password")
+	w = httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+	response = w.Result()
+	if response.StatusCode != http.StatusOK {
+		t.Fatal("Login failed")
+	}
+	var session SessionResponse
+	decodeError := json.NewDecoder(response.Body).Decode(&session)
+	tests.FailOnError(decodeError)
+	// Update email
+	req = postRequest(EmailURI, http.Header{
+		SessionHeader:  []string{session.Session},
+		"Content-Type": []string{"application/json"},
+	}, UpdateEmail{
+		Password: "password",
+		NewEmail: "sulcud@my.new.email.com",
+	})
+	w = httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+	response = w.Result()
+	// Confirm new email
+	req = postRequest(ConfirmUpdateEmailURI,
+		http.Header{
+			ConfirmCodeHeader: []string{c.Email.ConfirmationCode},
+		}, nil)
+	w = httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+	response = w.Result()
+	// Account information
+	req = getRequest(AccountURI, http.Header{SessionHeader: []string{session.Session}}, nil)
+	w = httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+	response = w.Result()
+	if response.StatusCode != http.StatusOK {
+		t.Fatal("Cannot get account information")
+	}
+	var accountInformation AccountInformationResponse
+	decodeError = json.NewDecoder(response.Body).Decode(&accountInformation)
+	tests.FailOnError(decodeError)
+	if accountInformation.Username != "sulcud" {
+		t.Fatal("Invalid username")
+	}
+	if accountInformation.Email != "sulcud@my.new.email.com" {
+		t.Fatal("Invalid email")
 	}
 }

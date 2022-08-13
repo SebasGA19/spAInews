@@ -1,5 +1,7 @@
 package controller
 
+import "fmt"
+
 func (c *Controller) RegisterUser(username, email, password string) error {
 	_, execError := c.SQL.Exec("CALL registrar_usuario(?, ?, ?)", username, email, password)
 	return execError
@@ -32,6 +34,7 @@ func (c *Controller) ChangePassword(userId int, oldPassword, newPassword string)
 }
 
 func (c *Controller) ChangeEmail(userId int, email, password string) error {
+	fmt.Println(userId, email, password)
 	_, err := c.SQL.Exec("CALL usuarios_cambiar_correo(?, ?, ?)", userId, email, password)
 	return err
 }

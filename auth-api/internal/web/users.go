@@ -38,6 +38,10 @@ type (
 	ResetPassword struct {
 		NewPassword string `json:"new-password"`
 	}
+	UpdateEmail struct {
+		Password string `json:"password"`
+		NewEmail string `json:"new-email"`
+	}
 )
 
 func (backend *Backend) Register(ctx *gin.Context) {
@@ -70,7 +74,7 @@ func (backend *Backend) Register(ctx *gin.Context) {
 		return
 	}
 	// Create a pending registration entry and send it to the address
-	addPendingEmailError := backend.Controller.AddPendingEmail(
+	addPendingEmailError := backend.Controller.AddPendingRegistration(
 		controller.RegistrationData{
 			Username: registerForm.Username,
 			Email:    registerForm.Email,
@@ -258,6 +262,42 @@ func (backend *Backend) ConfirmResetPassword(ctx *gin.Context) {
 	resetError := backend.Controller.ResetPassword(resetCode, resetPassword.NewPassword)
 	if resetError != nil {
 		log.Print(resetError)
+		ctx.AbortWithStatusJSON(http.StatusForbidden, NewError(PermissionDeniedErrorCode))
+		return
+	}
+	ctx.Done()
+}
+
+func (backend *Backend) RequestUpdateEmail(ctx *gin.Context) {
+	userId, found := ctx.Get(UserIdVariable)
+	if !found {
+		ctx.AbortWithStatusJSON(http.StatusForbidden, NewError(PermissionDeniedErrorCode))
+		return
+	}
+	var updateEmail UpdateEmail
+	bindError := ctx.Bind(&updateEmail)
+	if bindError != nil {
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, NewError(InternalServerErrorCode))
+		return
+	}
+	addError := backend.Controller.AddUpdateEmail(controller.UpdateEmail{
+		UserId:   userId.(int),
+		Password: updateEmail.Password,
+		NewEmail: updateEmail.NewEmail,
+	})
+	if addError != nil {
+		log.Print(addError)
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, NewError(InternalServerErrorCode))
+		return
+	}
+	ctx.Done()
+}
+
+func (backend *Backend) ConfirmUpdateEmail(ctx *gin.Context) {
+	confirmCode := ctx.GetHeader(ConfirmCodeHeader)
+	confirmError := backend.Controller.UpdateEmail(confirmCode)
+	if confirmError != nil {
+		log.Print(confirmError)
 		ctx.AbortWithStatusJSON(http.StatusForbidden, NewError(PermissionDeniedErrorCode))
 		return
 	}

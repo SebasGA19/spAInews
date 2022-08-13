@@ -14,7 +14,7 @@ type (
 	}
 )
 
-func (c *Controller) AddPendingEmail(registrationData RegistrationData) error {
+func (c *Controller) AddPendingRegistration(registrationData RegistrationData) error {
 	code := common.RandString(32)
 	registrationDataJson, marshalError := json.Marshal(registrationData)
 	if marshalError != nil {

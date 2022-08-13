@@ -40,6 +40,7 @@ func NewEngine(c *controller.Controller) *gin.Engine {
 	noAuthRequired.GET(SessionURI, backend.Session)
 	noAuthRequired.POST(ResetPasswordURI, backend.RequestResetPassword)
 	noAuthRequired.POST(ConfirmResetPasswordURI, backend.ConfirmResetPassword)
+	noAuthRequired.POST(ConfirmUpdateEmailURI, backend.ConfirmUpdateEmail)
 
 	authRequired := engine.Group("/", backend.AuthSession)
 	authRequired.DELETE(SessionURI, backend.DeleteSession)
@@ -47,5 +48,6 @@ func NewEngine(c *controller.Controller) *gin.Engine {
 	authRequired.GET(AccountURI, backend.AccountInformation)
 	authRequired.GET(WordsURI, backend.GetWords)
 	authRequired.POST(WordsURI, backend.PostWords)
+	authRequired.POST(EmailURI, backend.RequestUpdateEmail)
 	return engine
 }
