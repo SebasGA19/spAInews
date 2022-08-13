@@ -1,6 +1,13 @@
 import logo from './logo.svg';
+import {login} from './login/login';
 import './App.css';
 
+function App(){
+  return(
+    <button onClick={() => login("john", "super_password_123")}>Login</button>
+  )
+}
+/*
 function App() {
   return (
     <div className="App">
@@ -21,5 +28,5 @@ function App() {
     </div>
   );
 }
-
+*/
 export default App;
