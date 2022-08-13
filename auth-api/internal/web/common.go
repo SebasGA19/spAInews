@@ -8,17 +8,24 @@ type (
 )
 
 const (
-	SessionHeader            = "Session"
-	ConfirmAccountCodeHeader = "Confirm-Code"
+	UserIdVariable  = "UserId"
+	SessionVariable = "Session"
 )
 
 const (
-	RegisterURI            = "/register"
-	ConfirmRegistrationURI = "/confirm/registration"
-	SessionURI             = "/session"
-	PasswordURI            = "/password"
-	AccountURI             = "/account"
-	WordsURI               = "/words"
+	SessionHeader     = "Session"
+	ConfirmCodeHeader = "Confirm-Code"
+)
+
+const (
+	RegisterURI             = "/register"
+	ConfirmRegistrationURI  = "/confirm/registration"
+	SessionURI              = "/session"
+	PasswordURI             = "/password"
+	AccountURI              = "/account"
+	WordsURI                = "/words"
+	ResetPasswordURI        = "/reset/password"
+	ConfirmResetPasswordURI = "/confirm/reset/password"
 )
 
 const (

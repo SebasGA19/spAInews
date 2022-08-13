@@ -29,7 +29,7 @@ func mariaDB() *sql.DB {
 	return sqlDB
 }
 
-func redisClients() (sessions *redis.Client, pendingEmails *redis.Client) {
+func redisClients() (sessions *redis.Client, registrations, confirmEmails, passwordResets *redis.Client) {
 	redisAddress := "127.0.0.1:6379"
 	sessions = redis.NewClient(
 		&redis.Options{
@@ -40,16 +40,34 @@ func redisClients() (sessions *redis.Client, pendingEmails *redis.Client) {
 	if _, err := sessions.Ping(context.Background()).Result(); err != nil {
 		log.Fatal(err)
 	}
-	pendingEmails = redis.NewClient(
+	registrations = redis.NewClient(
 		&redis.Options{
 			Addr: redisAddress,
 			DB:   1,
 		},
 	)
-	if _, err := pendingEmails.Ping(context.Background()).Result(); err != nil {
+	if _, err := registrations.Ping(context.Background()).Result(); err != nil {
 		log.Fatal(err)
 	}
-	return sessions, pendingEmails
+	confirmEmails = redis.NewClient(
+		&redis.Options{
+			Addr: redisAddress,
+			DB:   2,
+		},
+	)
+	if _, err := confirmEmails.Ping(context.Background()).Result(); err != nil {
+		log.Fatal(err)
+	}
+	passwordResets = redis.NewClient(
+		&redis.Options{
+			Addr: redisAddress,
+			DB:   3,
+		},
+	)
+	if _, err := passwordResets.Ping(context.Background()).Result(); err != nil {
+		log.Fatal(err)
+	}
+	return sessions, registrations, confirmEmails, passwordResets
 }
 
 func emailSettings() (address, from string, auth smtp.Auth) {
@@ -64,9 +82,9 @@ func emailSettings() (address, from string, auth smtp.Auth) {
 
 func newTestController() *controller.Controller {
 	sqlDB := mariaDB()
-	sessions, pendingEmails := redisClients()
+	sessions, registrations, confirmEmails, passwordResets := redisClients()
 	e := email.NewEmail(emailSettings())
-	return controller.NewController(sqlDB, sessions, pendingEmails, e)
+	return controller.NewController(sqlDB, sessions, registrations, confirmEmails, passwordResets, e)
 }
 
 func getRequest(uri string, header http.Header, jsonPayload any) *http.Request {

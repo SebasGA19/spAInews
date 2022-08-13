@@ -32,6 +32,12 @@ type (
 		Automatic bool     `json:"automatic"`
 		Words     []string `json:"words"`
 	}
+	RequestPasswordReset struct {
+		Email string `json:"email"`
+	}
+	ResetPassword struct {
+		NewPassword string `json:"new-password"`
+	}
 )
 
 func (backend *Backend) Register(ctx *gin.Context) {
@@ -81,7 +87,7 @@ func (backend *Backend) Register(ctx *gin.Context) {
 }
 
 func (backend *Backend) ConfirmAccount(ctx *gin.Context) {
-	confirmCode := ctx.GetHeader(ConfirmAccountCodeHeader)
+	confirmCode := ctx.GetHeader(ConfirmCodeHeader)
 	// Confirm account
 	confirmationError := backend.Controller.ConfirmEmail(confirmCode)
 	if confirmationError != nil {
@@ -126,8 +132,12 @@ func (backend *Backend) Session(ctx *gin.Context) {
 }
 
 func (backend *Backend) DeleteSession(ctx *gin.Context) {
-	session := ctx.GetHeader(SessionHeader)
-	destroyError := backend.Controller.DestroySession(session)
+	session, found := ctx.Get(SessionVariable)
+	if !found {
+		ctx.AbortWithStatusJSON(http.StatusForbidden, NewError(PermissionDeniedErrorCode))
+		return
+	}
+	destroyError := backend.Controller.DestroySession(session.(string))
 	if destroyError != nil {
 		log.Print(destroyError)
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, NewError(InternalServerErrorCode))
@@ -138,10 +148,8 @@ func (backend *Backend) DeleteSession(ctx *gin.Context) {
 }
 
 func (backend *Backend) ChangePassword(ctx *gin.Context) {
-	session := ctx.GetHeader(SessionHeader)
-	userId, queryError := backend.Controller.QuerySession(session)
-	if queryError != nil {
-		log.Print(queryError)
+	userId, found := ctx.Get(UserIdVariable)
+	if !found {
 		ctx.AbortWithStatusJSON(http.StatusForbidden, NewError(PermissionDeniedErrorCode))
 		return
 	}
@@ -151,7 +159,7 @@ func (backend *Backend) ChangePassword(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, NewError(InternalServerErrorCode))
 		return
 	}
-	updatePasswordError := backend.Controller.ChangePassword(userId, changePassword.OldPassword, changePassword.NewPassword)
+	updatePasswordError := backend.Controller.ChangePassword(userId.(int), changePassword.OldPassword, changePassword.NewPassword)
 	if updatePasswordError != nil {
 		ctx.AbortWithStatusJSON(http.StatusForbidden, NewError(PermissionDeniedErrorCode))
 		return
@@ -161,14 +169,12 @@ func (backend *Backend) ChangePassword(ctx *gin.Context) {
 }
 
 func (backend *Backend) AccountInformation(ctx *gin.Context) {
-	session := ctx.GetHeader(SessionHeader)
-	userId, queryError := backend.Controller.QuerySession(session)
-	if queryError != nil {
-		log.Print(queryError)
+	userId, found := ctx.Get(UserIdVariable)
+	if !found {
 		ctx.AbortWithStatusJSON(http.StatusForbidden, NewError(PermissionDeniedErrorCode))
 		return
 	}
-	username, password, getInformationError := backend.Controller.Account(userId)
+	username, password, getInformationError := backend.Controller.Account(userId.(int))
 	if getInformationError != nil {
 		ctx.AbortWithStatusJSON(http.StatusForbidden, NewError(PermissionDeniedErrorCode))
 		return
@@ -180,14 +186,12 @@ func (backend *Backend) AccountInformation(ctx *gin.Context) {
 }
 
 func (backend *Backend) GetWords(ctx *gin.Context) {
-	session := ctx.GetHeader(SessionHeader)
-	userId, queryError := backend.Controller.QuerySession(session)
-	if queryError != nil {
-		log.Print(queryError)
+	userId, found := ctx.Get(UserIdVariable)
+	if !found {
 		ctx.AbortWithStatusJSON(http.StatusForbidden, NewError(PermissionDeniedErrorCode))
 		return
 	}
-	userWords, auto, getWordsError := backend.Controller.GetUserWords(userId)
+	userWords, auto, getWordsError := backend.Controller.GetUserWords(userId.(int))
 	if getWordsError != nil {
 		log.Print(getWordsError)
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, NewError(InternalServerErrorCode))
@@ -201,10 +205,8 @@ func (backend *Backend) GetWords(ctx *gin.Context) {
 }
 
 func (backend *Backend) PostWords(ctx *gin.Context) {
-	session := ctx.GetHeader(SessionHeader)
-	userId, queryError := backend.Controller.QuerySession(session)
-	if queryError != nil {
-		log.Print(queryError)
+	userId, found := ctx.Get(UserIdVariable)
+	if !found {
 		ctx.AbortWithStatusJSON(http.StatusForbidden, NewError(PermissionDeniedErrorCode))
 		return
 	}
@@ -214,9 +216,48 @@ func (backend *Backend) PostWords(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, NewError(InternalServerErrorCode))
 		return
 	}
-	setWordsError := backend.Controller.SetUserWords(userId, updateWords.Words, updateWords.Automatic)
+	setWordsError := backend.Controller.SetUserWords(userId.(int), updateWords.Words, updateWords.Automatic)
 	if setWordsError != nil {
 		log.Print(setWordsError)
+		ctx.AbortWithStatusJSON(http.StatusForbidden, NewError(PermissionDeniedErrorCode))
+		return
+	}
+	ctx.Done()
+}
+
+func (backend *Backend) RequestResetPassword(ctx *gin.Context) {
+	var requestPasswordReset RequestPasswordReset
+	err := ctx.Bind(&requestPasswordReset)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, NewError(InternalServerErrorCode))
+		return
+	}
+	userId, queryUserIdError := backend.Controller.QueryUserIdByEmail(requestPasswordReset.Email)
+	if queryUserIdError != nil {
+		// Do not return errors to prevent email enumeration
+		ctx.Done()
+		return
+	}
+	addPendingError := backend.Controller.AddPendingReset(userId)
+	if addPendingError != nil {
+		log.Print(addPendingError)
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, NewError(InternalServerErrorCode))
+		return
+	}
+	ctx.Done()
+}
+
+func (backend *Backend) ConfirmResetPassword(ctx *gin.Context) {
+	resetCode := ctx.GetHeader(ConfirmCodeHeader)
+	var resetPassword ResetPassword
+	bindError := ctx.Bind(&resetPassword)
+	if bindError != nil {
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, NewError(InternalServerErrorCode))
+		return
+	}
+	resetError := backend.Controller.ResetPassword(resetCode, resetPassword.NewPassword)
+	if resetError != nil {
+		log.Print(resetError)
 		ctx.AbortWithStatusJSON(http.StatusForbidden, NewError(PermissionDeniedErrorCode))
 		return
 	}

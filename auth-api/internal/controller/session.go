@@ -7,13 +7,12 @@ import (
 
 func (c *Controller) CreateSession(userId int) (string, error) {
 	key := common.RandString(32)
-	err := c.Session.Set(c.ctx, key, userId, 24*30*time.Hour).Err()
+	err := c.RedisSession.Set(c.ctx, key, userId, 24*30*time.Hour).Err()
 	return key, err
 }
 
 func (c *Controller) DestroySession(session string) error {
-
-	result := c.Session.Del(c.ctx, session)
+	result := c.RedisSession.Del(c.ctx, session)
 	removedKeys, err := result.Result()
 	if removedKeys != 1 {
 		err = NoSessionFoundError
@@ -22,7 +21,7 @@ func (c *Controller) DestroySession(session string) error {
 }
 
 func (c *Controller) QuerySession(session string) (int, error) {
-	status := c.Session.Get(c.ctx, session)
+	status := c.RedisSession.Get(c.ctx, session)
 	if err := status.Err(); err != nil {
 		return -1, err
 	}

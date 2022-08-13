@@ -8,30 +8,36 @@ import (
 )
 
 type Controller struct {
-	SQL           *sql.DB
-	Session       *redis.Client
-	PendingEmails *redis.Client
-	Email         *email.Email
-	ctx           context.Context
+	SQL                 *sql.DB
+	RedisSession        *redis.Client
+	RedisRegistrations  *redis.Client
+	RedisConfirmEmails  *redis.Client
+	RedisResetPasswords *redis.Client
+	Email               *email.Email
+	ctx                 context.Context
 }
 
 func (c *Controller) Close() error {
 	_ = c.SQL.Close()
-	_ = c.Session.Close()
-	return c.PendingEmails.Close()
+	_ = c.RedisSession.Close()
+	return c.RedisRegistrations.Close()
 }
 
 func NewController(
 	sqlDB *sql.DB,
-	session *redis.Client,
-	pendingEmails *redis.Client,
+	redisSession *redis.Client,
+	redisRegistrations *redis.Client,
+	redisConfirmEmails *redis.Client,
+	redisResetPasswords *redis.Client,
 	emailClient *email.Email,
 ) *Controller {
 	return &Controller{
-		SQL:           sqlDB,
-		Session:       session,
-		PendingEmails: pendingEmails,
-		Email:         emailClient,
-		ctx:           context.Background(),
+		SQL:                 sqlDB,
+		RedisSession:        redisSession,
+		RedisRegistrations:  redisRegistrations,
+		RedisConfirmEmails:  redisConfirmEmails,
+		RedisResetPasswords: redisResetPasswords,
+		Email:               emailClient,
+		ctx:                 context.Background(),
 	}
 }

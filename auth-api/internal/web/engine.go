@@ -21,7 +21,7 @@ func NewEngine(c *controller.Controller) *gin.Engine {
 					"Content-Length",
 					"Authorization",
 					SessionHeader,
-					ConfirmAccountCodeHeader,
+					ConfirmCodeHeader,
 				},
 				ExposeHeaders:    []string{"Content-Length", "Content-Type"},
 				AllowCredentials: true,
@@ -33,13 +33,19 @@ func NewEngine(c *controller.Controller) *gin.Engine {
 		),
 	)
 	backend := NewBackend(c)
-	engine.PUT(RegisterURI, backend.Register)
-	engine.POST(ConfirmRegistrationURI, backend.ConfirmAccount)
-	engine.GET(SessionURI, backend.Session)
-	engine.DELETE(SessionURI, backend.DeleteSession)
-	engine.POST(PasswordURI, backend.ChangePassword)
-	engine.GET(AccountURI, backend.AccountInformation)
-	engine.GET(WordsURI, backend.GetWords)
-	engine.POST(WordsURI, backend.PostWords)
+
+	noAuthRequired := engine.Group("/")
+	noAuthRequired.PUT(RegisterURI, backend.Register)
+	noAuthRequired.POST(ConfirmRegistrationURI, backend.ConfirmAccount)
+	noAuthRequired.GET(SessionURI, backend.Session)
+	noAuthRequired.POST(ResetPasswordURI, backend.RequestResetPassword)
+	noAuthRequired.POST(ConfirmResetPasswordURI, backend.ConfirmResetPassword)
+
+	authRequired := engine.Group("/", backend.AuthSession)
+	authRequired.DELETE(SessionURI, backend.DeleteSession)
+	authRequired.POST(PasswordURI, backend.ChangePassword)
+	authRequired.GET(AccountURI, backend.AccountInformation)
+	authRequired.GET(WordsURI, backend.GetWords)
+	authRequired.POST(WordsURI, backend.PostWords)
 	return engine
 }

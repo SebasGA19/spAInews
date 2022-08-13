@@ -20,7 +20,7 @@ func (c *Controller) AddPendingEmail(registrationData RegistrationData) error {
 	if marshalError != nil {
 		return marshalError
 	}
-	status := c.PendingEmails.Set(c.ctx, code, registrationDataJson, 24*time.Hour)
+	status := c.RedisRegistrations.Set(c.ctx, code, registrationDataJson, 24*time.Hour)
 	if err := status.Err(); err != nil {
 		return err
 	}
@@ -28,7 +28,7 @@ func (c *Controller) AddPendingEmail(registrationData RegistrationData) error {
 }
 
 func (c *Controller) ConfirmEmail(code string) error {
-	cmd := c.PendingEmails.GetDel(c.ctx, code)
+	cmd := c.RedisRegistrations.GetDel(c.ctx, code)
 	if err := cmd.Err(); err != nil {
 		return err
 	}

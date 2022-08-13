@@ -86,6 +86,27 @@ END;
 @@
 
 CREATE OR REPLACE FUNCTION
+    obtener_id_usuario_por_correo(
+    v_correo VARCHAR(1024)
+)
+    RETURNS INTEGER UNSIGNED
+    LANGUAGE SQL
+    NOT DETERMINISTIC
+BEGIN
+    DECLARE id_usuario INTEGER UNSIGNED;
+    SET id_usuario = (SELECT id
+                      FROM usuarios
+                      WHERE usuarios.activo
+                        AND usuarios.correo = v_correo
+                      LIMIT 1);
+    IF id_usuario IS NULL THEN
+        SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 30001, MESSAGE_TEXT = 'Usuario no encontrado';
+    END IF;
+    RETURN id_usuario;
+END;
+@@
+
+CREATE OR REPLACE FUNCTION
     login(
     v_usuario VARCHAR(1024),
     v_contrasena VARCHAR(1024)
@@ -165,6 +186,47 @@ BEGIN
     WHERE usuarios.id = v_id_usuario
       AND usuarios.contrasena = ENCRYPT(v_contrasena, usuarios.contrasena_salt)
     LIMIT 1;
+    IF ROW_COUNT() != 1 THEN
+        SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 30001, MESSAGE_TEXT = 'Credenciales invalidas';
+    END IF;
+END;
+@@
+
+CREATE OR REPLACE PROCEDURE
+    usuarios_cambiar_correo(
+    v_id_usuario INTEGER UNSIGNED,
+    v_nuevo_correo VARCHAR(1024),
+    v_contrasena VARCHAR(1024)
+)
+    LANGUAGE SQL
+    NOT DETERMINISTIC
+BEGIN
+    UPDATE
+        usuarios
+    SET usuarios.correo = v_nuevo_correo
+    WHERE usuarios.id = v_id_usuario
+      AND usuarios.contrasena = ENCRYPT(v_contrasena, usuarios.contrasena_salt);
+    IF ROW_COUNT() != 1 THEN
+        SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 30001, MESSAGE_TEXT = 'Credenciales invalidas';
+    END IF;
+END;
+@@
+
+CREATE OR REPLACE PROCEDURE
+    reset_contrasena(
+    v_id_usuario INTEGER UNSIGNED,
+    v_nueva_contrasena VARCHAR(1024)
+)
+    LANGUAGE SQL
+    NOT DETERMINISTIC
+BEGIN
+    DECLARE salt VARCHAR(1024);
+    SET salt = generar_salt();
+    UPDATE
+        usuarios
+    SET usuarios.contrasena_salt = salt,
+        usuarios.contrasena      = ENCRYPT(v_nueva_contrasena, salt)
+    WHERE usuarios.id = v_id_usuario;
     IF ROW_COUNT() != 1 THEN
         SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO = 30001, MESSAGE_TEXT = 'Credenciales invalidas';
     END IF;

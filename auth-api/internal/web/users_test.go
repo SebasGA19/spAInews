@@ -29,7 +29,7 @@ func TestRegister(t *testing.T) {
 		t.Fatal("No registration code set")
 	}
 	// Confirm registration
-	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmAccountCodeHeader: []string{c.Email.ConfirmationCode}}, nil)
+	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmCodeHeader: []string{c.Email.ConfirmationCode}}, nil)
 	w = httptest.NewRecorder()
 	engine.ServeHTTP(w, req)
 	response = w.Result()
@@ -85,7 +85,7 @@ func TestFailedRegister(t *testing.T) {
 	}
 	secondCode := c.Email.ConfirmationCode
 	// Confirm registration
-	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmAccountCodeHeader: []string{c.Email.ConfirmationCode}}, nil)
+	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmCodeHeader: []string{c.Email.ConfirmationCode}}, nil)
 	w = httptest.NewRecorder()
 	engine.ServeHTTP(w, req)
 	response = w.Result()
@@ -94,7 +94,7 @@ func TestFailedRegister(t *testing.T) {
 	}
 	// Confirm second Code
 	// Confirm registration
-	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmAccountCodeHeader: []string{secondCode}}, nil)
+	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmCodeHeader: []string{secondCode}}, nil)
 	w = httptest.NewRecorder()
 	engine.ServeHTTP(w, req)
 	response = w.Result()
@@ -148,7 +148,7 @@ func TestDeleteSession(t *testing.T) {
 		t.Fatal("No registration code set")
 	}
 	// Confirm registration
-	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmAccountCodeHeader: []string{c.Email.ConfirmationCode}}, nil)
+	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmCodeHeader: []string{c.Email.ConfirmationCode}}, nil)
 	w = httptest.NewRecorder()
 	engine.ServeHTTP(w, req)
 	response = w.Result()
@@ -206,7 +206,7 @@ func TestChangePassword(t *testing.T) {
 		t.Fatal("No registration code set")
 	}
 	// Confirm registration
-	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmAccountCodeHeader: []string{c.Email.ConfirmationCode}}, nil)
+	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmCodeHeader: []string{c.Email.ConfirmationCode}}, nil)
 	w = httptest.NewRecorder()
 	engine.ServeHTTP(w, req)
 	response = w.Result()
@@ -290,7 +290,7 @@ func TestChangePasswordInvalidSession(t *testing.T) {
 		t.Fatal("No registration code set")
 	}
 	// Confirm registration
-	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmAccountCodeHeader: []string{c.Email.ConfirmationCode}}, nil)
+	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmCodeHeader: []string{c.Email.ConfirmationCode}}, nil)
 	w = httptest.NewRecorder()
 	engine.ServeHTTP(w, req)
 	response = w.Result()
@@ -363,7 +363,7 @@ func TestAccountInformation(t *testing.T) {
 		t.Fatal("No registration code set")
 	}
 	// Confirm registration
-	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmAccountCodeHeader: []string{c.Email.ConfirmationCode}}, nil)
+	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmCodeHeader: []string{c.Email.ConfirmationCode}}, nil)
 	w = httptest.NewRecorder()
 	engine.ServeHTTP(w, req)
 	response = w.Result()
@@ -422,7 +422,7 @@ func TestAccountInformationInvalidSession(t *testing.T) {
 		t.Fatal("No registration code set")
 	}
 	// Confirm registration
-	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmAccountCodeHeader: []string{c.Email.ConfirmationCode}}, nil)
+	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmCodeHeader: []string{c.Email.ConfirmationCode}}, nil)
 	w = httptest.NewRecorder()
 	engine.ServeHTTP(w, req)
 	response = w.Result()
@@ -480,7 +480,7 @@ func TestUpdateWords(t *testing.T) {
 		t.Fatal("No registration code set")
 	}
 	// Confirm registration
-	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmAccountCodeHeader: []string{c.Email.ConfirmationCode}}, nil)
+	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmCodeHeader: []string{c.Email.ConfirmationCode}}, nil)
 	w = httptest.NewRecorder()
 	engine.ServeHTTP(w, req)
 	response = w.Result()
@@ -531,5 +531,61 @@ func TestUpdateWords(t *testing.T) {
 	}
 	if len(getWords.Words) == 2 && getWords.Words[0] != "Venezuela" && getWords.Words[1] != "Colombia" {
 		t.Fatal("Invalid words")
+	}
+}
+
+func TestResetPassword(t *testing.T) {
+	c := newTestController()
+	defer c.Close()
+	tests.ClearDB(c.SQL)
+	engine := NewEngine(c)
+	// Request register
+	req := putRequest(RegisterURI, nil, Register{
+		Username: "sulcud",
+		Email:    "sulcud@email.com",
+		Password: "password",
+	})
+	w := httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+	response := w.Result()
+	if response.StatusCode != http.StatusOK {
+		t.Fatal("Register request failed")
+	}
+	if c.Email.ConfirmationCode == "" {
+		t.Fatal("No registration code set")
+	}
+	// Confirm registration
+	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmCodeHeader: []string{c.Email.ConfirmationCode}}, nil)
+	w = httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+	response = w.Result()
+	if response.StatusCode != http.StatusOK {
+		t.Fatal("Account confirmation failed")
+	}
+	// Request Password reset
+	req = postRequest(ResetPasswordURI, http.Header{"Content-Type": []string{"application/json"}}, RequestPasswordReset{
+		Email: "sulcud@email.com",
+	})
+	w = httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+	response = w.Result()
+	// Confirm password reset
+	req = postRequest(ConfirmResetPasswordURI, http.Header{
+		ConfirmCodeHeader: []string{c.Email.ConfirmationCode},
+		"Content-Type":    []string{"application/json"},
+	}, ResetPassword{
+		NewPassword: "my-new-password",
+	})
+	w = httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+	response = w.Result()
+	// Login
+	req = getRequest(SessionURI, nil, nil)
+	req.SetBasicAuth("sulcud", "my-new-password")
+	w = httptest.NewRecorder()
+	engine.ServeHTTP(w, req)
+	response = w.Result()
+	if response.StatusCode != http.StatusOK {
+		t.Fatal("Login failed")
 	}
 }

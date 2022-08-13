@@ -30,3 +30,20 @@ func (c *Controller) ChangePassword(userId int, oldPassword, newPassword string)
 	_, err := c.SQL.Exec("CALL usuarios_cambiar_contrasena(?, ?, ?)", userId, oldPassword, newPassword)
 	return err
 }
+
+func (c *Controller) ChangeEmail(userId int, email, password string) error {
+	_, err := c.SQL.Exec("CALL usuarios_cambiar_correo(?, ?, ?)", userId, email, password)
+	return err
+}
+
+func (c *Controller) SQLResetPassword(userId int, newPassword string) error {
+	_, err := c.SQL.Exec("CALL reset_contrasena(?, ?)", userId, newPassword)
+	return err
+}
+
+func (c *Controller) QueryUserIdByEmail(email string) (int, error) {
+	row := c.SQL.QueryRow("SELECT obtener_id_usuario_por_correo(?)", email)
+	var result int
+	scanError := row.Scan(&result)
+	return result, scanError
+}

@@ -200,7 +200,7 @@ Any non `200` response is considered an error.
 }
 ```
 
-#### POST `/reset`
+#### POST `/reset/password`
 
 Requests a password reset, useful in case the user forgets its credentials. It sent an email to the account with the code that will be used to reset the credentials.
 
@@ -231,7 +231,7 @@ Any non `200` response is considered an error.
 
 User receives an email with the reset URL / CODE
 
-#### POST `/confirm/reset`
+#### POST `/confirm/reset/password`
 
 Ensures the reset of the credentials of the user using the CODE provided by email.
 
@@ -274,6 +274,7 @@ Requests an update for the email address. Send to the new email a confirmation U
 
 ```json
 {
+    "password": "password",
     "new-email": "email@mail.com"
 }
 ```
@@ -293,7 +294,7 @@ Any non `200` response is considered an error.
 
 User receives an email with the confirm email URL / CODE
 
-#### POST `/confirm/email`
+#### GET `/confirm/email`
 
 Ensures the new email provided if owned by the user
 

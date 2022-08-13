@@ -29,3 +29,22 @@ func (e *Email) SendConfirmationEmail(code string, to ...string) error {
 	}
 	return e.SendEmail(out.Bytes(), to...)
 }
+
+func (e *Email) SendResetCode(code string, to ...string) error {
+	if e.Dev {
+		e.ConfirmationCode = code
+	}
+	t := template.Must(template.ParseFS(Templates, "email-templates/reset-password.html"))
+	out := bytes.NewBuffer(nil)
+	executeError := t.Execute(out,
+		struct {
+			Code string
+		}{
+			Code: code,
+		},
+	)
+	if executeError != nil {
+		panic(executeError)
+	}
+	return e.SendEmail(out.Bytes(), to...)
+}
