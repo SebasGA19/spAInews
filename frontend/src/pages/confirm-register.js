@@ -19,6 +19,7 @@ function handleConfirm() {
 export function ConfirmRegister(){
     return(
         <Page>
+            <div class="container text-center w-25">
             <h3>Confirm registration</h3>
             <form onSubmit={handleConfirm}>
                 <div class="mb-3">
@@ -27,6 +28,7 @@ export function ConfirmRegister(){
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
+            </div>
         </Page>
     )
   }

@@ -1,5 +1,6 @@
 const pageStyle = {
     padding: '2%',
+    
 };
 
 export function Page(props) {

@@ -27,8 +27,10 @@ function handleRegister() {
 export function Register() {
     return(
         <Page>
+            <div class="container text-center w-25">
             <h3>Register</h3>
             <form onSubmit={handleRegister}>
+                
                 <div class="mb-3">
                     <label for="register-username" class="form-label">Username</label>
                     <input required type="text" placeholder="username" id="register-username" class="form-control"/>
@@ -45,8 +47,10 @@ export function Register() {
                     <label for="register-confirm-password" class="form-label">Confirm Password</label>
                     <input required type="password" placeholder="confirm password" id="register-confirm-password" class="form-control"/>
                 </div>
+                
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
+            </div>
         </Page>
     );
 }

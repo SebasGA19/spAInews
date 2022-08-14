@@ -8,7 +8,7 @@ export function Layout() {
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <Link to="/" class="nav-link">Home</Link>
+                                <Link to="/" class="nav-link">spAInews</Link>
                             </li>
                             <li class="nav-item">
                                 <Link to="/login" class="nav-link">Login</Link>
@@ -17,7 +17,7 @@ export function Layout() {
                                 <Link to="/register" class="nav-link">Register</Link>
                             </li>
                             <li class="nav-item">
-                                <Link to="/confirm-register" class="nav-link">Confirm registration</Link>
+                                <Link to="/settings" class="nav-link">Settings</Link>
                             </li>
                         </ul>
                     </div>

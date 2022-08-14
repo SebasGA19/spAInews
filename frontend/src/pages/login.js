@@ -20,6 +20,7 @@ function handleLogin() {
 export function Login(){
     return(
         <Page>
+            <div class="container text-center w-25">
             <h3>Login</h3>
             <form onSubmit={handleLogin}>
                 <div class="mb-3">
@@ -32,6 +33,7 @@ export function Login(){
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
+            </div>
         </Page>
     )
   }
