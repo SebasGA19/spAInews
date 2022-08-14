@@ -21,9 +21,15 @@ export function Login(){
         <div>
             <h3>Login</h3>
             <form onSubmit={handleLogin}>
-                <input required type="text" placeholder="username" id="login-username"/>
-                <input required type="password" placeholder="password" id="login-password"/>
-                <button type="submit">Submit</button>
+                <div class="mb-3">
+                    <label for="login-username" class="form-label">Username</label>
+                    <input required type="text" placeholder="username" id="login-username" class="form-control"/>
+                </div>
+                <div class="mb-3">
+                    <label for="login-password" class="form-label">Password</label>
+                    <input required type="password" placeholder="password" id="login-password" class="form-control"/>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
             </form>
         </div>
     )

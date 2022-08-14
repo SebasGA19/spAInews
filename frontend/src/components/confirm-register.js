@@ -20,8 +20,11 @@ export function ConfirmRegister(){
         <div>
             <h3>Confirm registration</h3>
             <form onSubmit={handleConfirm}>
-                <input required type="text" placeholder="confirm-code" id="register-confirm-code"/>
-                <button type="submit">Submit</button>
+                <div class="mb-3">
+                <label for="register-confirm-code" class="form-label">Confirmation code</label>
+                    <input required type="text" placeholder="confirm-code" id="register-confirm-code" class="form-control"/>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
             </form>
         </div>
     )

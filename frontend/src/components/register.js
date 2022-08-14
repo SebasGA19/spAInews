@@ -28,11 +28,23 @@ export function Register() {
         <div>
             <h3>Register</h3>
             <form onSubmit={handleRegister}>
-                <input required type="text" placeholder="username" id="register-username"/>
-                <input required type="email" placeholder="email" id="register-email"/>
-                <input required type="password" placeholder="password" id="register-password"/>
-                <input required type="password" placeholder="confirm password" id="register-confirm-password"/>
-                <button type="submit">Submit</button>
+                <div class="mb-3">
+                    <label for="register-username" class="form-label">Username</label>
+                    <input required type="text" placeholder="username" id="register-username" class="form-control"/>
+                </div>
+                <div class="mb-3">
+                    <label for="register-email" class="form-label">Email</label>
+                    <input required type="email" placeholder="email" id="register-email" class="form-control"/>
+                </div>
+                <div class="mb-3">
+                    <label for="register-password" class="form-label">Password</label>
+                    <input required type="password" placeholder="password" id="register-password" class="form-control"/>
+                </div>
+                <div class="mb-3">
+                    <label for="register-confirm-password" class="form-label">Confirm Password</label>
+                    <input required type="password" placeholder="confirm password" id="register-confirm-password" class="form-control"/>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
             </form>
         </div>
     );
