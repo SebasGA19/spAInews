@@ -1,3 +1,4 @@
+import { Page } from "../components/page";
 import { login } from "../api/login";
 
 function handleLogin() {
@@ -18,7 +19,7 @@ function handleLogin() {
 
 export function Login(){
     return(
-        <div>
+        <Page>
             <h3>Login</h3>
             <form onSubmit={handleLogin}>
                 <div class="mb-3">
@@ -31,6 +32,6 @@ export function Login(){
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
-        </div>
+        </Page>
     )
   }

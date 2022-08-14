@@ -1,3 +1,4 @@
+import { Page } from "../components/page";
 import { confirmRegister } from "../api/confirm";
 
 function handleConfirm() {
@@ -17,7 +18,7 @@ function handleConfirm() {
 
 export function ConfirmRegister(){
     return(
-        <div>
+        <Page>
             <h3>Confirm registration</h3>
             <form onSubmit={handleConfirm}>
                 <div class="mb-3">
@@ -26,6 +27,6 @@ export function ConfirmRegister(){
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
-        </div>
+        </Page>
     )
   }

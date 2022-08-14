@@ -1,3 +1,4 @@
+import { Page } from "../components/page";
 import { register } from "../api/register";
 
 function handleRegister() {
@@ -25,7 +26,7 @@ function handleRegister() {
 
 export function Register() {
     return(
-        <div>
+        <Page>
             <h3>Register</h3>
             <form onSubmit={handleRegister}>
                 <div class="mb-3">
@@ -46,6 +47,6 @@ export function Register() {
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
-        </div>
+        </Page>
     );
 }
