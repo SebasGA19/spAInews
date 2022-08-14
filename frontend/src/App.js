@@ -7,6 +7,7 @@ import { Register } from './pages/register';
 import { ConfirmRegister } from './pages/confirm-register';
 import { Settings} from './pages/settings';
 import { ChangePassword} from './pages/change-password';
+import { SpecificNews} from './pages/specific_news';
 
 function App(){
   return(
@@ -19,6 +20,7 @@ function App(){
           <Route path="confirm-register" element={<ConfirmRegister />} />
           <Route path="settings" element={<Settings />} />
           <Route path="change-password" element={<ChangePassword />} />
+          <Route path="specific_news" element={<SpecificNews />} />
         </Route>
       </Routes>
     </BrowserRouter>
