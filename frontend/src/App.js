@@ -1,10 +1,16 @@
 import logo from './logo.svg';
-import {login} from './login/login';
+import { Login } from './components/login';
+import { Register } from './components/register';
 import './App.css';
+import { ConfirmRegister } from './components/confirm-register';
 
 function App(){
   return(
-    <button onClick={() => login("john", "password")}>Login</button>
+    <div>
+      <Register/>
+      <ConfirmRegister/>
+      <Login/>
+    </div>
   )
 }
 /*
