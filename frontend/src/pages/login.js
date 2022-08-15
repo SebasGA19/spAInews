@@ -8,7 +8,7 @@ function handleLogin() {
     login(username, password)
     .then(
         session => {
-            alert(`My session is ${session}`);
+            document.cookie += `session=${session}`;
         }
     )
     .catch(
