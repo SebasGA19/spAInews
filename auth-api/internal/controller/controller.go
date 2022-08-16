@@ -5,10 +5,12 @@ import (
 	"database/sql"
 	"github.com/SebasGA19/spAInews/auth-api/internal/controller/email"
 	"github.com/go-redis/redis/v9"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type Controller struct {
 	SQL                 *sql.DB
+	Mongo               *mongo.Client
 	RedisSession        *redis.Client
 	RedisRegistrations  *redis.Client
 	RedisConfirmEmails  *redis.Client
@@ -25,6 +27,7 @@ func (c *Controller) Close() error {
 
 func NewController(
 	sqlDB *sql.DB,
+	mongoClient *mongo.Client,
 	redisSession *redis.Client,
 	redisRegistrations *redis.Client,
 	redisConfirmEmails *redis.Client,
@@ -33,6 +36,7 @@ func NewController(
 ) *Controller {
 	return &Controller{
 		SQL:                 sqlDB,
+		Mongo:               mongoClient,
 		RedisSession:        redisSession,
 		RedisRegistrations:  redisRegistrations,
 		RedisConfirmEmails:  redisConfirmEmails,

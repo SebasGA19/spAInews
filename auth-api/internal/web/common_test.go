@@ -10,10 +10,14 @@ import (
 	"github.com/SebasGA19/spAInews/auth-api/internal/controller/email"
 	"github.com/go-redis/redis/v9"
 	_ "github.com/go-sql-driver/mysql"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/mongo/readpref"
 	"log"
 	"net/http"
 	"net/http/httptest"
 	"net/smtp"
+	"time"
 )
 
 func mariaDB() *sql.DB {
@@ -82,9 +86,10 @@ func emailSettings() (address, from string, auth smtp.Auth) {
 
 func newTestController() *controller.Controller {
 	sqlDB := mariaDB()
+	mongoClient := mongoSettings()
 	sessions, registrations, confirmEmails, passwordResets := redisClients()
 	e := email.NewEmail(emailSettings())
-	return controller.NewController(sqlDB, sessions, registrations, confirmEmails, passwordResets, e)
+	return controller.NewController(sqlDB, mongoClient, sessions, registrations, confirmEmails, passwordResets, e)
 }
 
 func getRequest(uri string, header http.Header, jsonPayload any) *http.Request {
@@ -137,4 +142,20 @@ func putRequest(uri string, header http.Header, jsonPayload any) *http.Request {
 		req.Header = header
 	}
 	return req
+}
+
+func mongoSettings() *mongo.Client {
+	mongoURL := "mongodb://spainews:spainews@127.0.0.1:27017/spainews"
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	mongoClient, connectionError := mongo.Connect(ctx, options.Client().ApplyURI(mongoURL))
+	if connectionError != nil {
+		log.Fatal(connectionError)
+	}
+	var readPref readpref.ReadPref
+	pingError := mongoClient.Ping(context.Background(), &readPref)
+	if pingError != nil {
+		log.Fatal(pingError)
+	}
+	return mongoClient
 }

@@ -28,6 +28,9 @@ const (
 	ConfirmResetPasswordURI = "/confirm/reset/password"
 	EmailURI                = "/email"
 	ConfirmUpdateEmailURI   = "/confirm/email"
+	NewsPageVariable        = "page"
+	NewsURI                 = "/news/:" + NewsPageVariable
+	SearchNewsURI           = "/search/:" + NewsPageVariable
 )
 
 const (
