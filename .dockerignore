@@ -1,0 +1,12 @@
+docs/*
+.circleci/*
+frontend/*
+mariadb-init.d/*
+mongo-initdb.d/*
+compose-dev-back.yaml
+compose-dev-front.yaml
+dev-back.ps1
+dev-front.ps1
+start-back.ps1
+start-front.ps1
+README.md

@@ -2,4 +2,7 @@
 .vs/*
 .code/*
 .vscode/*
-node_modules/*
+*/node_modules/*
+mongo-data/*
+mariadb-data/*
+*/venv/*
