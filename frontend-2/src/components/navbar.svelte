@@ -19,12 +19,20 @@ export let darkMode = false;
                 </li>
             </ul>
             <div class="d-flex" role="search">
-                {#if $session !== ''}
-                <a href="/account" class="nav-link">Account</a>
-                {:else}
-                <Login/>
-                <a href="/register" class="nav-link">Register</a>
-                {/if}
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    {#if $session !== ''}
+                    <li class="nav-item">
+                        <a href="/account" class="nav-link">Account</a>
+                    </li>
+                    {:else}
+                    <li class="nav-item">
+                        <Login/>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/register" class="nav-link">Register</a>
+                    </li>
+                    {/if}
+                </ul>
             </div>
         </div>
     </div>
