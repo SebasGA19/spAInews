@@ -16,6 +16,7 @@ def scrap(urls: list[str]) -> list[dict[str:any]]:
     return result
 
 
-articles = ["https://www.rt.com/news/560956-russian-defense-ministry-uk-provocation/", "https://www.nytimes.com/2022/08/16/business/economy/covid-pandemic-fraud.html"]
-result = scrap(articles)
-print(result)
+if __name__ == "__main__": # Try the script
+    articles = ["https://www.rt.com/news/560956-russian-defense-ministry-uk-provocation/", "https://www.nytimes.com/2022/08/16/business/economy/covid-pandemic-fraud.html"]
+    result = scrap(articles)
+    print(result)
