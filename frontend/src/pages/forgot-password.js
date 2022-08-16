@@ -1,7 +1,8 @@
 import { Page } from "../components/page";
 import { forgot_password} from "../api/forgot-password";
 
-function handleForgotPassword() {
+function handleForgotPassword(event) {
+    event.preventDefault();
     const email = document.getElementById("user-email").value;
     forgot_password(email)
     .then(

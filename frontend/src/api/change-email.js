@@ -1,17 +1,19 @@
 import { auth_api } from "../config";
 
-export async function forgot_password(email){
+export async function change_email(password, newEmail) {
     const payload = {
-        'email': email
+        'password' : password,
+        'new-email' : newEmail
     };
     const response = await fetch(
-        auth_api + "/reset/password",
+        auth_api + "/email",
         {
             method: 'POST',
             mode: 'cors',
             cache: 'no-cache',
             headers: {
-              'Content-Type': 'application/json'
+                'Session': localStorage.getItem('session'),
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(payload)
         }
@@ -23,24 +25,19 @@ export async function forgot_password(email){
     throw data["message"];
 }
 
-export async function forgot_password_confirm(newPassword,confirmCode){
-    const payload = {
-        'new-password': newPassword
-    };
+export async function confirm_change_email(confirmCode)  {
     const response = await fetch(
-        auth_api + "/confirm/reset/password",
+        auth_api + "/confirm/email",
         {
             method: 'POST',
             mode: 'cors',
             cache: 'no-cache',
             headers: {
-                'Confirm-Code':confirmCode,
-              'Content-Type': 'application/json'
+              'Confirm-Code': confirmCode
             },
-            body: JSON.stringify(payload)
         }
     );
-    if (response.status === 200){
+    if (response.status === 200) {
         return;
     }
     const data = await response.json();

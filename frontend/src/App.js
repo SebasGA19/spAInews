@@ -10,6 +10,8 @@ import { ChangePassword} from './pages/change-password';
 import { SpecificNews} from './pages/specific_news';
 import { ForgotPassword} from './pages/forgot-password';
 import { ForgotPasswordConfirm } from './pages/forgot-password-confirm';
+import { ChangeEmail } from './pages/change-email';
+import { ConfirmChangeEmail} from './pages/confirm-change-email';
 
 function App(){
   return(
@@ -25,6 +27,9 @@ function App(){
           <Route path="specific_news" element={<SpecificNews />} />
           <Route path="forgot-password" element={<ForgotPassword />} />
           <Route path="forgot-password-confirm" element={<ForgotPasswordConfirm />} />
+          <Route path="change-email" element={<ChangeEmail />} />
+          <Route path="confirm-change-email" element={<ConfirmChangeEmail />} />
+
         </Route>
       </Routes>
     </BrowserRouter>

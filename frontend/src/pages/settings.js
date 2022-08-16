@@ -8,6 +8,10 @@ export function Settings() {
                 <div class="col">
                     <Link to="/change-password" class="btn btn-primary">Change Password</Link>
                 </div>
+                <br></br>
+                <div class="col">
+                    <Link to="/change-email" class="btn btn-primary">Change Email</Link>
+                </div>
             </div>
         </Page>
     )
