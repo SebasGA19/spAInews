@@ -22,3 +22,27 @@ export async function forgot_password(email){
     const data = await response.json();
     throw data["message"];
 }
+
+export async function forgot_password_confirm(newPassword){
+    const payload = {
+        'new-password': newPassword
+    };
+    const response = await fetch(
+        auth_api + "/confirm/reset/password",
+        {
+            method: 'POST',
+            mode: 'cors',
+            cache: 'no-cache',
+            headers: {
+                'Confirm-Code':'RESET_CODE',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        }
+    );
+    if (response.status === 200){
+        return;
+    }
+    const data = await response.json();
+    throw data["message"];
+}

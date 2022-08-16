@@ -1,9 +1,9 @@
 import { Page } from "../components/page";
-import { change_password} from "../api/change-password";
+import { forgot_password} from "../api/forgot-password";
 
 function handleForgotPassword() {
     const email = document.getElementById("user-email").value;
-    change_password(email)
+    forgot_password(email)
     .then(
         () => {
             alert("An email with the URL for password reset has been sent")
