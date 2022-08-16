@@ -1,5 +1,6 @@
 import { Page } from "../components/page";
 import { login } from "../api/login";
+import {  Link } from "react-router-dom";
 
 function handleLogin() {
     const username = document.getElementById("login-username").value;
@@ -33,6 +34,7 @@ export function Login(){
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
+            <Link to="/forgot-password">Forgot your password?</Link>
             </div>
         </Page>
     )

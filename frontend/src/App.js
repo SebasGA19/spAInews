@@ -8,6 +8,8 @@ import { ConfirmRegister } from './pages/confirm-register';
 import { Settings} from './pages/settings';
 import { ChangePassword} from './pages/change-password';
 import { SpecificNews} from './pages/specific_news';
+import { ForgotPassword} from './pages/forgot-password';
+import { ForgotPasswordConfirm } from './pages/forgot-password-confirm';
 
 function App(){
   return(
@@ -21,6 +23,8 @@ function App(){
           <Route path="settings" element={<Settings />} />
           <Route path="change-password" element={<ChangePassword />} />
           <Route path="specific_news" element={<SpecificNews />} />
+          <Route path="forgot-password" element={<ForgotPassword />} />
+          <Route path="forgot-password-confirm" element={<ForgotPasswordConfirm />} />
         </Route>
       </Routes>
     </BrowserRouter>
