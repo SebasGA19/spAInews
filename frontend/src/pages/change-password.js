@@ -2,7 +2,8 @@ import { Page } from "../components/page"
 import { change_password } from "../api/change-password";
 
 
-function handleChangePassword(){
+function handleChangePassword(event){
+    event.preventDefault();
     const oldPassword = document.getElementById("user-old-password").value;
     const newPassword = document.getElementById("user-new-password").value;
 

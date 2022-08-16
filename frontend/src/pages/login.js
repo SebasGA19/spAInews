@@ -2,13 +2,15 @@ import { Page } from "../components/page";
 import { login } from "../api/login";
 import {  Link } from "react-router-dom";
 
-function handleLogin() {
+function handleLogin(event) {
+    event.preventDefault();
     const username = document.getElementById("login-username").value;
     const password = document.getElementById("login-password").value;
     login(username, password)
     .then(
         session => {
-            document.cookie += `session=${session}`;
+            
+            localStorage.setItem('session', session);
         }
     )
     .catch(

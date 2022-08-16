@@ -1,7 +1,8 @@
 import { Page } from "../components/page";
 import { confirmRegister } from "../api/confirm";
 
-function handleConfirm() {
+function handleConfirm(event) {
+    event.preventDefault();
     const confirmCode = document.getElementById("register-confirm-code").value;
     confirmRegister(confirmCode)
     .then(

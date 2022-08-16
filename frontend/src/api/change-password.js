@@ -12,7 +12,7 @@ export async function change_password(oldPassword, newPassword) {
             mode: 'cors',
             cache: 'no-cache',
             headers: {
-                'Session': 'COOKIE',
+                'Session': localStorage.getItem('session'),
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(payload)

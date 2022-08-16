@@ -1,7 +1,8 @@
 import { Page } from "../components/page";
 import { register } from "../api/register";
 
-function handleRegister() {
+function handleRegister(event) {
+    event.preventDefault();
     const username = document.getElementById("register-username").value;
     const email = document.getElementById("register-email").value;
     const password = document.getElementById("register-password").value;
