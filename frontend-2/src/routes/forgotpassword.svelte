@@ -8,7 +8,6 @@
 		forgot_password(email)
 			.then((s) => {
 				successMessage = 'Check your email for authentication';
-				location.reload();
 			})
 			.catch((error) => {
 				errorMessage = error;

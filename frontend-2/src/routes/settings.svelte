@@ -14,7 +14,7 @@
     change_password(oldPassword, newPassword, $session)
     .then(
       () => {
-        successMessage_pass = "Check your email for authentication";
+        successMessage_pass = "Password Changed successfully";
       }
     ).catch(
       error => {
@@ -56,7 +56,7 @@
                     </div>
                     {/if}
                     {#if successMessage}
-                    <div class="alert alert-danger" role="alert">
+                    <div class="alert alert-success" role="alert">
                       {successMessage}
                     </div>
                     {/if}
@@ -83,22 +83,22 @@
                 <div class="accordion-body">
                   <div class="container text-center" style="max-width: 50vw;">
                     <h3>Change Password</h3>
-                    {#if errorMessage}
+                    {#if errorMessage_pass}
                     <div class="alert alert-danger" role="alert">
-                        {errorMessage}
+                        {errorMessage_pass}
                     </div>
                     {/if}
-                    {#if successMessage}
-                    <div class="alert alert-danger" role="alert">
-                      {successMessage}
+                    {#if successMessage_pass}
+                    <div class="alert alert-success" role="alert">
+                      {successMessage_pass}
                     </div>
                     {/if}
                     <form on:submit|preventDefault={handleChangePassword}>
                         <div class="mb-3">
                         <label for="change-password" class="form-label">Old password</label>
-                            <input required type="text" placeholder="old-password" bind:value="{oldPassword}" class="form-control"/>
+                            <input required type="password" placeholder="old-password" bind:value="{oldPassword}" class="form-control"/>
                         <label for="change-password" class="form-label">New password</label>
-                            <input required type="text" placeholder="new-password" bind:value="{newPassword}" class="form-control"/>
+                            <input required type="password" placeholder="new-password" bind:value="{newPassword}" class="form-control"/>
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>

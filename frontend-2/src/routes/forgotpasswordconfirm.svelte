@@ -8,7 +8,7 @@
 		forgot_password_confirm(newPassword,code)
 			.then((s) => {
 				successMessage = 'Password changed succesfully';
-				location.reload();
+				
 			})
 			.catch((error) => {
 				errorMessage = error;

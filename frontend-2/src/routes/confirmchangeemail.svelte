@@ -1,12 +1,12 @@
 <script>
-	import { change_email } from '../api/change-email';
+	import { change_email, confirm_change_email } from '../api/change-email';
 	import Page from '../components/page.svelte';
 
 	let confirmCode;
 	let successMessage, errorMessage;
 
 	function handleConfirm() {
-		change_email(confirmCode)
+		confirm_change_email(confirmCode)
 			.then(() => {
 				successMessage = 'Email changed succesfully';
 			})
@@ -25,7 +25,7 @@
 			</div>
 		{/if}
 		{#if successMessage}
-			<div class="alert alert-danger" role="alert">
+			<div class="alert alert-success" role="alert">
 				{successMessage}
 			</div>
 		{/if}

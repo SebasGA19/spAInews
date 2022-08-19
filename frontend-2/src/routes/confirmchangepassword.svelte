@@ -25,7 +25,7 @@
 			</div>
 		{/if}
 		{#if successMessage}
-			<div class="alert alert-danger" role="alert">
+			<div class="alert alert-success" role="alert">
 				{successMessage}
 			</div>
 		{/if}

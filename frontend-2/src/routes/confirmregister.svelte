@@ -8,7 +8,7 @@
 	function handleConfirm() {
 		confirmRegister(confirmCode)
 			.then(() => {
-				successMessage = 'Password changed succesfully';
+				successMessage = 'Registration succesfull!';
 			})
 			.catch((error) => {
 				errorMessage = error;
@@ -25,7 +25,7 @@
 			</div>
 		{/if}
 		{#if successMessage}
-			<div class="alert alert-danger" role="alert">
+			<div class="alert alert-success" role="alert">
 				{successMessage}
 			</div>
 		{/if}
