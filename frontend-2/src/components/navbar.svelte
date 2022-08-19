@@ -1,6 +1,7 @@
 <script>
 import { session } from "../stores/session";
 import { darkMode } from "../stores/dark-mode"
+import { logout } from "../api/login";
 
 import Login from "./login.svelte";
 import Register from "./register.svelte";
@@ -10,6 +11,20 @@ let darkModeChecked = $darkMode === 'dark';
 $ : {
     darkModeChecked;
     $darkMode = darkModeChecked ? 'dark' : 'light';
+}
+
+function handle_logout() {
+    logout($session)
+    .then(
+        () => {
+            $session = '';
+        }
+    )
+    .catch(
+        () => {
+            $session = '';
+        }
+    )
 }
 </script>
 
@@ -41,7 +56,7 @@ $ : {
                         </button>
                         <ul class="dropdown-menu">
                           <li><a class="dropdown-item" href="/settings">Settings</a></li>
-                          <li><a class="dropdown-item" href="#" >Logout</a></li>
+                          <li><a class="dropdown-item" href="#" on:click={handle_logout}>Logout</a></li>
                         </ul>
                       </div>
                     {:else}

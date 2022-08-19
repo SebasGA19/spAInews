@@ -11,3 +11,22 @@ export async function login(username, password) {
     }
     throw data["message"];
 }
+
+export async function logout(session) {
+    const response = await fetch(
+        auth_api + "/session",
+        {
+            method: 'DELETE',
+            mode: 'cors',
+            cache: 'no-cache',
+            headers: {
+              'Session': session
+            },
+        }
+    );
+    if (response.status === 200) {
+        return;
+    }
+    const data = await response.json();
+    throw data["message"];
+}
