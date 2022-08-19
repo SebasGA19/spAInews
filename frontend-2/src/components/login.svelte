@@ -1,5 +1,5 @@
 <script>
-import {session} from '../stores/session'
+import {session, sessionUsername} from '../stores/session'
 import {login} from '../api/login'
 
 
@@ -10,6 +10,7 @@ function handleLogin() {
     login(username, password)
     .then(
         s => {
+            sessionUsername.set(username);
             session.set(s);
             location.reload();
         }

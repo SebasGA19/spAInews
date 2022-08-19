@@ -1,5 +1,5 @@
 <script>
-import { session } from "../stores/session";
+import { session, sessionUsername } from "../stores/session";
 import { darkMode } from "../stores/dark-mode"
 import { logout } from "../api/login";
 
@@ -52,7 +52,7 @@ function handle_logout() {
                     {#if $session !== ''}
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                          Usuario
+                          {$sessionUsername}
                         </button>
                         <ul class="dropdown-menu">
                           <li><a class="dropdown-item" href="/settings">Settings</a></li>
