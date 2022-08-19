@@ -13,5 +13,7 @@ import Navbar from "./navbar.svelte";
 <link rel="stylesheet" href="/css/light.css"/>
 {/if}
 <Navbar/>
-<slot></slot>
+<div style="min-height: 80vh;">
+    <slot></slot>
+</div>
 <Footer/>
