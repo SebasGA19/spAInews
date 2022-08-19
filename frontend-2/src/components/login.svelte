@@ -2,6 +2,7 @@
 import {session} from '../stores/session'
 import {login} from '../api/login'
 
+
 let username, password;
 let errorMessage;
 
@@ -50,6 +51,8 @@ function handleLogin() {
                         <input required type="password" placeholder="password" class="form-control" bind:value="{password}"/>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
+                    <br>
+                    <a href="/forgotpassword">Forgot password?</a>
                 </form>
             </div>
         </div>

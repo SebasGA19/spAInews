@@ -2,6 +2,7 @@
 import { session } from "../stores/session";
 
 import Login from "./login.svelte";
+import Register from "./register.svelte";
 
 export let darkMode = false;
 
@@ -29,7 +30,7 @@ export let darkMode = false;
                         <Login/>
                     </li>
                     <li class="nav-item">
-                        <a href="/register" class="nav-link">Register</a>
+                        <Register/>
                     </li>
                     {/if}
                 </ul>

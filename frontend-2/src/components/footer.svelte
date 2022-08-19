@@ -5,7 +5,7 @@
                         <p class="m-0" >Autores</p>
                         <p class="m-0">Antonio Jose Donis</p>
                         <p class="m-0">Sebastian David Gomez</p>
-                        <p class="m-0">Mario Esteban Hurtado</p>
+                        <p class="m-0">Mario Humberto Esteban Hurtado</p>
                         <p class="m-0">Santiado Andres Del Valle</p>
                         <p class="m-0">Diego Alejandro Angulo</p>
                         <p class="m-0">©Copyright 2022 spAInews</p>
@@ -22,6 +22,7 @@
     }
     .footersito{
         padding-top: 10px;
+        font-size: 10px;
     }
 
 </style>
