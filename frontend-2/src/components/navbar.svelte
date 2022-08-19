@@ -41,7 +41,7 @@ $ : {
                         </button>
                         <ul class="dropdown-menu">
                           <li><a class="dropdown-item" href="/settings">Settings</a></li>
-                          <li><a class="dropdown-item" href="#" on:click={handle_logout}>Logout</a></li>
+                          <li><a class="dropdown-item" href="#" >Logout</a></li>
                         </ul>
                       </div>
                     {:else}

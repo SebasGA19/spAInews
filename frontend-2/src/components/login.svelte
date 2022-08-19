@@ -4,14 +4,14 @@ import {login} from '../api/login'
 
 
 let username, password;
-let errorMessage;
+let errorMessage, successMessage;
 
 function handleLogin() {
     login(username, password)
     .then(
         s => {
             session.set(s);
-            location.reload()
+            location.reload();
         }
     ).catch(
         error => {

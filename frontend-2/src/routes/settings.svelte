@@ -3,20 +3,22 @@
 	import { change_password } from "../api/change-password";
   import { change_email } from "../api/change-email";
   import { session } from '../stores/session';
+  import Footer from '../components/footer.svelte';
 
   let password, newEmail;
   let oldPassword, newPassword;
-  let errorMessage;
+  let errorMessage, successMessage;
+  let errorMessage_pass, successMessage_pass;
 
   function handleChangePassword(){
     change_password(oldPassword, newPassword, $session)
     .then(
       () => {
-        
+        successMessage_pass = "Check your email for authentication";
       }
     ).catch(
       error => {
-        errorMessage = error;
+        errorMessage_pass = error;
       }
     )
   }
@@ -25,7 +27,7 @@
     change_email(password, newEmail, $session)
     .then(
       () => {
-
+        successMessage = "Check your email for authentication";
       }
     ).catch( 
         error => {
@@ -48,12 +50,22 @@
                 <div class="accordion-body">
                   <div class="container text-center w-25">
                     <h3>Change Email</h3>
+                    {#if errorMessage}
+                    <div class="alert alert-danger" role="alert">
+                        {errorMessage}
+                    </div>
+                    {/if}
+                    {#if successMessage}
+                    <div class="alert alert-danger" role="alert">
+                      {successMessage}
+                    </div>
+                    {/if}
                     <form on:submit|preventDefault={handleChangeEmail}>
                         <div class="mb-3">
                         <label for="password" class="form-label">Password</label>
                             <input required type="password" placeholder="password" bind:value="{password}" class="form-control"/>
                         <label for="change-email" class="form-label">New email</label>
-                            <input required type="text" placeholder="new-email" bind:value="{newEmail}" class="form-control"/>
+                            <input required type="email" placeholder="new-email" bind:value="{newEmail}" class="form-control"/>
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
@@ -71,6 +83,16 @@
                 <div class="accordion-body">
                   <div class="container text-center w-25">
                     <h3>Change Password</h3>
+                    {#if errorMessage}
+                    <div class="alert alert-danger" role="alert">
+                        {errorMessage}
+                    </div>
+                    {/if}
+                    {#if successMessage}
+                    <div class="alert alert-danger" role="alert">
+                      {successMessage}
+                    </div>
+                    {/if}
                     <form on:submit|preventDefault={handleChangePassword}>
                         <div class="mb-3">
                         <label for="change-password" class="form-label">Old password</label>
