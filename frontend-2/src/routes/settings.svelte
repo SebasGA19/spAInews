@@ -3,7 +3,7 @@
 	import { change_password } from "../api/change-password";
   import { change_email } from "../api/change-email";
   import { session } from '../stores/session';
-  import Footer from '../components/footer.svelte';
+  import AuthRequired from '../components/authRequired.svelte';
 
   let password, newEmail;
   let oldPassword, newPassword;
@@ -37,6 +37,7 @@
   }
 </script>
 
+<AuthRequired/>
 <Page>
     <div class="container text-center">
         <div class="accordion accordion-flush" id="accordionFlushExample">
