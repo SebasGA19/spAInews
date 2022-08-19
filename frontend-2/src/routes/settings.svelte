@@ -1,46 +1,87 @@
 <script>
 	import Page from '../components/page.svelte';
-	
+	import { change_password } from "../api/change-password";
+  import { change_email } from "../api/change-email";
+  import { session } from '../stores/session';
+
+  let password, newEmail;
+  let oldPassword, newPassword;
+  let errorMessage;
+
+  function handleChangePassword(){
+    change_password(oldPassword, newPassword, $session)
+    .then(
+      () => {
+        
+      }
+    ).catch(
+      error => {
+        errorMessage = error;
+      }
+    )
+  }
+
+  function handleChangeEmail(){
+    change_email(password, newEmail, $session)
+    .then(
+      () => {
+
+      }
+    ).catch( 
+        error => {
+        errorMessage = error;
+        }
+    )
+  }
 </script>
 
 <Page>
     <div class="container text-center">
-        <div class="col">
-            <a href="/changepassword" class="btn btn-primary">Change Password</a>
-        </div>
-        <br>
-        <div class="col">
-            <a href="/changeemail" class="btn btn-primary">Change email</a>
-        </div>
         <div class="accordion accordion-flush" id="accordionFlushExample">
             <div class="accordion-item">
               <h2 class="accordion-header" id="flush-headingOne">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                  Accordion Item #1
+                  Change Email
                 </button>
               </h2>
               <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-                <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the first item's accordion body.</div>
+                <div class="accordion-body">
+                  <div class="container text-center w-25">
+                    <h3>Change Email</h3>
+                    <form on:submit|preventDefault={handleChangeEmail}>
+                        <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                            <input required type="password" placeholder="password" bind:value="{password}" class="form-control"/>
+                        <label for="change-email" class="form-label">New email</label>
+                            <input required type="text" placeholder="new-email" bind:value="{newEmail}" class="form-control"/>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                    </div>
+                </div>
               </div>
             </div>
             <div class="accordion-item">
               <h2 class="accordion-header" id="flush-headingTwo">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                  Accordion Item #2
+                  Change Password
                 </button>
               </h2>
               <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
-                <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the second item's accordion body. Let's imagine this being filled with some actual content.</div>
-              </div>
-            </div>
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="flush-headingThree">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
-                  Accordion Item #3
-                </button>
-              </h2>
-              <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
-                <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
+                <div class="accordion-body">
+                  <div class="container text-center w-25">
+                    <h3>Change Password</h3>
+                    <form on:submit|preventDefault={handleChangePassword}>
+                        <div class="mb-3">
+                        <label for="change-password" class="form-label">Old password</label>
+                            <input required type="text" placeholder="old-password" bind:value="{oldPassword}" class="form-control"/>
+                        <label for="change-password" class="form-label">New password</label>
+                            <input required type="text" placeholder="new-password" bind:value="{newPassword}" class="form-control"/>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                    </div>
+                </div>
               </div>
             </div>
           </div>
