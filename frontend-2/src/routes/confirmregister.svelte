@@ -17,7 +17,7 @@
 </script>
 
 <Page>
-	<div class="container text-center w-25">
+	<div class="container text-center" style="max-width: 50vw;">
 		<h3>Confirm Register</h3>
 		{#if errorMessage}
 			<div class="alert alert-danger" role="alert">

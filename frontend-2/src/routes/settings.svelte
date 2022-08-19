@@ -48,7 +48,7 @@
               </h2>
               <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
                 <div class="accordion-body">
-                  <div class="container text-center w-25">
+                  <div class="container text-center" style="max-width: 50vw;">
                     <h3>Change Email</h3>
                     {#if errorMessage}
                     <div class="alert alert-danger" role="alert">
@@ -81,7 +81,7 @@
               </h2>
               <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
                 <div class="accordion-body">
-                  <div class="container text-center w-25">
+                  <div class="container text-center" style="max-width: 50vw;">
                     <h3>Change Password</h3>
                     {#if errorMessage}
                     <div class="alert alert-danger" role="alert">

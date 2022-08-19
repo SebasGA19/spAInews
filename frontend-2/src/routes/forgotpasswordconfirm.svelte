@@ -28,7 +28,7 @@
 		</div>
 	{/if}
    
-	<div class="container text-center w-25">
+	<div class="container text-center" style="max-width: 50vw;">
 		<form on:submit|preventDefault={handleForgotPasswordConfirm}>
 			<div class="mb-3">
 				<label for="forgot-password" class="form-label">Code</label>
