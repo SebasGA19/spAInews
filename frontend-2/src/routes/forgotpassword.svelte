@@ -28,7 +28,7 @@
 		</div>
 	{/if}
    
-	<div class="container text-center w-25">
+	<div class="container text-center">
 		<form on:submit|preventDefault={handleForgotPassword}>
 			<div class="mb-3">
 				<label for="forgot-password" class="form-label">email</label>
