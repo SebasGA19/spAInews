@@ -17,11 +17,13 @@ function handle_logout() {
     logout($session)
     .then(
         () => {
+            $sessionUsername = '';
             $session = '';
         }
     )
     .catch(
         () => {
+            $sessionUsername = '';
             $session = '';
         }
     )
