@@ -68,6 +68,7 @@ services:
       SMTP_PASSWORD: "password" # TODO: FIX ME
       REDIS_ADDRESS: "redis:6379"
       MARIA_URL: "spainews:spainews@tcp(mariadb:3306)/spainews?parseTime=true"
+      MONGO_URL: "mongodb://spainews:spainews@mongo:27017/spainews"
       LISTEN_ADDRESS: "auth-api:5000"
     ports:
       - "127.0.0.1:5000:5000"
