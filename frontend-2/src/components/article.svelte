@@ -21,9 +21,9 @@
 			<a class="article-news" href="#">Continuar leyendo</a>
 		</p>
 		<footer class="article-info">
-			{#each authors as author}
-				<span>{author}</span>
-			{/each}
+			{#if authors.length > 1}
+				<span>{authors[0]}</span>
+			{/if}
 			<span class="date-published">{publish_date}</span>
 		</footer>
 	</div>

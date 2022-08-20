@@ -26,7 +26,9 @@
 	<div>
 		<!-- By Juan Paez -->
 		<NewsSection bind:articles={articles}/>
-		<button type="button" class="btn btn-outline-primary" on:click="{loadContent}">Ver más</button>
+		<div class="text-center">
+			<button type="button" class="btn btn-primary" on:click="{loadContent}">More</button>
+		</div>
 	</div>
 </Page>
 
