@@ -437,13 +437,12 @@ It will return 10 or less news as results
 
 ```json
 {
-    "filter": {
-        "start-date": "31/12/2022",
-        "end-date": "31/12/2022",
-        "sources": ["apnews.com", "nytimes.com", "..."],
-        "words": ["Colombia", "Venezuela", "..."]
-    },
-    "sort": "new-first"
+    "start-date": "31/12/2022",
+    "end-date": "31/12/2022",
+    "sources": ["apnews.com", "nytimes.com", "..."],
+    "maintext-words": ["Colombia", "Venezuela", "..."],
+    "title-words": ["Colombia", "Venezuela", "..."],
+    "old-first": true,
 }
 ```
 
