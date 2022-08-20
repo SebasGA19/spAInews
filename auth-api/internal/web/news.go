@@ -23,7 +23,7 @@ func (backend *Backend) LatestNews(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, NewError(InternalServerErrorCode))
 		return
 	}
-	articles, getArticlesError := backend.Controller.LatestNews(page)
+	articles, getArticlesError := backend.Controller.LatestNews(page - 1)
 	if getArticlesError != nil {
 		log.Print(getArticlesError)
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, NewError(InternalServerErrorCode))

@@ -8,18 +8,18 @@ import (
 
 type (
 	Article struct {
-		Authors      []string  `bson:"authors"`
-		DateDownload time.Time `bson:"date_download"`
-		DateModify   time.Time `bson:"date_modify"`
-		DatePublish  time.Time `bson:"date_publish"`
-		Description  string    `bson:"description"`
-		Filename     string    `bson:"filename"`
-		ImageURL     string    `bson:"image_url"`
-		Language     string    `bson:"language"`
-		SourceDomain string    `bson:"source_domain"`
-		MainText     string    `bson:"maintext"`
-		Title        string    `bson:"title"`
-		URL          string    `bson:"url"`
+		Authors      []string  `bson:"authors" json:"authors"`
+		DateDownload time.Time `bson:"date_download" json:"date_download"`
+		DateModify   time.Time `bson:"date_modify" json:"date_modify"`
+		DatePublish  time.Time `bson:"date_publish" json:"date_publish"`
+		Description  string    `bson:"description" json:"description"`
+		Filename     string    `bson:"filename" json:"filename"`
+		ImageURL     string    `bson:"image_url" json:"image_url"`
+		Language     string    `bson:"language" json:"language"`
+		SourceDomain string    `bson:"source_domain" json:"source_domain"`
+		MainText     string    `bson:"maintext" json:"maintext"`
+		Title        string    `bson:"title" json:"title"`
+		URL          string    `bson:"url" json:"url"`
 	}
 	LatestNewsFilter struct {
 	}
