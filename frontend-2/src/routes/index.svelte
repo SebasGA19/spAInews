@@ -1,6 +1,23 @@
 <script>
 import Page from "../components/page.svelte";
+import { onMount } from 'svelte';
+import { latestnews} from '../api/latestnews';
 
+let currentpage;
+
+function loadContent(){
+  latestnews(currentpage)
+			.then(
+        () => {
+          
+        }
+      )
+}
+
+onMount(async () => {
+      
+
+	});
 </script>
 
 <Page> 
