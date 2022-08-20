@@ -438,9 +438,10 @@ It will return 10 or less news as results
 ```json
 {
     "filter": {
-        "start-date": new DATE(),
-        "end-date": new DATE(),
-        "sources": ["CNN", "RT", "NYTIMES", "..."]
+        "start-date": "31/12/2022",
+        "end-date": "31/12/2022",
+        "sources": ["apnews.com", "nytimes.com", "..."],
+        "words": ["Colombia", "Venezuela", "..."]
     },
     "sort": "new-first"
 }

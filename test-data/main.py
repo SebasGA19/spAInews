@@ -18,7 +18,9 @@ def load_data() -> list:
                 contents = file_obj.read()
                 obj = json.loads(contents)
                 # 2022-08-16 17:13:00
-                # date_download, date_modify, date_publish
+                # date_download
+                # date_modify
+                # date_publish
                 obj["date_download"] = datetime.datetime.strptime(obj["date_download"], '%Y-%m-%d %H:%M:%S')
                 obj["date_modify"] = datetime.datetime.strptime(obj["date_modify"], '%Y-%m-%d %H:%M:%S')
                 obj["date_publish"] = datetime.datetime.strptime(obj["date_publish"], '%Y-%m-%d %H:%M:%S')
