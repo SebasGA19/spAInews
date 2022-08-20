@@ -1,4 +1,4 @@
-import { auth_api } from "../config";
+import { api_baseurl } from "../config";
 
 export async function register(username, email, password) {
     const payload = {
@@ -7,7 +7,7 @@ export async function register(username, email, password) {
         password: password
     };
     const response = await fetch(
-        auth_api + "/register",
+        api_baseurl + "/register",
         {
             method: 'PUT',
             mode: 'cors',

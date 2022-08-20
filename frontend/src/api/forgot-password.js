@@ -1,11 +1,11 @@
-import { auth_api } from "../config";
+import { api_baseurl } from "../config";
 
 export async function forgot_password(email){
     const payload = {
         'email': email
     };
     const response = await fetch(
-        auth_api + "/reset/password",
+        api_baseurl + "/reset/password",
         {
             method: 'POST',
             mode: 'cors',
@@ -28,7 +28,7 @@ export async function forgot_password_confirm(newPassword,confirmCode){
         'new-password': newPassword
     };
     const response = await fetch(
-        auth_api + "/confirm/reset/password",
+        api_baseurl + "/confirm/reset/password",
         {
             method: 'POST',
             mode: 'cors',
