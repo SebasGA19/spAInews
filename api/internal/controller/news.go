@@ -7,6 +7,10 @@ import (
 	"time"
 )
 
+const (
+	NumberOfResults = 9
+)
+
 type (
 	Article struct {
 		Authors      []string  `bson:"authors"`
@@ -33,7 +37,7 @@ type (
 )
 
 func (c *Controller) LatestNews(page int64) ([]Article, error) {
-	skip := 10 * page
+	skip := NumberOfResults * page
 	opts := options.Find()
 	opts.Skip = &skip
 	opts.SetSort(bson.D{{"date_publish", -1}})
@@ -46,9 +50,9 @@ func (c *Controller) LatestNews(page int64) ([]Article, error) {
 	}
 	var (
 		article  Article
-		articles = make([]Article, 0, 10)
+		articles = make([]Article, 0, NumberOfResults)
 	)
-	for index := 0; index < 10 && cursor.Next(c.ctx); index++ {
+	for index := 0; index < NumberOfResults && cursor.Next(c.ctx); index++ {
 		decodeError := cursor.Decode(&article)
 		if decodeError != nil {
 			return nil, decodeError
@@ -59,7 +63,7 @@ func (c *Controller) LatestNews(page int64) ([]Article, error) {
 }
 
 func (c *Controller) SearchNews(page int64, searchFilter SearchFilter) ([]Article, error) {
-	skip := 10 * page
+	skip := NumberOfResults * page
 	// Filter
 	var andConditions, orConditions []bson.M
 	if searchFilter.StartDate != nil {
@@ -106,9 +110,9 @@ func (c *Controller) SearchNews(page int64, searchFilter SearchFilter) ([]Articl
 	}
 	var (
 		article  Article
-		articles = make([]Article, 0, 10)
+		articles = make([]Article, 0, NumberOfResults)
 	)
-	for index := 0; index < 10 && cursor.Next(c.ctx); index++ {
+	for index := 0; index < NumberOfResults && cursor.Next(c.ctx); index++ {
 		decodeError := cursor.Decode(&article)
 		if decodeError != nil {
 			return nil, decodeError
