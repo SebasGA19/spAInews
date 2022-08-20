@@ -1,4 +1,4 @@
-import { auth_api } from "../config";
+import { api_baseurl } from "../config";
 
 export async function change_email(password, newEmail) {
     const payload = {
@@ -6,7 +6,7 @@ export async function change_email(password, newEmail) {
         'new-email' : newEmail
     };
     const response = await fetch(
-        auth_api + "/email",
+        api_baseurl + "/email",
         {
             method: 'POST',
             mode: 'cors',
@@ -27,7 +27,7 @@ export async function change_email(password, newEmail) {
 
 export async function confirm_change_email(confirmCode)  {
     const response = await fetch(
-        auth_api + "/confirm/email",
+        api_baseurl + "/confirm/email",
         {
             method: 'POST',
             mode: 'cors',

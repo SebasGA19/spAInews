@@ -1,4 +1,4 @@
-import { auth_api } from "../config";
+import { api_baseurl } from "../config";
 
 export async function change_password(oldPassword, newPassword, session) {
     const payload = {
@@ -6,7 +6,7 @@ export async function change_password(oldPassword, newPassword, session) {
         'new-password' : newPassword
     };
     const response = await fetch(
-        auth_api + "/password",
+        api_baseurl + "/password",
         {
             method: 'POST',
             mode: 'cors',
