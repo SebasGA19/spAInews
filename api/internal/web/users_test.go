@@ -2,7 +2,7 @@ package web
 
 import (
 	"encoding/json"
-	"github.com/SebasGA19/spAInews/auth-api/internal/tests"
+	"github.com/SebasGA19/spAInews/api/internal/tests"
 	"net/http"
 	"net/http/httptest"
 	"testing"

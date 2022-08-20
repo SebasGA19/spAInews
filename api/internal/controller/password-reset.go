@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"github.com/SebasGA19/spAInews/auth-api/internal/common"
+	"github.com/SebasGA19/spAInews/api/internal/common"
 	"time"
 )
 

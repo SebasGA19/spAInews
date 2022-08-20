@@ -10,4 +10,4 @@ $env:MONGO_URL = "mongodb://spainews:spainews@127.0.0.1:27017/spainews"
 $env:LISTEN_ADDRESS = "127.0.0.1:5000"
 # Start Backend
 $path = Split-Path $MyInvocation.MyCommand.Path -Parent
-go run "$path/auth-api/cmd/auth-api"
+go run -mod=vendor "$path/api/cmd/api"

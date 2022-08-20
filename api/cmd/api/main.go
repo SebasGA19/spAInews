@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/SebasGA19/spAInews/auth-api/internal/config"
-	"github.com/SebasGA19/spAInews/auth-api/internal/controller"
-	"github.com/SebasGA19/spAInews/auth-api/internal/controller/email"
-	"github.com/SebasGA19/spAInews/auth-api/internal/web"
+	"github.com/SebasGA19/spAInews/api/internal/config"
+	"github.com/SebasGA19/spAInews/api/internal/controller"
+	"github.com/SebasGA19/spAInews/api/internal/controller/email"
+	"github.com/SebasGA19/spAInews/api/internal/web"
 	"log"
 	"os"
 )

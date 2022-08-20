@@ -3,7 +3,7 @@ package controller
 import (
 	"context"
 	"database/sql"
-	"github.com/SebasGA19/spAInews/auth-api/internal/controller/email"
+	"github.com/SebasGA19/spAInews/api/internal/controller/email"
 	"github.com/go-redis/redis/v9"
 	"go.mongodb.org/mongo-driver/mongo"
 )
