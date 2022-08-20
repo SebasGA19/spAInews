@@ -53,3 +53,11 @@ services:
       MARIADB_DATABASE: spainews
       MARIADB_USER: spainews
       MARIADB_PASSWORD: spainews
+  test-data:
+    restart: on-failure
+    networks:
+      - spainews
+    container_name: spainews-test-data
+    build:
+      context: .
+      dockerfile: test-data.Dockerfile

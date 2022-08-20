@@ -4,17 +4,17 @@ RUN apk add build-base
 WORKDIR /build
 WORKDIR /spAInews
 COPY . .
-WORKDIR /spAInews/auth-api/cmd/auth-api
+WORKDIR /spAInews/api/cmd/api
 RUN go build -ldflags="-s -w" -trimpath -buildvcs=false -o /build/server
 
 # Prepare image
 FROM alpine:3.16 AS runner
-RUN addgroup -g 5001 -S auth-api
-RUN adduser -h /apt/auth-api -s /sbin/nologin -G auth-api -S -u 5001 auth-api
-WORKDIR /apt/auth-api
+RUN addgroup -g 5001 -S api
+RUN adduser -h /apt/api -s /sbin/nologin -G api -S -u 5001 api
+WORKDIR /apt/api
 COPY --from=builder /build/server .
-RUN chmod 777 /apt/auth-api/server
-USER auth-api:auth-api
+RUN chmod 777 /apt/api/server
+USER api:api
 EXPOSE 5000
-CMD /apt/auth-api/server
+CMD /apt/api/server
 
