@@ -4,7 +4,7 @@ db.createUser(
         pwd: "spainews",
         roles: [
             {
-                role: "read",
+                role: "readWrite",
                 db: "spainews"
             }
         ]
