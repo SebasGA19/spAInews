@@ -1,3 +1,13 @@
 .nav-link:hover {
-    color: greenyellow;
+    color: #148d8d;
+}
+#titulo{
+    color: white;
+}
+.article-body{
+    background-color: #405461;
+    color: white;
+}
+.article-title{
+    color: white;
 }
