@@ -12,18 +12,18 @@ import (
 type (
 	ArticleTime time.Time
 	Article     struct {
-		Authors      []string    `bson:"authors"`
-		DateDownload ArticleTime `bson:"date_download"`
-		DateModify   ArticleTime `bson:"date_modify"`
-		DatePublish  ArticleTime `bson:"date_publish"`
-		Description  string      `bson:"description"`
-		Filename     string      `bson:"filename"`
-		ImageURL     string      `bson:"image_url"`
-		Language     string      `bson:"language"`
-		SourceDomain string      `bson:"source_domain"`
-		MainText     string      `bson:"maintext"`
-		Title        string      `bson:"title"`
-		URL          string      `bson:"url"`
+		Authors      []string    `json:"authors"`
+		DateDownload ArticleTime `json:"date_download"`
+		DateModify   ArticleTime `json:"date_modify"`
+		DatePublish  ArticleTime `json:"date_publish"`
+		Description  string      `json:"description"`
+		Filename     string      `json:"filename"`
+		ImageURL     string      `json:"image_url"`
+		Language     string      `json:"language"`
+		SourceDomain string      `json:"source_domain"`
+		MainText     string      `json:"maintext"`
+		Title        string      `json:"title"`
+		URL          string      `json:"url"`
 	}
 	NewsResponse struct {
 		CurrentPage     int64     `json:"current-page"`
