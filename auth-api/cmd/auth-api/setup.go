@@ -12,6 +12,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 	"log"
 	"net/smtp"
+	"net/url"
 	"os"
 	"time"
 )
@@ -80,7 +81,7 @@ func emailSettings() (address, from string, auth smtp.Auth) {
 	return fmt.Sprintf("%s:%s", os.Getenv(config.SMTPHost), os.Getenv(config.SMTPPort)), os.Getenv(config.SMTPFrom), auth
 }
 
-func mongoSettings() *mongo.Client {
+func mongoSettings() *mongo.Collection {
 	mongoURL := os.Getenv(config.MongoURL)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -93,5 +94,10 @@ func mongoSettings() *mongo.Client {
 	if pingError != nil {
 		log.Fatal(pingError)
 	}
-	return mongoClient
+	parseUrl, parseError := url.Parse(mongoURL)
+	if parseError != nil {
+		log.Fatal(parseError)
+	}
+	database := mongoClient.Database(parseUrl.RequestURI()[1:])
+	return database.Collection("news")
 }

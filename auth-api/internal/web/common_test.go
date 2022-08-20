@@ -17,6 +17,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/smtp"
+	"net/url"
 	"time"
 )
 
@@ -86,10 +87,10 @@ func emailSettings() (address, from string, auth smtp.Auth) {
 
 func newTestController() *controller.Controller {
 	sqlDB := mariaDB()
-	mongoClient := mongoSettings()
+	mongoCollection := mongoSettings()
 	sessions, registrations, confirmEmails, passwordResets := redisClients()
 	e := email.NewEmail(emailSettings())
-	return controller.NewController(sqlDB, mongoClient, sessions, registrations, confirmEmails, passwordResets, e)
+	return controller.NewController(sqlDB, mongoCollection, sessions, registrations, confirmEmails, passwordResets, e)
 }
 
 func getRequest(uri string, header http.Header, jsonPayload any) *http.Request {
@@ -144,7 +145,7 @@ func putRequest(uri string, header http.Header, jsonPayload any) *http.Request {
 	return req
 }
 
-func mongoSettings() *mongo.Client {
+func mongoSettings() *mongo.Collection {
 	mongoURL := "mongodb://spainews:spainews@127.0.0.1:27017/spainews"
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -157,5 +158,10 @@ func mongoSettings() *mongo.Client {
 	if pingError != nil {
 		log.Fatal(pingError)
 	}
-	return mongoClient
+	parseUrl, parseError := url.Parse(mongoURL)
+	if parseError != nil {
+		log.Fatal(parseError)
+	}
+	database := mongoClient.Database(parseUrl.RequestURI()[1:])
+	return database.Collection("news")
 }

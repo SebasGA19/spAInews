@@ -56,19 +56,16 @@ It will return 10 or less news as results
     "news": [
         {
           "authors": [],
-          "date_download": null,
-          "date_modify": null,
-          "date_publish": "",
+          "date_download": new DATE(),
+          "date_modify": new DATE(),
+          "date_publish": new DATE(),
           "description": "",
           "filename": "",
           "image_url": "",
           "language": "en",
-          "localpath": null,
           "source_domain": "",
           "maintext": "",
           "title": "",
-          "title_page": null,
-          "title_rss": null,
           "url": ""
         },
         "..."
@@ -90,8 +87,8 @@ It will return 10 or less news as results
 ```json
 {
     "filter": {
-        "start-date": "DAY/MONTH/YEAR",
-        "end-date": "DAY/MONTH/YEAR",
+        "start-date": new DATE(),
+        "end-date": new DATE(),
         "sources": ["CNN", "RT", "NYTIMES", "..."]
     },
     "sort": "new-first"
@@ -119,19 +116,16 @@ It will return 10 or less news as results
     "news": [
         {
           "authors": [],
-          "date_download": null,
-          "date_modify": null,
-          "date_publish": "",
+          "date_download": new DATE(),
+          "date_modify": new DATE(),
+          "date_publish": new DATE(),
           "description": "",
           "filename": "",
           "image_url": "",
           "language": "en",
-          "localpath": null,
           "source_domain": "",
           "maintext": "",
           "title": "",
-          "title_page": null,
-          "title_rss": null,
           "url": ""
         },
         "..."

@@ -17,10 +17,10 @@ main: Set GIN_MODE=release for production
 */
 func main() {
 	mariadb := mariaDB()
-	mongoClient := mongoSettings()
+	mongoCollection := mongoSettings()
 	sessions, registrations, confirmEmails, resetPasswords := redisClients()
 	e := email.NewEmail(emailSettings())
-	db := controller.NewController(mariadb, mongoClient, sessions, registrations, confirmEmails, resetPasswords, e)
+	db := controller.NewController(mariadb, mongoCollection, sessions, registrations, confirmEmails, resetPasswords, e)
 	engine := web.NewEngine(db)
 	log.Fatal(engine.Run(os.Getenv(config.ListenAddress)))
 }

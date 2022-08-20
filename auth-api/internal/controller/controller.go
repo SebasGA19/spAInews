@@ -10,7 +10,7 @@ import (
 
 type Controller struct {
 	SQL                 *sql.DB
-	Mongo               *mongo.Client
+	Mongo               *mongo.Collection
 	RedisSession        *redis.Client
 	RedisRegistrations  *redis.Client
 	RedisConfirmEmails  *redis.Client
@@ -27,7 +27,7 @@ func (c *Controller) Close() error {
 
 func NewController(
 	sqlDB *sql.DB,
-	mongoClient *mongo.Client,
+	mongoClient *mongo.Collection,
 	redisSession *redis.Client,
 	redisRegistrations *redis.Client,
 	redisConfirmEmails *redis.Client,
