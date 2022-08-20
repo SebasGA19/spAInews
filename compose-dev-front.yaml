@@ -49,14 +49,16 @@ services:
       MARIADB_DATABASE: spainews
       MARIADB_USER: spainews
       MARIADB_PASSWORD: spainews
-  auth-api:
+  api:
     depends_on:
+      - redis
       - mariadb
-    user: "auth-api:auth-api"
-    container_name: spainews-auth-api
+      - mongo
+    user: "api:api"
+    container_name: spainews-api
     build:
       context: .
-      dockerfile: auth-api.Dockerfile
+      dockerfile: api.Dockerfile
     restart: unless-stopped
     networks:
       - spainews
@@ -69,6 +71,14 @@ services:
       REDIS_ADDRESS: "redis:6379"
       MARIA_URL: "spainews:spainews@tcp(mariadb:3306)/spainews?parseTime=true"
       MONGO_URL: "mongodb://spainews:spainews@mongo:27017/spainews"
-      LISTEN_ADDRESS: "auth-api:5000"
+      LISTEN_ADDRESS: "api:5000"
     ports:
       - "127.0.0.1:5000:5000"
+  test-data:
+    restart: on-failure
+    networks:
+      - spainews
+    container_name: spainews-test-data
+    build:
+      context: .
+      dockerfile: test-data.Dockerfile

@@ -1,8 +1,8 @@
-import { auth_api } from "../config";
+import { api_baseurl } from "../config";
 
 export async function confirmRegister(confirmCode)  {
     const response = await fetch(
-        auth_api + "/confirm/registration",
+        api_baseurl + "/confirm/registration",
         {
             method: 'POST',
             mode: 'cors',

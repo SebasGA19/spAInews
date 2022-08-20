@@ -1,13 +1,14 @@
-<footer>
+<footer id="footerpro">
     <div class="footersito">
         <div class="d-flex">
             <div class="col-4 integrantes">
-                        <p class="m-0" >Autores</p>
+                        <p class="m-0" >Desarrollado por</p>
                         <p class="m-0">Antonio Jose Donis</p>
                         <p class="m-0">Sebastian David Gomez</p>
-                        <p class="m-0">Mario Humberto Esteban Hurtado</p>
+                        <p class="m-0">Juan Esteban Paez</p>
+                        <p class="m-0">Mhario Humberto Hurtado</p>
                         <p class="m-0">Santiado Andres Del Valle</p>
-                        <p class="m-0">Diego Alejandro Angulo</p>
+                        <p class="m-0">Diego Alejandro Angulo</p><br>
                         <p class="m-0">©Copyright 2022 spAInews</p>
             </div>
             <div class="col-6 ">
