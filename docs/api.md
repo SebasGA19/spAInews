@@ -407,12 +407,9 @@ It will return 10 or less news as results
     "news": [
         {
           "authors": [],
-          "date_download": "31/12/2022",
-          "date_modify": "31/12/2022",
           "date_publish": "31/12/2022",
           "description": "",
-          "filename": "",
-          "image_url": "",
+          "category": "",
           "language": "en",
           "source_domain": "",
           "maintext": "",
@@ -466,12 +463,9 @@ It will return 10 or less news as results
     "news": [
         {
           "authors": [],
-          "date_download": "31/12/2022",
-          "date_modify": "31/12/2022",
           "date_publish": "31/12/2022",
           "description": "",
-          "filename": "",
-          "image_url": "",
+          "category": "",
           "language": "en",
           "source_domain": "",
           "maintext": "",
