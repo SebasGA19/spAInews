@@ -14,8 +14,11 @@
 			}
 		);
 	}
-
-	loadContent();
+	try {
+		loadContent();
+	} catch {
+		
+	}
 </script>
 
 <Page>
