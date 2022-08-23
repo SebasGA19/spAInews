@@ -22,11 +22,13 @@
 </script>
 
 <Page>
+	
 	<!-- By Juan Paez -->
 	<header class="header">
 		<h3 id="titulo">Welcome to the Jungle</h3>
 	</header>
 	<div>
+		
 		<!-- By Juan Paez -->
 		<NewsSection bind:articles={articles}/>
 		<div class="text-center">
