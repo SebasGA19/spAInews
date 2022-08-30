@@ -1,29 +1,19 @@
-<footer id="footerpro">
-    <div class="footersito">
-        <div class="d-flex">
-            <div class="col-4 integrantes">
-                        <p class="m-0" >Desarrollado por</p>
-                        <p class="m-0">Antonio Jose Donis</p>
-                        <p class="m-0">Sebastian David Gomez</p>
-                        <p class="m-0">Juan Esteban Paez</p>
-                        <p class="m-0">Mhario Humberto Hurtado</p>
-                        <p class="m-0">Santiado Andres Del Valle</p>
-                        <p class="m-0">Diego Alejandro Angulo</p><br>
-                        <p class="m-0">©Copyright 2022 spAInews</p>
-            </div>
-            <div class="col-6 ">
-                        <p class="m-0">Esta información está siendo tomada de: CNN y ELTIEMPO. </p>
-            </div>
+<div class="container">
+    <footer class="row row-cols-2 py-3 my-3 border-top">
+        <div class="col">
+            <h5>SPAINEWS</h5>
+            <p><a href="https://github.com/SebasGA19/spAInews">SPAINEWS</a> is an OpenSource project. The word is the combination of SPAIDER, AI and NEWS</p>
         </div>
-    </div>
-</footer>
-<style>
-    footer{
-        border-top: 1px solid white;
-    }
-    .footersito{
-        padding-top: 10px;
-        font-size: 10px;
-    }
-
-</style>
+        <div class="col">
+            <h5>Authors</h5>
+            <ul class="nav flex-column">
+                <li class="nav-item mb-2"><a href="https://github.com/shoriwe" class="nav-link p-0 text-muted">Antonio</a></li>
+                <li class="nav-item mb-2"><a href="https://github.com/SebasGA19" class="nav-link p-0 text-muted">Sebastian</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Juan</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Santiago</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Mario</a></li>
+                <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-muted">Diego</a></li>
+            </ul>
+        </div>
+    </footer>
+</div>
