@@ -84,7 +84,7 @@
 <style>
 	.main {
 		margin: 0 auto;
-		max-width: 1400px;
+		max-width: 1000px;
 		padding: 10px;
 	}
 
