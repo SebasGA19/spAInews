@@ -25,7 +25,7 @@
 	
 	<!-- By Juan Paez -->
 	<header class="header">
-		<h3 id="titulo">Welcome to the Jungle</h3>
+		<h3 id="titulo">Latest news</h3>
 	</header>
 	<div>
 		
