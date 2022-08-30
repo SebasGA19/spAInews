@@ -39,12 +39,12 @@
 		flex-direction: column;
 		flex-basis: auto;
 		margin: 10px;
+		transition: 0.5s;
 	}
 
 	.article:hover,
 	.article:focus {
-		box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-		color: #444;
+		transform: scale(1.02);
 	}
 
 	.article-image {
