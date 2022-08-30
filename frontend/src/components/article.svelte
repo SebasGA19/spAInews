@@ -57,6 +57,7 @@
 	}
 
 	.article-image img {
+		object-fit: cover;
 		display: block;
 		height: 100%;
 		left: 0;
