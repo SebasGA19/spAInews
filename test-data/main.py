@@ -3,10 +3,13 @@
 import json
 import datetime
 import os
+import random
 from pymongo import MongoClient
 
 
 mongoURL = "mongodb://spainews:spainews@mongo:27017/spainews"
+
+categories = ["sports", "finance", "politics"]
 
 
 def load_data() -> list:
@@ -21,6 +24,7 @@ def load_data() -> list:
                 # date_download
                 # date_modify
                 # date_publish
+                obj["image_url"] = f"/images/{random.choice(categories)}-{random.randint(1, 4)}.jpg"
                 obj["date_download"] = datetime.datetime.strptime(obj["date_download"], '%Y-%m-%d %H:%M:%S')
                 obj["date_modify"] = datetime.datetime.strptime(obj["date_modify"], '%Y-%m-%d %H:%M:%S')
                 obj["date_publish"] = datetime.datetime.strptime(obj["date_publish"], '%Y-%m-%d %H:%M:%S')
