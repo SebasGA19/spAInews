@@ -13,7 +13,7 @@ export async function register(username: string, email: string, password: string
             mode: 'cors',
             cache: 'no-cache',
             headers: {
-              'Content-Type': 'application/json'
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(payload)
         }

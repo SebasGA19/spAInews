@@ -81,17 +81,17 @@
 
 	function addWord() {
 		userWords.words.push(wordsFormNewWord);
-		userWords.words = (Array<string>).from(new Set<string>(userWords.words));
+		userWords.words = Array<string>.from(new Set<string>(userWords.words));
 		handleUpdateWords();
 	}
 
-    function deleteFromWords(index: number): () => void {
-        return () => {
-            userWords.words.splice(index, 1);
-            userWords.words = userWords.words;
-            handleUpdateWords();
-        }
-    }
+	function deleteFromWords(index: number): () => void {
+		return () => {
+			userWords.words.splice(index, 1);
+			userWords.words = userWords.words;
+			handleUpdateWords();
+		};
+	}
 </script>
 
 <AuthRequired />
@@ -277,7 +277,9 @@
 											<h6 style="overflow-x: hidden; overflow-y: hidden;">{word}</h6>
 										</div>
 										<div class="col-5">
-											<button type="button" class="btn btn-danger" on:click={deleteFromWords(index)}>Delete</button>
+											<button type="button" class="btn btn-danger" on:click={deleteFromWords(index)}
+												>Delete</button
+											>
 										</div>
 									</div>
 								{/each}

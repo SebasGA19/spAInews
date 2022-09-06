@@ -58,7 +58,15 @@
 								{$sessionUsername}
 							</button>
 							<ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="#" on:click={() => {darkModeChecked = !darkModeChecked}}>Theme: {darkModeChecked ? "Dark" : "Light"}</a></li>
+								<li>
+									<a
+										class="dropdown-item"
+										href="#"
+										on:click={() => {
+											darkModeChecked = !darkModeChecked;
+										}}>Theme: {darkModeChecked ? 'Dark' : 'Light'}</a
+									>
+								</li>
 								<li><a class="dropdown-item" href="/settings">Settings</a></li>
 								<li><a class="dropdown-item" href="#" on:click={handle_logout}>Logout</a></li>
 							</ul>

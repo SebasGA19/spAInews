@@ -15,7 +15,7 @@ export async function updateWords(words: Words, session: string) {
             body: JSON.stringify(words)
         }
     );
-    if (response.status === 200){
+    if (response.status === 200) {
         return;
     }
     const data = await response.json();
@@ -35,7 +35,7 @@ export async function getWords(session: string): Promise<Words> {
         }
     );
     const data = await response.json();
-    if (response.status === 200){
+    if (response.status === 200) {
         return data;
     }
     throw data["message"];

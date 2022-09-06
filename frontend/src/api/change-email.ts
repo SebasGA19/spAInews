@@ -2,8 +2,8 @@ import { api_baseurl } from "../config";
 
 export async function updateEmail(password: string, newEmail: string, session: string) {
     const payload = {
-        'password' : password,
-        'new-email' : newEmail
+        'password': password,
+        'new-email': newEmail
     };
     const response = await fetch(
         api_baseurl + "/email",
@@ -18,7 +18,7 @@ export async function updateEmail(password: string, newEmail: string, session: s
             body: JSON.stringify(payload)
         }
     );
-    if (response.status === 200){
+    if (response.status === 200) {
         return;
     }
     const data = await response.json();

@@ -2,8 +2,8 @@ import { api_baseurl } from "../config";
 
 export async function updatePassword(oldPassword: string, newPassword: string, session: string) {
     const payload = {
-        'old-password' : oldPassword,
-        'new-password' : newPassword
+        'old-password': oldPassword,
+        'new-password': newPassword
     };
     const response = await fetch(
         api_baseurl + "/password",
@@ -18,7 +18,7 @@ export async function updatePassword(oldPassword: string, newPassword: string, s
             body: JSON.stringify(payload)
         }
     );
-    if (response.status === 200){
+    if (response.status === 200) {
         return;
     }
     const data = await response.json();

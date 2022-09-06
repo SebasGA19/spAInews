@@ -1,10 +1,9 @@
 <script lang="ts">
-import {session} from '../stores/session'
-
+	import { session } from '../stores/session';
 </script>
 
 {#if $session === ''}
-<script>
-    window.location.href = "/";
-</script>
+	<script>
+		window.location.href = '/';
+	</script>
 {/if}

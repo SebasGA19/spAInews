@@ -25,4 +25,4 @@ interface Words {
     automatic: boolean;
     words: string[];
 }
-export type {Article, Account, News, Words};
+export type { Article, Account, News, Words };

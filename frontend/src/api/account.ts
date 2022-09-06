@@ -11,7 +11,7 @@ export async function accountDetails(session: string): Promise<Account> {
             headers: {
                 'Session': session
             },
-        }   
+        }
     )
     const data = await response.json();
     if (response.status === 200) {

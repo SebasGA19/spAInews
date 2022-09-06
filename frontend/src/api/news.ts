@@ -9,7 +9,7 @@ export async function news(pages: number): Promise<News> {
             method: 'GET',
             mode: 'cors',
             cache: 'no-cache'
-        }   
+        }
     )
     const data = await response.json();
     if (response.status === 200) {
@@ -29,11 +29,11 @@ export async function search(page: number): Promise<News> {
             headers: {
                 'Content-Type': 'application/json'
             },
-            
+
         }
     )
     const data = await response.json();
-    if (response.status === 200){
+    if (response.status === 200) {
         return data;
     }
     throw data["message"];

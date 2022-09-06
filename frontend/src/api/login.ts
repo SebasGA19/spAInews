@@ -3,8 +3,8 @@ import { api_baseurl } from "../config";
 export async function login(username: string, password: string): Promise<string> {
     const headers = new Headers();
     headers.set('Authorization', 'Basic ' + btoa(username + ":" + password));
-    
-    const response = await fetch(api_baseurl + "/session",{method:'GET',headers: headers});
+
+    const response = await fetch(api_baseurl + "/session", { method: 'GET', headers: headers });
     const data = await response.json();
     if (response.status === 200) {
         return data["session"];
@@ -20,7 +20,7 @@ export async function logout(session: string) {
             mode: 'cors',
             cache: 'no-cache',
             headers: {
-              'Session': session
+                'Session': session
             },
         }
     );

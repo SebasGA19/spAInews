@@ -1,5 +1,5 @@
-import {writable} from 'svelte/store';
-import {browser} from '$app/environment'
+import { writable } from 'svelte/store';
+import { browser } from '$app/environment'
 
 export const session: any = writable(browser && (localStorage.getItem('session') || ''));
 export const unsubscribeSession = session.subscribe(value => browser && (localStorage.setItem('session', value)));
