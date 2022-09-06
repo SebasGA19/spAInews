@@ -81,7 +81,7 @@
 
 	function addWord() {
 		userWords.words.push(wordsFormNewWord);
-		userWords.words = (Array<string>).from(new Set<string>(userWords.words));
+		userWords.words = Array.from(new Set<string>(userWords.words));
 		handleUpdateWords();
 	}
 
