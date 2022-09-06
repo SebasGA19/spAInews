@@ -7,7 +7,6 @@
 	let successMessage: string | undefined;
 
 	function handleForgotPasswordConfirm() {
-		alert(data.code);
 		resetPassword(newPassword, data.code)
 			.then(() => {
 				successMessage = 'Password changed succesfully';
