@@ -1,6 +1,6 @@
 import { api_baseurl } from "../config";
 
-export async function change_password(oldPassword, newPassword, session) {
+export async function updatePassword(oldPassword: string, newPassword: string, session: string) {
     const payload = {
         'old-password' : oldPassword,
         'new-password' : newPassword

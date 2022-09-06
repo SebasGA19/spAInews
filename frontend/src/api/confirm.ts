@@ -1,31 +1,25 @@
 import { api_baseurl } from "../config";
 
-export async function change_email(password, newEmail, session) {
-    const payload = {
-        'password' : password,
-        'new-email' : newEmail
-    };
+export async function confirmRegister(confirmCode: string)  {
     const response = await fetch(
-        api_baseurl + "/email",
+        api_baseurl + "/confirm/registration",
         {
             method: 'POST',
             mode: 'cors',
             cache: 'no-cache',
             headers: {
-                'Session': session,
-                'Content-Type': 'application/json'
+              'Confirm-Code': confirmCode
             },
-            body: JSON.stringify(payload)
         }
     );
-    if (response.status === 200){
+    if (response.status === 200) {
         return;
     }
     const data = await response.json();
     throw data["message"];
 }
 
-export async function confirm_change_email(confirmCode)  {
+export async function confirmEmail(confirmCode: string)  {
     const response = await fetch(
         api_baseurl + "/confirm/email",
         {

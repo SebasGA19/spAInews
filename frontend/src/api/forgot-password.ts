@@ -1,6 +1,6 @@
 import { api_baseurl } from "../config";
 
-export async function forgot_password(email){
+export async function requestPasswordReset(email: string){
     const payload = {
         'email': email
     };
@@ -23,7 +23,7 @@ export async function forgot_password(email){
     throw data["message"];
 }
 
-export async function forgot_password_confirm(newPassword,confirmCode){
+export async function resetPassword(newPassword: string,confirmCode: string){
     const payload = {
         'new-password': newPassword
     };
