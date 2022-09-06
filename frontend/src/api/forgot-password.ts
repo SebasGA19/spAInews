@@ -1,6 +1,6 @@
 import { api_baseurl } from "../config";
 
-export async function requestPasswordReset(email: string){
+export async function requestPasswordReset(email: string) {
     const payload = {
         'email': email
     };
@@ -11,19 +11,19 @@ export async function requestPasswordReset(email: string){
             mode: 'cors',
             cache: 'no-cache',
             headers: {
-              'Content-Type': 'application/json'
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(payload)
         }
     );
-    if (response.status === 200){
+    if (response.status === 200) {
         return;
     }
     const data = await response.json();
     throw data["message"];
 }
 
-export async function resetPassword(newPassword: string,confirmCode: string){
+export async function resetPassword(newPassword: string, confirmCode: string) {
     const payload = {
         'new-password': newPassword
     };
@@ -34,13 +34,13 @@ export async function resetPassword(newPassword: string,confirmCode: string){
             mode: 'cors',
             cache: 'no-cache',
             headers: {
-                'Confirm-Code':confirmCode,
-              'Content-Type': 'application/json'
+                'Confirm-Code': confirmCode,
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(payload)
         }
     );
-    if (response.status === 200){
+    if (response.status === 200) {
         return;
     }
     const data = await response.json();

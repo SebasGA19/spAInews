@@ -64,7 +64,7 @@
 						/>
 					</div>
 					<div class="mb-3">
-						<a href="/forgotpassword" class="text-reset">Forgot password?</a>
+						<a href="/reset-password/request" class="text-reset">Forgot password?</a>
 					</div>
 					<div class="text-center w-100">
 						<button type="submit" class="btn btn-primary">Submit</button>
