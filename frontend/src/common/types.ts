@@ -5,6 +5,8 @@ interface Article {
     authors: string[];
     category: string;
     date_publish: string;
+    source_domain: string;
+    url: string;
 };
 
 interface Account {

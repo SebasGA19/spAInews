@@ -406,15 +406,14 @@ It will return 10 or less news as results
     "number-of-results": 10,
     "news": [
         {
-          "authors": [],
-          "date_publish": "31/12/2022",
-          "description": "",
-          "category": "",
-          "language": "en",
-          "source_domain": "",
-          "maintext": "",
-          "title": "",
-          "url": ""
+            "title": "",
+            "description": "",
+            "maintext": "",
+            "authors": [],
+            "category": "",
+            "date_publish": "31/12/2022",
+            "source_domain": "",
+            "url": ""
         },
         "..."
     ]
@@ -462,15 +461,14 @@ It will return 10 or less news as results
     "number-of-results": 10,
     "news": [
         {
-          "authors": [],
-          "date_publish": "31/12/2022",
-          "description": "",
-          "category": "",
-          "language": "en",
-          "source_domain": "",
-          "maintext": "",
-          "title": "",
-          "url": ""
+            "title": "",
+            "description": "",
+            "maintext": "",
+            "authors": [],
+            "category": "",
+            "date_publish": "31/12/2022",
+            "source_domain": "",
+            "url": ""
         },
         "..."
     ]
