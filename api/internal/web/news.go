@@ -13,17 +13,13 @@ import (
 type (
 	ArticleTime time.Time
 	Article     struct {
-		Authors      []string    `json:"authors"`
-		DateDownload ArticleTime `json:"date_download"`
-		DateModify   ArticleTime `json:"date_modify"`
-		DatePublish  ArticleTime `json:"date_publish"`
-		Description  string      `json:"description"`
-		Filename     string      `json:"filename"`
-		ImageURL     string      `json:"image_url"`
-		Language     string      `json:"language"`
-		SourceDomain string      `json:"source_domain"`
-		MainText     string      `json:"maintext"`
 		Title        string      `json:"title"`
+		Description  string      `json:"description"`
+		MainText     string      `json:"maintext"`
+		Authors      []string    `json:"authors"`
+		Category     string      `json:"category"`
+		DatePublish  ArticleTime `json:"date_publish"`
+		SourceDomain string      `json:"source_domain"`
 		URL          string      `json:"url"`
 	}
 	NewsResponse struct {
@@ -61,17 +57,13 @@ func (backend *Backend) LatestNews(ctx *gin.Context) {
 	articles := make([]Article, 0, len(mongoArticles))
 	for _, article := range mongoArticles {
 		articles = append(articles, Article{
-			Authors:      article.Authors,
-			DateDownload: ArticleTime(article.DateDownload),
-			DateModify:   ArticleTime(article.DateModify),
-			DatePublish:  ArticleTime(article.DatePublish),
-			Description:  article.Description,
-			Filename:     article.Filename,
-			ImageURL:     article.ImageURL,
-			Language:     article.Language,
-			SourceDomain: article.SourceDomain,
-			MainText:     article.MainText,
 			Title:        article.Title,
+			Description:  article.Description,
+			MainText:     article.MainText,
+			Authors:      article.Authors,
+			Category:     article.Category,
+			DatePublish:  ArticleTime(article.DatePublish),
+			SourceDomain: article.SourceDomain,
 			URL:          article.URL,
 		})
 	}
@@ -132,17 +124,13 @@ func (backend *Backend) SearchNews(ctx *gin.Context) {
 	articles := make([]Article, 0, len(mongoArticles))
 	for _, article := range mongoArticles {
 		articles = append(articles, Article{
-			Authors:      article.Authors,
-			DateDownload: ArticleTime(article.DateDownload),
-			DateModify:   ArticleTime(article.DateModify),
-			DatePublish:  ArticleTime(article.DatePublish),
-			Description:  article.Description,
-			Filename:     article.Filename,
-			ImageURL:     article.ImageURL,
-			Language:     article.Language,
-			SourceDomain: article.SourceDomain,
-			MainText:     article.MainText,
 			Title:        article.Title,
+			Description:  article.Description,
+			MainText:     article.MainText,
+			Authors:      article.Authors,
+			Category:     article.Category,
+			DatePublish:  ArticleTime(article.DatePublish),
+			SourceDomain: article.SourceDomain,
 			URL:          article.URL,
 		})
 	}
