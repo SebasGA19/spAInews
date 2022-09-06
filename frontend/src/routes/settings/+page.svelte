@@ -19,6 +19,7 @@
 	let emailFormSuccessMessage: string | undefined;
 	let passwordFormErrorMessage: string | undefined;
 	let passwordFormSuccessMessage: string | undefined;
+	let wordsFormNewWord: string;
 	let wordsFormErrorMessage: string | undefined;
 	let wordsFormSuccessMessage: string | undefined;
 
@@ -64,6 +65,9 @@
 	}
 
 	function handleUpdateWords() {
+		if (userWords.automatic) {
+			userWords.words = [];
+		}
 		updateWords(userWords, $session)
 			.then(() => {
 				wordsFormErrorMessage = undefined;
@@ -74,6 +78,20 @@
 				wordsFormErrorMessage = error;
 			});
 	}
+
+	function addWord() {
+		userWords.words.push(wordsFormNewWord);
+		userWords.words = (Array<string>).from(new Set<string>(userWords.words));
+		handleUpdateWords();
+	}
+
+    function deleteFromWords(index: number): () => void {
+        return () => {
+            userWords.words.splice(index, 1);
+            userWords.words = userWords.words;
+            handleUpdateWords();
+        }
+    }
 </script>
 
 <AuthRequired />
@@ -100,7 +118,7 @@
 				data-bs-parent="#settingsAccordionFlush"
 			>
 				<div class="accordion-body">
-					<div class="container" style="max-width: 50vw;">
+					<div class="container" style="max-width: 500px;">
 						{#if emailFormErrorMessage}
 							<div class="alert alert-danger" role="alert">
 								{emailFormErrorMessage}
@@ -156,7 +174,7 @@
 				data-bs-parent="#settingsAccordionFlush"
 			>
 				<div class="accordion-body">
-					<div class="container" style="max-width: 50vw;">
+					<div class="container" style="max-width: 500px;">
 						{#if passwordFormErrorMessage}
 							<div class="alert alert-danger" role="alert">
 								{passwordFormErrorMessage}
@@ -212,7 +230,7 @@
 				data-bs-parent="#settingsAccordionFlush"
 			>
 				<div class="accordion-body">
-					<div class="container" style="max-width: 50vw;">
+					<div class="container" style="max-width: 500px;">
 						{#if wordsFormErrorMessage}
 							<div class="alert alert-danger" role="alert">
 								{wordsFormErrorMessage}
@@ -223,20 +241,48 @@
 								{wordsFormSuccessMessage}
 							</div>
 						{/if}
-						<div class="mb-3">
-							<div class="form-check form-switch">
-								<input
-									class="form-check-input"
-									type="checkbox"
-									role="switch"
-									id="wordsAutomatic"
-									bind:checked={userWords.automatic}
-									on:change={handleUpdateWords}
-									value={userWords.automatic}
-								/>
-								<label class="form-check-label" for="wordsAutomatic">Pick words automatic</label>
-							</div>
+						<div class="form-check form-switch mb-3">
+							<input
+								class="form-check-input"
+								type="checkbox"
+								role="switch"
+								id="wordsAutomatic"
+								bind:checked={userWords.automatic}
+								on:change={handleUpdateWords}
+								value={userWords.automatic}
+							/>
+							<label class="form-check-label" for="wordsAutomatic">Pick words automatic</label>
 						</div>
+						{#if !userWords.automatic}
+							<div class="input-group mb-3">
+								<input
+									type="text"
+									class="form-control"
+									placeholder="finance"
+									aria-label="finance"
+									aria-describedby="button-add-word"
+									bind:value={wordsFormNewWord}
+								/>
+								<button
+									class="btn btn-primary"
+									type="button"
+									id="button-add-word"
+									on:click={addWord}>Add</button
+								>
+							</div>
+							<div class="justify-content-center text-center">
+								{#each userWords.words as word, index}
+									<div class="row mb-3">
+										<div class="col-7">
+											<h6 style="overflow-x: hidden; overflow-y: hidden;">{word}</h6>
+										</div>
+										<div class="col-5">
+											<button type="button" class="btn btn-danger" on:click={deleteFromWords(index)}>Delete</button>
+										</div>
+									</div>
+								{/each}
+							</div>
+						{/if}
 					</div>
 				</div>
 			</div>
