@@ -4,6 +4,6 @@
 </script>
 
 <div class="card">
-	Hola
+	{JSON.stringify(article)}
 </div>
 

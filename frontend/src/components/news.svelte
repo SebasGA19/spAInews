@@ -15,10 +15,12 @@
 	}
 </script>
 
+<div class="container">
 <div class="row justify-content-center mt-5 mb-5">
 	{#each articles as article}
 		<div class="col-md-5 col-sm-10">
 			<NewsEntry {article} />
 		</div>
 	{/each}
+</div>
 </div>
