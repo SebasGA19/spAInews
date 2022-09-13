@@ -8,6 +8,7 @@ import (
 )
 
 type SMTP struct {
+	DashboardURL     string
 	Dev              bool
 	Addr             string
 	From             string

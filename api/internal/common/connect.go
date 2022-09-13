@@ -49,7 +49,7 @@ func ConnectRedis(host, port string, db int) *redis.Client {
 	return client
 }
 
-func ConnectSMTP(from, username, password, host, port string, dev bool) *SMTP {
+func ConnectSMTP(from, username, password, host, port, dashboardURL string, dev bool) *SMTP {
 	addr := fmt.Sprintf("%s:%s", host, port)
 	client, dialError := smtp.Dial(addr)
 	if dialError != nil {
@@ -69,10 +69,11 @@ func ConnectSMTP(from, username, password, host, port string, dev bool) *SMTP {
 		panic(authError)
 	}
 	return &SMTP{
-		Addr: addr,
-		From: from,
-		Auth: auth,
-		Dev:  dev,
+		DashboardURL: dashboardURL,
+		Addr:         addr,
+		From:         from,
+		Auth:         auth,
+		Dev:          dev,
 	}
 }
 

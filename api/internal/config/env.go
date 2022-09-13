@@ -24,10 +24,11 @@ const (
 )
 
 const (
-	SMTPHost = "SMTP_HOST"
-	SMTPPort = "SMTP_PORT"
-	SMTPFrom = "SMTP_FROM"
-	SMTPUser = "SMTP_USERNAME"
-	SMTPPass = "SMTP_PASSWORD"
-	SMTPDev  = "SMTP_DEV"
+	SMTPHost         = "SMTP_HOST"
+	SMTPPort         = "SMTP_PORT"
+	SMTPFrom         = "SMTP_FROM"
+	SMTPUser         = "SMTP_USERNAME"
+	SMTPPass         = "SMTP_PASSWORD"
+	SMTPDev          = "SMTP_DEV"
+	SMTPDashboardURL = "SMTP_DASHBOARD_URL"
 )

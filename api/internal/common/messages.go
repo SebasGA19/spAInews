@@ -11,6 +11,27 @@ var (
 	Templates embed.FS
 )
 
+func (s *SMTP) SendConfirmationRegistration(code string, to ...string) error {
+	if s.Dev {
+		s.ConfirmationCode = code
+	}
+	t := template.Must(template.ParseFS(Templates, "email-templates/email-registration.html"))
+	out := bytes.NewBuffer(nil)
+	executeError := t.Execute(out,
+		struct {
+			DashboardURL string
+			Code         string
+		}{
+			DashboardURL: s.DashboardURL,
+			Code:         code,
+		},
+	)
+	if executeError != nil {
+		panic(executeError)
+	}
+	return s.SendEmail(to, "Confirm Email", string(out.Bytes()))
+}
+
 func (s *SMTP) SendConfirmationEmail(code string, to ...string) error {
 	if s.Dev {
 		s.ConfirmationCode = code
@@ -19,9 +40,11 @@ func (s *SMTP) SendConfirmationEmail(code string, to ...string) error {
 	out := bytes.NewBuffer(nil)
 	executeError := t.Execute(out,
 		struct {
-			Code string
+			DashboardURL string
+			Code         string
 		}{
-			Code: code,
+			DashboardURL: s.DashboardURL,
+			Code:         code,
 		},
 	)
 	if executeError != nil {
@@ -38,9 +61,11 @@ func (s *SMTP) SendResetCode(code string, to ...string) error {
 	out := bytes.NewBuffer(nil)
 	executeError := t.Execute(out,
 		struct {
-			Code string
+			DashboardURL string
+			Code         string
 		}{
-			Code: code,
+			DashboardURL: s.DashboardURL,
+			Code:         code,
 		},
 	)
 	if executeError != nil {

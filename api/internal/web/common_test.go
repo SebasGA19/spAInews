@@ -54,6 +54,7 @@ func NewTestEngine() *TestEngine {
 		"password",
 		"localhost",
 		"25",
+		"http://localhost:5173",
 		true,
 	)
 	c := controller.NewController(sqlDB, mongoCollection, sessions, registrations, confirmEmails, resetPasswords, smtp)

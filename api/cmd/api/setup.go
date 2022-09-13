@@ -32,12 +32,13 @@ var (
 )
 
 var (
-	SMTPFrom string
-	SMTPUser string
-	SMTPPass string
-	SMTPHost string
-	SMTPPort string
-	SMTPDev  bool
+	SMTPFrom         string
+	SMTPUser         string
+	SMTPPass         string
+	SMTPHost         string
+	SMTPPort         string
+	SMTPDev          bool
+	SMTPDashboardURL string
 )
 
 func initSetup() {
@@ -70,4 +71,5 @@ func initSetup() {
 	SMTPHost = m[config.SMTPHost]
 	SMTPPort = m[config.SMTPPort]
 	SMTPDev = m[config.SMTPDev] == "true"
+	SMTPDashboardURL = m[config.SMTPDashboardURL]
 }
