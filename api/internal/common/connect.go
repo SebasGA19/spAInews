@@ -65,6 +65,7 @@ func ConnectSMTP(from, username, password, host, port string, dev bool) *SMTP {
 		Addr: addr,
 		From: from,
 		Auth: auth,
+		Dev:  dev,
 	}
 }
 

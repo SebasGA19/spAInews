@@ -14,7 +14,6 @@ var (
 func (s *SMTP) SendConfirmationEmail(code string, to ...string) error {
 	if s.Dev {
 		s.ConfirmationCode = code
-		return nil
 	}
 	t := template.Must(template.ParseFS(Templates, "email-templates/email-confirmation.html"))
 	out := bytes.NewBuffer(nil)
@@ -34,7 +33,6 @@ func (s *SMTP) SendConfirmationEmail(code string, to ...string) error {
 func (s *SMTP) SendResetCode(code string, to ...string) error {
 	if s.Dev {
 		s.ConfirmationCode = code
-		return nil
 	}
 	t := template.Must(template.ParseFS(Templates, "email-templates/reset-password.html"))
 	out := bytes.NewBuffer(nil)
