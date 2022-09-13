@@ -24,7 +24,7 @@ func (c *Controller) AddUpdateEmail(updateEmail UpdateEmail) error {
 	if err := cmd.Err(); err != nil {
 		return err
 	}
-	return c.SMTP.SendConfirmationEmail(resetCode)
+	return c.SMTP.SendConfirmationEmail(resetCode, updateEmail.NewEmail)
 }
 
 func (c *Controller) UpdateEmail(resetCode string) error {

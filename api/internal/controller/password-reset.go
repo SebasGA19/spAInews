@@ -11,7 +11,11 @@ func (c *Controller) AddPendingReset(userId int) error {
 	if err := cmd.Err(); err != nil {
 		return err
 	}
-	return c.SMTP.SendResetCode(resetCode)
+	_, email, err := c.Account(userId)
+	if err != nil {
+		return err
+	}
+	return c.SMTP.SendResetCode(resetCode, email)
 }
 
 func (c *Controller) ResetPassword(resetCode, newPassword string) error {
