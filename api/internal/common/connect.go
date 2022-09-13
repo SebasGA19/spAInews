@@ -55,6 +55,13 @@ func ConnectSMTP(from, username, password, host, port string, dev bool) *SMTP {
 	if dialError != nil {
 		panic(dialError)
 	}
+	err := client.StartTLS(nil)
+	if err != nil {
+		client, dialError = smtp.Dial(addr)
+		if dialError != nil {
+			panic(dialError)
+		}
+	}
 	defer client.Close()
 	auth := sasl.NewPlainClient("", username, password)
 	authError := client.Auth(auth)
