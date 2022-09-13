@@ -1,0 +1,153 @@
+openapi: 3.0.3
+
+components:
+  securitySchemes:
+    session-key:
+      type: apiKey
+      in: header
+      name: Session
+    basicAuth:
+      type: http
+      scheme: basic
+  schemas:
+    error-message:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+      example:
+        code: 1
+        message: error message
+  responses:
+    server-error:
+      description: Server error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/error-message"
+
+
+info:
+  title: SPAINEWS API
+  description: |-
+    API documentation for the SPAINEWS API.
+  contact:
+    email: antoniojosedonishung@gmail.com
+  license:
+    name: MIT
+  version: 0.9.0
+
+tags:
+  - name: Authentication
+    description: Authentication operations
+  - name: News
+    description: News query operations
+
+paths:
+  /register:
+    put:
+      tags:
+       - Authentication
+      summary: Requests a user registration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+              example:
+                username: sulcud
+                email: sulcud@mail.com
+                password: my_password
+      responses:
+        '200':
+          description: Registration request made successfully, user should verify his email.
+        '500':
+          $ref: "#/components/responses/server-error"
+  /confirm/registration:
+    post:
+      tags:
+       - Authentication
+      summary: Confirm the registration using the code sent by email
+      parameters:
+        - in: header
+          name: Confirm-Code
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Registration cofirmed
+        '403':
+          description: Permission denied
+        '500':
+          $ref: "#/components/responses/server-error"
+  /session:
+    get:
+      summary: Request a valid session cookie
+      tags:
+       - Authentication
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: User authenticated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  session:
+                    type: string
+                example:
+                  session: 1234abcd
+        '403':
+          description: Permission denied
+        '500':
+          $ref: "#/components/responses/server-error"
+    delete:
+      summary: destroys a session cookie
+      tags:
+        - Authentication
+      security:
+        - session-key: [ ]
+      responses:
+        '200':
+          description: Session destroyed
+        '500':
+          $ref: "#/components/responses/server-error"
+  /password:
+    post:
+      summary: Updates the user password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                old-password:
+                  type: string
+                new-password:
+                  type: string
+              example:
+                old-password: password
+                new-password: my-new-password
+      tags:
+       - Authentication
+      security:
+        - session-key: []
+      responses:
+        '200':
+          description: Password updated
+        '403':
+          description: Permission denied
+        '500':
+          $ref: "#/components/responses/server-error"

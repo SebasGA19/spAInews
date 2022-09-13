@@ -13,17 +13,13 @@ const (
 
 type (
 	Article struct {
-		Authors      []string  `bson:"authors"`
-		DateDownload time.Time `bson:"date_download"`
-		DateModify   time.Time `bson:"date_modify"`
-		DatePublish  time.Time `bson:"date_publish"`
-		Description  string    `bson:"description"`
-		Filename     string    `bson:"filename"`
-		ImageURL     string    `bson:"image_url"`
-		Language     string    `bson:"language"`
-		SourceDomain string    `bson:"source_domain"`
-		MainText     string    `bson:"maintext"`
 		Title        string    `bson:"title"`
+		Description  string    `bson:"description"`
+		MainText     string    `bson:"maintext"`
+		Authors      []string  `bson:"authors"`
+		Category     string    `bson:"category"`
+		DatePublish  time.Time `bson:"date_publish"`
+		SourceDomain string    `bson:"source_domain"`
 		URL          string    `bson:"url"`
 	}
 	SearchFilter struct {
