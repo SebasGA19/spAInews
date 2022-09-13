@@ -2,166 +2,105 @@ package web
 
 import (
 	"bytes"
-	"context"
-	"database/sql"
 	"encoding/json"
-	"fmt"
+	"github.com/SebasGA19/spAInews/api/internal/common"
 	"github.com/SebasGA19/spAInews/api/internal/controller"
-	"github.com/SebasGA19/spAInews/api/internal/controller/email"
-	"github.com/go-redis/redis/v9"
+	"github.com/SebasGA19/spAInews/api/internal/tests"
+	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
-	"go.mongodb.org/mongo-driver/mongo/readpref"
-	"log"
+	"io"
 	"net/http"
 	"net/http/httptest"
-	"net/smtp"
-	"net/url"
-	"time"
 )
 
-func mariaDB() *sql.DB {
-	mariaURL := "spainews:spainews@tcp(127.0.0.1:3306)/spainews?parseTime=true"
-	sqlDB, err := sql.Open("mysql", mariaURL)
-	if err != nil {
-		log.Fatal(err)
-	}
-	pingError := sqlDB.Ping()
-	if pingError != nil {
-		log.Fatal(pingError)
-	}
-	return sqlDB
+const (
+	RedisHost = "127.0.0.1"
+	RedisPort = "6379"
+)
+
+type TestEngine struct {
+	Controller *controller.Controller
+	Engine     *gin.Engine
 }
 
-func redisClients() (sessions *redis.Client, registrations, confirmEmails, passwordResets *redis.Client) {
-	redisAddress := "127.0.0.1:6379"
-	sessions = redis.NewClient(
-		&redis.Options{
-			Addr: redisAddress,
-			DB:   0,
-		},
-	)
-	if _, err := sessions.Ping(context.Background()).Result(); err != nil {
-		log.Fatal(err)
-	}
-	registrations = redis.NewClient(
-		&redis.Options{
-			Addr: redisAddress,
-			DB:   1,
-		},
-	)
-	if _, err := registrations.Ping(context.Background()).Result(); err != nil {
-		log.Fatal(err)
-	}
-	confirmEmails = redis.NewClient(
-		&redis.Options{
-			Addr: redisAddress,
-			DB:   2,
-		},
-	)
-	if _, err := confirmEmails.Ping(context.Background()).Result(); err != nil {
-		log.Fatal(err)
-	}
-	passwordResets = redis.NewClient(
-		&redis.Options{
-			Addr: redisAddress,
-			DB:   3,
-		},
-	)
-	if _, err := passwordResets.Ping(context.Background()).Result(); err != nil {
-		log.Fatal(err)
-	}
-	return sessions, registrations, confirmEmails, passwordResets
+func (te *TestEngine) Close() error {
+	return te.Controller.Close()
 }
 
-func emailSettings() (address, from string, auth smtp.Auth) {
-	auth = smtp.PlainAuth(
-		"",
+func NewTestEngine() *TestEngine {
+	sqlDB := common.ConnectSQL(
+		"spainews",
+		"spainews",
+		"127.0.0.1",
+		"3306",
+		"spainews",
+		"parseTime=true",
+		true,
+	)
+	mongoCollection := common.ConnectMongo(
+		"spainews",
+		"spainews",
+		"127.0.0.1",
+		"27017",
+		"spainews").Collection("news")
+	sessions := common.ConnectRedis(RedisHost, RedisPort, 0)
+	registrations := common.ConnectRedis(RedisHost, RedisPort, 1)
+	confirmEmails := common.ConnectRedis(RedisHost, RedisPort, 2)
+	resetPasswords := common.ConnectRedis(RedisHost, RedisPort, 3)
+
+	smtp := common.ConnectSMTP(
+		"dashboard@dev-spainews.co",
 		"dashboard@dev-spainews.co",
 		"password",
-		"",
+		"localhost",
+		"25",
 	)
-	return fmt.Sprintf("%s:%s", "", ""), "dashboard@dev-spainews.co", auth
+	smtp.Dev = true
+	c := controller.NewController(sqlDB, mongoCollection, sessions, registrations, confirmEmails, resetPasswords, smtp)
+	tests.ClearDB(sqlDB)
+	return &TestEngine{
+		Controller: c,
+		Engine:     NewEngine(c),
+	}
 }
 
-func newTestController() *controller.Controller {
-	sqlDB := mariaDB()
-	mongoCollection := mongoSettings()
-	sessions, registrations, confirmEmails, passwordResets := redisClients()
-	e := email.NewEmail(emailSettings())
-	return controller.NewController(sqlDB, mongoCollection, sessions, registrations, confirmEmails, passwordResets, e)
+func (te *TestEngine) doRequest(method, uri string, header map[string]string, obj any) *http.Response {
+	if header == nil {
+		header = map[string]string{}
+	}
+	var body io.Reader
+	if obj != nil {
+		j, marshalError := json.Marshal(obj)
+		if marshalError != nil {
+			panic(marshalError)
+		}
+		body = bytes.NewReader(j)
+		header["Content-Type"] = "application/json"
+	}
+	req, err := http.NewRequest(method, uri, body)
+	if err != nil {
+		panic(err)
+	}
+	for key, value := range header {
+		req.Header.Set(key, value)
+	}
+	w := httptest.NewRecorder()
+	te.Engine.ServeHTTP(w, req)
+	return w.Result()
 }
 
-func getRequest(uri string, header http.Header, jsonPayload any) *http.Request {
-	buffer, marshalError := json.Marshal(jsonPayload)
-	if marshalError != nil {
-		panic(marshalError)
-	}
-	body := bytes.NewBuffer(buffer)
-	req := httptest.NewRequest(http.MethodGet, uri, body)
-	if header != nil {
-		req.Header = header
-	}
-	return req
+func (te *TestEngine) Get(uri string, header map[string]string, obj any) *http.Response {
+	return te.doRequest(http.MethodGet, uri, header, obj)
 }
 
-func postRequest(uri string, header http.Header, jsonPayload any) *http.Request {
-	buffer, marshalError := json.Marshal(jsonPayload)
-	if marshalError != nil {
-		panic(marshalError)
-	}
-	body := bytes.NewBuffer(buffer)
-	req := httptest.NewRequest(http.MethodPost, uri, body)
-	if header != nil {
-		req.Header = header
-	}
-	return req
+func (te *TestEngine) Post(uri string, header map[string]string, obj any) *http.Response {
+	return te.doRequest(http.MethodPost, uri, header, obj)
 }
 
-func deleteRequest(uri string, header http.Header, jsonPayload any) *http.Request {
-	buffer, marshalError := json.Marshal(jsonPayload)
-	if marshalError != nil {
-		panic(marshalError)
-	}
-	body := bytes.NewBuffer(buffer)
-	req := httptest.NewRequest(http.MethodDelete, uri, body)
-	if header != nil {
-		req.Header = header
-	}
-	return req
+func (te *TestEngine) Delete(uri string, header map[string]string, obj any) *http.Response {
+	return te.doRequest(http.MethodDelete, uri, header, obj)
 }
 
-func putRequest(uri string, header http.Header, jsonPayload any) *http.Request {
-	buffer, marshalError := json.Marshal(jsonPayload)
-	if marshalError != nil {
-		panic(marshalError)
-	}
-	body := bytes.NewBuffer(buffer)
-	req := httptest.NewRequest(http.MethodPut, uri, body)
-	if header != nil {
-		req.Header = header
-	}
-	return req
-}
-
-func mongoSettings() *mongo.Collection {
-	mongoURL := "mongodb://spainews:spainews@127.0.0.1:27017/spainews"
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	mongoClient, connectionError := mongo.Connect(ctx, options.Client().ApplyURI(mongoURL))
-	if connectionError != nil {
-		log.Fatal(connectionError)
-	}
-	var readPref readpref.ReadPref
-	pingError := mongoClient.Ping(context.Background(), &readPref)
-	if pingError != nil {
-		log.Fatal(pingError)
-	}
-	parseUrl, parseError := url.Parse(mongoURL)
-	if parseError != nil {
-		log.Fatal(parseError)
-	}
-	database := mongoClient.Database(parseUrl.RequestURI()[1:])
-	return database.Collection("news")
+func (te *TestEngine) Put(uri string, header map[string]string, obj any) *http.Response {
+	return te.doRequest(http.MethodPut, uri, header, obj)
 }

@@ -11,10 +11,10 @@ func (c *Controller) AddPendingReset(userId int) error {
 	if err := cmd.Err(); err != nil {
 		return err
 	}
-	return c.Email.SendResetCode(resetCode)
+	return c.SMTP.SendResetCode(resetCode)
 }
 
-func (c Controller) ResetPassword(resetCode, newPassword string) error {
+func (c *Controller) ResetPassword(resetCode, newPassword string) error {
 	cmd := c.RedisResetPasswords.GetDel(c.ctx, resetCode)
 	if err := cmd.Err(); err != nil {
 		return err

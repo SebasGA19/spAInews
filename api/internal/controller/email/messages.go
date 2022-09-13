@@ -11,9 +11,10 @@ var (
 	Templates embed.FS
 )
 
-func (e *Email) SendConfirmationEmail(code string, to ...string) error {
-	if e.Dev {
-		e.ConfirmationCode = code
+func (s *SMTP) SendConfirmationEmail(code string, to ...string) error {
+	if s.Dev {
+		s.ConfirmationCode = code
+		return nil
 	}
 	t := template.Must(template.ParseFS(Templates, "email-templates/email-confirmation.html"))
 	out := bytes.NewBuffer(nil)
@@ -27,12 +28,13 @@ func (e *Email) SendConfirmationEmail(code string, to ...string) error {
 	if executeError != nil {
 		panic(executeError)
 	}
-	return e.SendEmail(out.Bytes(), to...)
+	return s.SendEmail(to, "Confirm Email", string(out.Bytes()))
 }
 
-func (e *Email) SendResetCode(code string, to ...string) error {
-	if e.Dev {
-		e.ConfirmationCode = code
+func (s *SMTP) SendResetCode(code string, to ...string) error {
+	if s.Dev {
+		s.ConfirmationCode = code
+		return nil
 	}
 	t := template.Must(template.ParseFS(Templates, "email-templates/reset-password.html"))
 	out := bytes.NewBuffer(nil)
@@ -46,5 +48,5 @@ func (e *Email) SendResetCode(code string, to ...string) error {
 	if executeError != nil {
 		panic(executeError)
 	}
-	return e.SendEmail(out.Bytes(), to...)
+	return s.SendEmail(to, "Reset password", string(out.Bytes()))
 }

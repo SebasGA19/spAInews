@@ -53,6 +53,14 @@ services:
       MARIADB_DATABASE: spainews
       MARIADB_USER: spainews
       MARIADB_PASSWORD: spainews
+  smtp:
+    networks:
+      - spainews
+    container_name: pluto-mailhog
+    restart: unless-stopped
+    image: mailhog/mailhog
+    ports:
+      - "127.0.0.1:25:1025"
   test-data:
     restart: on-failure
     networks:

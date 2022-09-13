@@ -11,11 +11,6 @@ var (
 	clearScript string
 )
 
-func FailOnError(err error) {
-	if err != nil {
-		panic(err)
-	}
-}
 func ClearDB(db *sql.DB) {
 	for _, line := range strings.Split(clearScript, "\n") {
 		_, execError := db.Exec(line)

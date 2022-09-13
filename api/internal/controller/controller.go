@@ -15,7 +15,7 @@ type Controller struct {
 	RedisRegistrations  *redis.Client
 	RedisConfirmEmails  *redis.Client
 	RedisResetPasswords *redis.Client
-	Email               *email.Email
+	SMTP                *email.SMTP
 	ctx                 context.Context
 }
 
@@ -32,7 +32,7 @@ func NewController(
 	redisRegistrations *redis.Client,
 	redisConfirmEmails *redis.Client,
 	redisResetPasswords *redis.Client,
-	emailClient *email.Email,
+	smtpClient *email.SMTP,
 ) *Controller {
 	return &Controller{
 		SQL:                 sqlDB,
@@ -41,7 +41,7 @@ func NewController(
 		RedisRegistrations:  redisRegistrations,
 		RedisConfirmEmails:  redisConfirmEmails,
 		RedisResetPasswords: redisResetPasswords,
-		Email:               emailClient,
+		SMTP:                smtpClient,
 		ctx:                 context.Background(),
 	}
 }

@@ -1,21 +1,25 @@
 package email
 
-import "net/smtp"
+import (
+	"fmt"
+	"github.com/emersion/go-sasl"
+	"github.com/emersion/go-smtp"
+	"strings"
+)
 
-type Email struct {
-	SMTPAddress string
-	From        string
-	Auth        smtp.Auth
-	// Dev Only
+type SMTP struct {
 	Dev              bool
+	Addr             string
+	From             string
 	ConfirmationCode string
+	Auth             sasl.Client
 }
 
-func NewEmail(address, from string, auth smtp.Auth) *Email {
-	return &Email{
-		SMTPAddress: address,
-		From:        from,
-		Auth:        auth,
-		Dev:         address == ":",
-	}
+func (s *SMTP) SendEmail(recipients []string, subject, message string) error {
+	body := strings.NewReader(fmt.Sprintf("Subject: %s\r\n\r\n%s\r\n", subject, message))
+	return smtp.SendMail(s.Addr, s.Auth, s.From, recipients, body)
+}
+
+func NewEmail() *SMTP {
+	return &SMTP{}
 }
