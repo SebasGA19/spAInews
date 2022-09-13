@@ -1,531 +1,316 @@
 package web
 
 import (
+	"encoding/base64"
 	"encoding/json"
-	"github.com/SebasGA19/spAInews/api/internal/tests"
+	"fmt"
+	"github.com/stretchr/testify/assert"
 	"net/http"
-	"net/http/httptest"
 	"testing"
 )
 
 func TestRegister(t *testing.T) {
-	c := newTestController()
-	defer c.Close()
-	tests.ClearDB(c.SQL)
-	engine := NewEngine(c)
+	engine := NewTestEngine()
+	defer engine.Close()
 	// Request register
-	req := putRequest(RegisterURI, nil, Register{
+	response := engine.Put(RegisterURI, nil, Register{
 		Username: "sulcud",
 		Email:    "sulcud@email.com",
 		Password: "password",
 	})
-	w := httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response := w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Register request failed")
-	}
-	if c.Email.ConfirmationCode == "" {
-		t.Fatal("No registration code set")
-	}
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Register request failed")
+	assert.Greater(t, len(engine.Controller.SMTP.ConfirmationCode), 0, "Not registration code set")
 	// Confirm registration
-	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmCodeHeader: []string{c.Email.ConfirmationCode}}, nil)
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Account confirmation failed")
-	}
+	response = engine.Post(ConfirmRegistrationURI, map[string]string{ConfirmCodeHeader: engine.Controller.SMTP.ConfirmationCode}, nil)
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Account confirmation failed")
 	// Login
-	req = getRequest(SessionURI, nil, nil)
-	req.SetBasicAuth("sulcud", "password")
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Login failed")
-	}
+	header := map[string]string{"Authorization": fmt.Sprintf("Basic %s", base64.StdEncoding.EncodeToString([]byte("sulcud:password")))}
+	response = engine.Get(SessionURI, header, nil)
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Login failed")
 }
 
 func TestFailedRegister(t *testing.T) {
-	c := newTestController()
-	defer c.Close()
-	tests.ClearDB(c.SQL)
-	engine := NewEngine(c)
+	engine := NewTestEngine()
+	defer engine.Close()
 	// Request register
-	req := putRequest(RegisterURI, nil, Register{
+	response := engine.Put(RegisterURI, nil, Register{
 		Username: "sulcud",
 		Email:    "sulcud@email.com",
 		Password: "password",
 	})
-	w := httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response := w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Register request failed")
-	}
-	if c.Email.ConfirmationCode == "" {
-		t.Fatal("No registration code set")
-	}
-
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Register request failed")
+	assert.Greater(t, len(engine.Controller.SMTP.ConfirmationCode), 0, "Not registration code set")
+	firstConfirmCode := engine.Controller.SMTP.ConfirmationCode
 	// Second code same information
-	req = putRequest(RegisterURI, nil, Register{
+	response = engine.Put(RegisterURI, nil, Register{
 		Username: "sulcud",
 		Email:    "sulcud@email.com",
 		Password: "password",
 	})
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Register request failed")
-	}
-	if c.Email.ConfirmationCode == "" {
-		t.Fatal("No registration code set")
-	}
-	secondCode := c.Email.ConfirmationCode
-	// Confirm registration
-	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmCodeHeader: []string{c.Email.ConfirmationCode}}, nil)
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Account confirmation failed")
-	}
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Register request failed")
+	assert.Greater(t, len(engine.Controller.SMTP.ConfirmationCode), 0, "Not registration code set")
+	secondConfirmCode := engine.Controller.SMTP.ConfirmationCode
+	// Confirm first code
+	response = engine.Post(ConfirmRegistrationURI, map[string]string{
+		ConfirmCodeHeader: firstConfirmCode,
+	}, nil)
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Account confirmation failed")
 	// Confirm second Code
-	// Confirm registration
-	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmCodeHeader: []string{secondCode}}, nil)
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode == http.StatusOK {
-		t.Fatal("Registration should fail")
-	}
+	response = engine.Post(ConfirmRegistrationURI, map[string]string{
+		ConfirmCodeHeader: secondConfirmCode,
+	}, nil)
+	assert.NotEqual(t, http.StatusOK, response.StatusCode, "Account confirmation should fail")
 	// Existing username
-	req = putRequest(RegisterURI, nil, Register{
+	response = engine.Put(RegisterURI, nil, Register{
 		Username: "sulcud",
 		Email:    "sulcud2@email.com",
 		Password: "password",
 	})
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode == http.StatusOK {
-		t.Fatal("Register should fail")
-	}
+	assert.NotEqual(t, http.StatusOK, response.StatusCode, "Register should fail")
 	// Existing email
-	req = putRequest(RegisterURI, nil, Register{
+	response = engine.Put(RegisterURI, nil, Register{
 		Username: "sulcud2",
 		Email:    "sulcud@email.com",
 		Password: "password",
 	})
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode == http.StatusOK {
-		t.Fatal("Register should fail")
-	}
+	assert.NotEqual(t, http.StatusOK, response.StatusCode, "Register should fail")
 }
 
 func TestDeleteSession(t *testing.T) {
-	c := newTestController()
-	defer c.Close()
-	tests.ClearDB(c.SQL)
-	engine := NewEngine(c)
+	engine := NewTestEngine()
+	defer engine.Close()
 	// Request register
-	req := putRequest(RegisterURI, nil, Register{
+	response := engine.Put(RegisterURI, nil, Register{
 		Username: "sulcud",
 		Email:    "sulcud@email.com",
 		Password: "password",
 	})
-	w := httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response := w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Register request failed")
-	}
-	if c.Email.ConfirmationCode == "" {
-		t.Fatal("No registration code set")
-	}
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Register request failed")
+	assert.Greater(t, len(engine.Controller.SMTP.ConfirmationCode), 0, "Not registration code set")
 	// Confirm registration
-	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmCodeHeader: []string{c.Email.ConfirmationCode}}, nil)
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Account confirmation failed")
-	}
+	response = engine.Post(ConfirmRegistrationURI, map[string]string{ConfirmCodeHeader: engine.Controller.SMTP.ConfirmationCode}, nil)
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Account confirmation failed")
 	// Login
-	req = getRequest(SessionURI, nil, nil)
-	req.SetBasicAuth("sulcud", "password")
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Login failed")
-	}
+	header := map[string]string{"Authorization": fmt.Sprintf("Basic %s", base64.StdEncoding.EncodeToString([]byte("sulcud:password")))}
+	response = engine.Get(SessionURI, header, nil)
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Login failed")
 	var session SessionResponse
 	decodeError := json.NewDecoder(response.Body).Decode(&session)
-	tests.FailOnError(decodeError)
+	assert.ErrorIs(t, decodeError, nil)
 	// Delete Session
-	req = deleteRequest(SessionURI, http.Header{SessionHeader: []string{session.Session}}, nil)
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Delete session failed")
-	}
+	response = engine.Delete(SessionURI, map[string]string{SessionHeader: session.Session}, nil)
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Delete session failed")
 	// Delete session twice
-	req = deleteRequest(SessionURI, http.Header{SessionHeader: []string{session.Session}}, nil)
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode == http.StatusOK {
-		t.Fatal("Delete should fail")
-	}
+	response = engine.Delete(SessionURI, map[string]string{SessionHeader: session.Session}, nil)
+	assert.NotEqual(t, http.StatusOK, response.StatusCode, "Delete session should fail")
 }
 
 func TestChangePassword(t *testing.T) {
-	c := newTestController()
-	defer c.Close()
-	tests.ClearDB(c.SQL)
-	engine := NewEngine(c)
+	engine := NewTestEngine()
+	defer engine.Close()
 	// Request register
-	req := putRequest(RegisterURI, nil, Register{
+	response := engine.Put(RegisterURI, nil, Register{
 		Username: "sulcud",
 		Email:    "sulcud@email.com",
 		Password: "password",
 	})
-	w := httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response := w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Register request failed")
-	}
-	if c.Email.ConfirmationCode == "" {
-		t.Fatal("No registration code set")
-	}
+
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Register request failed")
+	assert.Greater(t, len(engine.Controller.SMTP.ConfirmationCode), 0, "Not registration code set")
 	// Confirm registration
-	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmCodeHeader: []string{c.Email.ConfirmationCode}}, nil)
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Account confirmation failed")
-	}
+	response = engine.Post(ConfirmRegistrationURI, map[string]string{ConfirmCodeHeader: engine.Controller.SMTP.ConfirmationCode}, nil)
+
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Account confirmation failed")
 	// Login
-	req = getRequest(SessionURI, nil, nil)
-	req.SetBasicAuth("sulcud", "password")
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Login failed")
-	}
+	header := map[string]string{"Authorization": fmt.Sprintf("Basic %s", base64.StdEncoding.EncodeToString([]byte("sulcud:password")))}
+	response = engine.Get(SessionURI, header, nil)
+
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Login failed")
 	var session SessionResponse
 	decodeError := json.NewDecoder(response.Body).Decode(&session)
-	tests.FailOnError(decodeError)
+	assert.ErrorIs(t, decodeError, nil)
 	// Change Password
-	req = postRequest(PasswordURI, http.Header{
-		SessionHeader:  []string{session.Session},
-		"Content-Type": []string{"application/json"},
+	response = engine.Post(PasswordURI, map[string]string{
+		SessionHeader:  session.Session,
+		"Content-Type": "application/json",
 	}, ChangePassword{
 		OldPassword: "password",
 		NewPassword: "secret-password",
 	})
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Update password failed")
-	}
+
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Update password failed")
+
 	// Delete old session
-	req = deleteRequest(SessionURI, http.Header{SessionHeader: []string{session.Session}}, nil)
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Delete session failed")
-	}
+	response = engine.Delete(SessionURI, map[string]string{SessionHeader: session.Session}, nil)
+
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Delete session failed")
 	// Login old credentials
-	req = getRequest(SessionURI, nil, nil)
-	req.SetBasicAuth("sulcud", "password")
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode == http.StatusOK {
-		t.Fatal("Login should fail")
-	}
+	header = map[string]string{"Authorization": fmt.Sprintf("Basic %s", base64.StdEncoding.EncodeToString([]byte("sulcud:password")))}
+	response = engine.Get(SessionURI, header, nil)
+	assert.NotEqual(t, http.StatusOK, response.StatusCode, "Login should fail")
 	// Login new credentials
-	req = getRequest(SessionURI, nil, nil)
-	req.SetBasicAuth("sulcud", "secret-password")
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Login failed")
-	}
+	header = map[string]string{"Authorization": fmt.Sprintf("Basic %s", base64.StdEncoding.EncodeToString([]byte("sulcud:secret-password")))}
+	response = engine.Get(SessionURI, header, nil)
+
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Login failed")
 	decodeError = json.NewDecoder(response.Body).Decode(&session)
-	tests.FailOnError(decodeError)
+	assert.ErrorIs(t, decodeError, nil)
 }
 
 func TestChangePasswordInvalidSession(t *testing.T) {
-	c := newTestController()
-	defer c.Close()
-	tests.ClearDB(c.SQL)
-	engine := NewEngine(c)
+	engine := NewTestEngine()
+	defer engine.Close()
 	// Request register
-	req := putRequest(RegisterURI, nil, Register{
+	response := engine.Put(RegisterURI, nil, Register{
 		Username: "sulcud",
 		Email:    "sulcud@email.com",
 		Password: "password",
 	})
-	w := httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response := w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Register request failed")
-	}
-	if c.Email.ConfirmationCode == "" {
-		t.Fatal("No registration code set")
-	}
+
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Register request failed")
+	assert.Greater(t, len(engine.Controller.SMTP.ConfirmationCode), 0, "Not registration code set")
 	// Confirm registration
-	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmCodeHeader: []string{c.Email.ConfirmationCode}}, nil)
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Account confirmation failed")
-	}
+	response = engine.Post(ConfirmRegistrationURI, map[string]string{ConfirmCodeHeader: engine.Controller.SMTP.ConfirmationCode}, nil)
+
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Account confirmation failed")
 	// Login
-	req = getRequest(SessionURI, nil, nil)
-	req.SetBasicAuth("sulcud", "password")
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Login failed")
-	}
+	header := map[string]string{"Authorization": fmt.Sprintf("Basic %s", base64.StdEncoding.EncodeToString([]byte("sulcud:password")))}
+	response = engine.Get(SessionURI, header, nil)
+
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Login failed")
 	var session SessionResponse
 	decodeError := json.NewDecoder(response.Body).Decode(&session)
-	tests.FailOnError(decodeError)
+	assert.ErrorIs(t, decodeError, nil)
 	// Delete old session
-	req = deleteRequest(SessionURI, http.Header{SessionHeader: []string{session.Session}}, nil)
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Delete session failed")
-	}
+	response = engine.Delete(SessionURI, map[string]string{SessionHeader: session.Session}, nil)
+
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Delete session failed")
 	// Change Password
-	req = postRequest(PasswordURI, http.Header{
-		SessionHeader:  []string{session.Session},
-		"Content-Type": []string{"application/json"},
+	response = engine.Post(PasswordURI, map[string]string{
+		SessionHeader:  session.Session,
+		"Content-Type": "application/json",
 	}, ChangePassword{
 		OldPassword: "password",
 		NewPassword: "secret-password",
 	})
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode == http.StatusOK {
-		t.Fatal("Update should fail")
-	}
+	assert.NotEqual(t, http.StatusOK, response.StatusCode, "Update should fail")
 	// Login
-	req = getRequest(SessionURI, nil, nil)
-	req.SetBasicAuth("sulcud", "password")
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Login failed")
-	}
+	header = map[string]string{"Authorization": fmt.Sprintf("Basic %s", base64.StdEncoding.EncodeToString([]byte("sulcud:password")))}
+	response = engine.Get(SessionURI, header, nil)
+
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Login failed")
 }
 
 func TestAccountInformation(t *testing.T) {
-	c := newTestController()
-	defer c.Close()
-	tests.ClearDB(c.SQL)
-	engine := NewEngine(c)
+	engine := NewTestEngine()
+	defer engine.Close()
 	// Request register
-	req := putRequest(RegisterURI, nil, Register{
+	response := engine.Put(RegisterURI, nil, Register{
 		Username: "sulcud",
 		Email:    "sulcud@email.com",
 		Password: "password",
 	})
-	w := httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response := w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Register request failed")
-	}
-	if c.Email.ConfirmationCode == "" {
-		t.Fatal("No registration code set")
-	}
+
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Register request failed")
+	assert.Greater(t, len(engine.Controller.SMTP.ConfirmationCode), 0, "Not registration code set")
 	// Confirm registration
-	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmCodeHeader: []string{c.Email.ConfirmationCode}}, nil)
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Account confirmation failed")
-	}
+	response = engine.Post(ConfirmRegistrationURI, map[string]string{ConfirmCodeHeader: engine.Controller.SMTP.ConfirmationCode}, nil)
+
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Account confirmation failed")
 	// Login
-	req = getRequest(SessionURI, nil, nil)
-	req.SetBasicAuth("sulcud", "password")
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Login failed")
-	}
+	header := map[string]string{"Authorization": fmt.Sprintf("Basic %s", base64.StdEncoding.EncodeToString([]byte("sulcud:password")))}
+	response = engine.Get(SessionURI, header, nil)
+
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Login failed")
 	var session SessionResponse
 	decodeError := json.NewDecoder(response.Body).Decode(&session)
-	tests.FailOnError(decodeError)
+	assert.ErrorIs(t, decodeError, nil)
 	// Request account information
-	req = getRequest(AccountURI, http.Header{SessionHeader: []string{session.Session}}, nil)
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Cannot get account information")
-	}
+	response = engine.Get(AccountURI, map[string]string{SessionHeader: session.Session}, nil)
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Cannot get account information")
 	var accountInformation AccountInformationResponse
 	decodeError = json.NewDecoder(response.Body).Decode(&accountInformation)
-	tests.FailOnError(decodeError)
-	if accountInformation.Username != "sulcud" {
-		t.Fatal("Invalid username")
-	}
-	if accountInformation.Email != "sulcud@email.com" {
-		t.Fatal("Invalid email")
-	}
+	assert.ErrorIs(t, decodeError, nil)
+	assert.Equal(t, "sulcud", accountInformation.Username, "Invalid username")
+	assert.Equal(t, "sulcud@email.com", accountInformation.Email, "Invalid email")
 }
 
 func TestAccountInformationInvalidSession(t *testing.T) {
-	c := newTestController()
-	defer c.Close()
-	tests.ClearDB(c.SQL)
-	engine := NewEngine(c)
+	engine := NewTestEngine()
+	defer engine.Close()
 	// Request register
-	req := putRequest(RegisterURI, nil, Register{
+	response := engine.Put(RegisterURI, nil, Register{
 		Username: "sulcud",
 		Email:    "sulcud@email.com",
 		Password: "password",
 	})
-	w := httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response := w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Register request failed")
-	}
-	if c.Email.ConfirmationCode == "" {
-		t.Fatal("No registration code set")
-	}
+
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Register request failed")
+	assert.Greater(t, len(engine.Controller.SMTP.ConfirmationCode), 0, "Not registration code set")
 	// Confirm registration
-	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmCodeHeader: []string{c.Email.ConfirmationCode}}, nil)
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Account confirmation failed")
-	}
+	response = engine.Post(ConfirmRegistrationURI, map[string]string{ConfirmCodeHeader: engine.Controller.SMTP.ConfirmationCode}, nil)
+
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Account confirmation failed")
 	// Login
-	req = getRequest(SessionURI, nil, nil)
-	req.SetBasicAuth("sulcud", "password")
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Login failed")
-	}
+	header := map[string]string{"Authorization": fmt.Sprintf("Basic %s", base64.StdEncoding.EncodeToString([]byte("sulcud:password")))}
+	response = engine.Get(SessionURI, header, nil)
+
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Login failed")
 	var session SessionResponse
 	decodeError := json.NewDecoder(response.Body).Decode(&session)
-	tests.FailOnError(decodeError)
+	assert.ErrorIs(t, decodeError, nil)
 	// Delete session
-	req = deleteRequest(SessionURI, http.Header{SessionHeader: []string{session.Session}}, nil)
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Delete session failed")
-	}
+	response = engine.Delete(SessionURI, map[string]string{SessionHeader: session.Session}, nil)
+
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Delete session failed")
 	// Request account information
-	req = getRequest(AccountURI, http.Header{SessionHeader: []string{session.Session}}, nil)
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode == http.StatusOK {
-		t.Fatal("Should fail")
-	}
+	response = engine.Get(AccountURI, map[string]string{SessionHeader: session.Session}, nil)
+	assert.NotEqual(t, http.StatusOK, response.StatusCode, "Reuse of deleted session should fail")
 }
 
 func TestUpdateWords(t *testing.T) {
-	c := newTestController()
-	defer c.Close()
-	tests.ClearDB(c.SQL)
-	engine := NewEngine(c)
+	engine := NewTestEngine()
+	defer engine.Close()
 	// Request register
-	req := putRequest(RegisterURI, nil, Register{
+	response := engine.Put(RegisterURI, nil, Register{
 		Username: "sulcud",
 		Email:    "sulcud@email.com",
 		Password: "password",
 	})
-	w := httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response := w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Register request failed")
-	}
-	if c.Email.ConfirmationCode == "" {
-		t.Fatal("No registration code set")
-	}
+
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Register request failed")
+	assert.Greater(t, len(engine.Controller.SMTP.ConfirmationCode), 0, "Not registration code set")
 	// Confirm registration
-	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmCodeHeader: []string{c.Email.ConfirmationCode}}, nil)
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Account confirmation failed")
-	}
+	response = engine.Post(ConfirmRegistrationURI, map[string]string{ConfirmCodeHeader: engine.Controller.SMTP.ConfirmationCode}, nil)
+
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Account confirmation failed")
 	// Login
-	req = getRequest(SessionURI, nil, nil)
-	req.SetBasicAuth("sulcud", "password")
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Login failed")
-	}
+	header := map[string]string{"Authorization": fmt.Sprintf("Basic %s", base64.StdEncoding.EncodeToString([]byte("sulcud:password")))}
+	response = engine.Get(SessionURI, header, nil)
+
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Login failed")
 	var session SessionResponse
 	decodeError := json.NewDecoder(response.Body).Decode(&session)
-	tests.FailOnError(decodeError)
+	assert.ErrorIs(t, decodeError, nil)
 	// Update words
-	req = postRequest(WordsURI, http.Header{
-		SessionHeader:  []string{session.Session},
-		"Content-Type": []string{"application/json"},
+	response = engine.Post(WordsURI, map[string]string{
+		SessionHeader:  session.Session,
+		"Content-Type": "application/json",
 	}, UpdateWords{
 		Automatic: true,
 		Words:     []string{"Venezuela", "Colombia"},
 	})
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Update words failed")
-	}
+
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Update words failed")
 	// Get words
-	req = getRequest(WordsURI, http.Header{
-		SessionHeader: []string{session.Session},
+	response = engine.Get(WordsURI, map[string]string{
+		SessionHeader: session.Session,
 	}, nil)
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Get words failed")
-	}
+
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Get words failed")
 	var getWords GetWordsResponse
 	decodeError = json.NewDecoder(response.Body).Decode(&getWords)
-	tests.FailOnError(decodeError)
+	assert.ErrorIs(t, decodeError, nil)
 	if getWords.Automatic != true {
 		t.Fatal("Invalid automatic")
 	}
@@ -535,135 +320,87 @@ func TestUpdateWords(t *testing.T) {
 }
 
 func TestResetPassword(t *testing.T) {
-	c := newTestController()
-	defer c.Close()
-	tests.ClearDB(c.SQL)
-	engine := NewEngine(c)
+	engine := NewTestEngine()
+	defer engine.Close()
 	// Request register
-	req := putRequest(RegisterURI, nil, Register{
+	response := engine.Put(RegisterURI, nil, Register{
 		Username: "sulcud",
 		Email:    "sulcud@email.com",
 		Password: "password",
 	})
-	w := httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response := w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Register request failed")
-	}
-	if c.Email.ConfirmationCode == "" {
-		t.Fatal("No registration code set")
-	}
+
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Register request failed")
+	assert.Greater(t, len(engine.Controller.SMTP.ConfirmationCode), 0, "Not registration code set")
 	// Confirm registration
-	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmCodeHeader: []string{c.Email.ConfirmationCode}}, nil)
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Account confirmation failed")
-	}
+	response = engine.Post(ConfirmRegistrationURI, map[string]string{ConfirmCodeHeader: engine.Controller.SMTP.ConfirmationCode}, nil)
+
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Account confirmation failed")
 	// Request Password reset
-	req = postRequest(ResetPasswordURI, http.Header{"Content-Type": []string{"application/json"}}, RequestPasswordReset{
+	response = engine.Post(ResetPasswordURI, map[string]string{"Content-Type": "application/json"}, RequestPasswordReset{
 		Email: "sulcud@email.com",
 	})
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
+
 	// Confirm password reset
-	req = postRequest(ConfirmResetPasswordURI, http.Header{
-		ConfirmCodeHeader: []string{c.Email.ConfirmationCode},
-		"Content-Type":    []string{"application/json"},
+	response = engine.Post(ConfirmResetPasswordURI, map[string]string{
+		ConfirmCodeHeader: engine.Controller.SMTP.ConfirmationCode,
+		"Content-Type":    "application/json",
 	}, ResetPassword{
 		NewPassword: "my-new-password",
 	})
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
+
 	// Login
-	req = getRequest(SessionURI, nil, nil)
-	req.SetBasicAuth("sulcud", "my-new-password")
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Login failed")
-	}
+	header := map[string]string{"Authorization": fmt.Sprintf("Basic %s", base64.StdEncoding.EncodeToString([]byte("sulcud:my-new-password")))}
+	response = engine.Get(SessionURI, header, nil)
+
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Login failed")
 }
 
 func TestUpdateEmail(t *testing.T) {
-	c := newTestController()
-	defer c.Close()
-	tests.ClearDB(c.SQL)
-	engine := NewEngine(c)
+	engine := NewTestEngine()
+	defer engine.Close()
 	// Request register
-	req := putRequest(RegisterURI, nil, Register{
+	response := engine.Put(RegisterURI, nil, Register{
 		Username: "sulcud",
 		Email:    "sulcud@email.com",
 		Password: "password",
 	})
-	w := httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response := w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Register request failed")
-	}
-	if c.Email.ConfirmationCode == "" {
-		t.Fatal("No registration code set")
-	}
+
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Register request failed")
+	assert.Greater(t, len(engine.Controller.SMTP.ConfirmationCode), 0, "Not registration code set")
 	// Confirm registration
-	req = postRequest(ConfirmRegistrationURI, http.Header{ConfirmCodeHeader: []string{c.Email.ConfirmationCode}}, nil)
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Account confirmation failed")
-	}
+	response = engine.Post(ConfirmRegistrationURI, map[string]string{ConfirmCodeHeader: engine.Controller.SMTP.ConfirmationCode}, nil)
+
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Account confirmation failed")
 	// Login
-	req = getRequest(SessionURI, nil, nil)
-	req.SetBasicAuth("sulcud", "password")
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Login failed")
-	}
+	header := map[string]string{"Authorization": fmt.Sprintf("Basic %s", base64.StdEncoding.EncodeToString([]byte("sulcud:password")))}
+	response = engine.Get(SessionURI, header, nil)
+
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Login failed")
 	var session SessionResponse
 	decodeError := json.NewDecoder(response.Body).Decode(&session)
-	tests.FailOnError(decodeError)
+	assert.ErrorIs(t, decodeError, nil)
 	// Update email
-	req = postRequest(EmailURI, http.Header{
-		SessionHeader:  []string{session.Session},
-		"Content-Type": []string{"application/json"},
+	response = engine.Post(EmailURI, map[string]string{
+		SessionHeader:  session.Session,
+		"Content-Type": "application/json",
 	}, UpdateEmail{
 		Password: "password",
 		NewEmail: "sulcud@my.new.email.com",
 	})
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
+
 	// Confirm new email
-	req = postRequest(ConfirmUpdateEmailURI,
-		http.Header{
-			ConfirmCodeHeader: []string{c.Email.ConfirmationCode},
+	response = engine.Post(ConfirmUpdateEmailURI,
+		map[string]string{
+			ConfirmCodeHeader: engine.Controller.SMTP.ConfirmationCode,
 		}, nil)
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
+
 	// Account information
-	req = getRequest(AccountURI, http.Header{SessionHeader: []string{session.Session}}, nil)
-	w = httptest.NewRecorder()
-	engine.ServeHTTP(w, req)
-	response = w.Result()
-	if response.StatusCode != http.StatusOK {
-		t.Fatal("Cannot get account information")
-	}
+	response = engine.Get(AccountURI, map[string]string{SessionHeader: session.Session}, nil)
+
+	assert.Equal(t, http.StatusOK, response.StatusCode, "Cannot get account information")
 	var accountInformation AccountInformationResponse
 	decodeError = json.NewDecoder(response.Body).Decode(&accountInformation)
-	tests.FailOnError(decodeError)
-	if accountInformation.Username != "sulcud" {
-		t.Fatal("Invalid username")
-	}
-	if accountInformation.Email != "sulcud@my.new.email.com" {
-		t.Fatal("Invalid email")
-	}
+	assert.ErrorIs(t, decodeError, nil)
+	assert.Equal(t, "sulcud", accountInformation.Username, "Invalid username")
+	assert.Equal(t, "sulcud@my.new.email.com", accountInformation.Email, "Invalid email")
 }

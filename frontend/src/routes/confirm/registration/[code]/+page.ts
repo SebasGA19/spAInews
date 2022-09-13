@@ -1,9 +1,10 @@
-import { error } from "@sveltejs/kit";
-import { confirmRegister } from "../../../../api/confirm";
+import {error} from "@sveltejs/kit";
+import {confirmRegister} from "../../../../api/confirm";
 
 export const ssr = false;
 export const csr = true;
-export async function load({ params }) {
+
+export async function load({params}) {
     try {
         const result: void = await confirmRegister(params.code);
         return;

@@ -1,1 +1,28 @@
-{"authors": ["James Dean", "Kimberly Dean", "Joanna Gaines", "Kids. Illustrated Julianna Swaney", "Jory John. Illustrated Pete Oswald", "Emily Winfield Martin", "Adam Wallace", "Andy Elkerton", "Adam Rubin. Illustrated Daniel Salmieri", "Hoda Kotb. Illustrated Suzie Mason"], "date_download": "2022-08-16 17:13:03", "date_modify": "2022-08-16 17:13:03", "date_publish": "2019-05-05 00:00:00", "description": "The New York Times Best Sellers are up-to-date and authoritative lists of the most popular books in the United States, based on sales in the past week, including fiction, non-fiction, paperbacks, children’s books, audiobooks, graphic books and more.", "filename": "books_best-sellers_2019_05_05__1660669983.html", "image_url": "https://nytimes.com/vi-assets/static-assets/NYT-BestSeller-1200x675-699eb842421d5076f318fe0df3d903a5.png", "language": "en", "localpath": "C:\\Users\\USUARIO/news-please-repo//data/2022/08/16/nytimes.com/books_best-sellers_2019_05_05__1660669983.html", "title": "Children’s Picture Books", "title_page": "Children’s Picture Books - Best Sellers - Books - May 5, 2019", "title_rss": "NULL", "source_domain": "nytimes.com", "maintext": "If a book is not in a rank since the previous week , it will not have an arrow. The last few titles on the list known as the extended list, never have arrows.", "url": "https://www.nytimes.com/books/best-sellers/2019/05/05/picture-books/"}
+{
+  "authors": [
+    "James Dean",
+    "Kimberly Dean",
+    "Joanna Gaines",
+    "Kids. Illustrated Julianna Swaney",
+    "Jory John. Illustrated Pete Oswald",
+    "Emily Winfield Martin",
+    "Adam Wallace",
+    "Andy Elkerton",
+    "Adam Rubin. Illustrated Daniel Salmieri",
+    "Hoda Kotb. Illustrated Suzie Mason"
+  ],
+  "date_download": "2022-08-16 17:13:03",
+  "date_modify": "2022-08-16 17:13:03",
+  "date_publish": "2019-05-05 00:00:00",
+  "description": "The New York Times Best Sellers are up-to-date and authoritative lists of the most popular books in the United States, based on sales in the past week, including fiction, non-fiction, paperbacks, childrenï¿½s books, audiobooks, graphic books and more.",
+  "filename": "books_best-sellers_2019_05_05__1660669983.html",
+  "image_url": "https://nytimes.com/vi-assets/static-assets/NYT-BestSeller-1200x675-699eb842421d5076f318fe0df3d903a5.png",
+  "language": "en",
+  "localpath": "C:\\Users\\USUARIO/news-please-repo//data/2022/08/16/nytimes.com/books_best-sellers_2019_05_05__1660669983.html",
+  "title": "Childrenï¿½s Picture Books",
+  "title_page": "Childrenï¿½s Picture Books - Best Sellers - Books - May 5, 2019",
+  "title_rss": "NULL",
+  "source_domain": "nytimes.com",
+  "maintext": "If a book is not in a rank since the previous week , it will not have an arrow. The last few titles on the list known as the extended list, never have arrows.",
+  "url": "https://www.nytimes.com/books/best-sellers/2019/05/05/picture-books/"
+}

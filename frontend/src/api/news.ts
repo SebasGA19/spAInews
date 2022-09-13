@@ -1,5 +1,5 @@
-import type { News } from "src/common/types";
-import { api_baseurl } from "../config";
+import type {News} from "src/common/types";
+import {api_baseurl} from "../config";
 
 export async function news(pages: number): Promise<News> {
 

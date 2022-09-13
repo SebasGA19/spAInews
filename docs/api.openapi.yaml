@@ -49,7 +49,7 @@ paths:
   /register:
     put:
       tags:
-       - Authentication
+        - Authentication
       summary: Requests a user registration
       requestBody:
         content:
@@ -75,7 +75,7 @@ paths:
   /confirm/registration:
     post:
       tags:
-       - Authentication
+        - Authentication
       summary: Confirm the registration using the code sent by email
       parameters:
         - in: header
@@ -94,9 +94,9 @@ paths:
     get:
       summary: Request a valid session cookie
       tags:
-       - Authentication
+        - Authentication
       security:
-        - basicAuth: []
+        - basicAuth: [ ]
       responses:
         '200':
           description: User authenticated successfully
@@ -141,9 +141,9 @@ paths:
                 old-password: password
                 new-password: my-new-password
       tags:
-       - Authentication
+        - Authentication
       security:
-        - session-key: []
+        - session-key: [ ]
       responses:
         '200':
           description: Password updated

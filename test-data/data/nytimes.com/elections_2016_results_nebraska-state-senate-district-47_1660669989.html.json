@@ -1,1 +1,19 @@
-{"authors": ["The New York Times"], "date_download": "2022-08-16 17:13:09", "date_modify": "2022-08-16 17:13:09", "date_publish": "2017-08-01 11:26:16", "description": "Nebraska election results from the 2016 general election.", "filename": "elections_2016_results_nebraska-state-senate-district-47_1660669989.html", "image_url": "https://int.nyt.com/applications/elections/2016/assets/e8ef61f66872/img/promo-nebraska.png", "language": "en", "localpath": "C:\\Users\\USUARIO/news-please-repo//data/2022/08/16/nytimes.com/elections_2016_results_nebraska-state-senate-district-47_1660669989.html", "title": "Nebraska 47th District Unicameral Legislature Results: Steve Erdman Wins", "title_page": "Nebraska 47th District Unicameral Legislature Results: Steve Erdman Wins – Election Results 2016 – The New York Times", "title_rss": "NULL", "source_domain": "nytimes.com", "maintext": "Steve Erdman won the 47th District Unicameral Legislature race in Nebraska on Tuesday. Steve Erdman is up by 35 points with all precincts reporting.\nBelow are detailed results for the race. View other Nebraska election results on our full Nebraska results page.", "url": "https://www.nytimes.com/elections/2016/results/nebraska-state-senate-district-47"}
+{
+  "authors": [
+    "The New York Times"
+  ],
+  "date_download": "2022-08-16 17:13:09",
+  "date_modify": "2022-08-16 17:13:09",
+  "date_publish": "2017-08-01 11:26:16",
+  "description": "Nebraska election results from the 2016 general election.",
+  "filename": "elections_2016_results_nebraska-state-senate-district-47_1660669989.html",
+  "image_url": "https://int.nyt.com/applications/elections/2016/assets/e8ef61f66872/img/promo-nebraska.png",
+  "language": "en",
+  "localpath": "C:\\Users\\USUARIO/news-please-repo//data/2022/08/16/nytimes.com/elections_2016_results_nebraska-state-senate-district-47_1660669989.html",
+  "title": "Nebraska 47th District Unicameral Legislature Results: Steve Erdman Wins",
+  "title_page": "Nebraska 47th District Unicameral Legislature Results: Steve Erdman Wins ï¿½ Election Results 2016 ï¿½ The New York Times",
+  "title_rss": "NULL",
+  "source_domain": "nytimes.com",
+  "maintext": "Steve Erdman won the 47th District Unicameral Legislature race in Nebraska on Tuesday. Steve Erdman is up by 35 points with all precincts reporting.\nBelow are detailed results for the race. View other Nebraska election results on our full Nebraska results page.",
+  "url": "https://www.nytimes.com/elections/2016/results/nebraska-state-senate-district-47"
+}

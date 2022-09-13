@@ -24,7 +24,7 @@ func (c *Controller) AddPendingRegistration(registrationData RegistrationData) e
 	if err := status.Err(); err != nil {
 		return err
 	}
-	return c.Email.SendConfirmationEmail(code)
+	return c.SMTP.SendConfirmationRegistration(code, registrationData.Email)
 }
 
 func (c *Controller) ConfirmEmail(code string) error {

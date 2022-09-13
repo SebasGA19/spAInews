@@ -1,7 +1,6 @@
 # This docker compose will only be used by frontend developers since it isolates the database by the API interfaces
 # Ports:
-# - Auth API -> 127.0.0.1:5000
-# - News API -> 127.0.0.1:6000
+# - API -> 127.0.0.1:5000
 
 version: "3.3"
 
@@ -49,31 +48,12 @@ services:
       MARIADB_DATABASE: spainews
       MARIADB_USER: spainews
       MARIADB_PASSWORD: spainews
-  api:
-    depends_on:
-      - redis
-      - mariadb
-      - mongo
-    user: "api:api"
-    container_name: spainews-api
-    build:
-      context: .
-      dockerfile: api.Dockerfile
-    restart: unless-stopped
+  smtp:
     networks:
       - spainews
-    environment:
-      SMTP_HOST: "" # TODO: FIX ME
-      SMTP_PORT: "" # TODO: FIX ME
-      SMTP_FROM: "dashboard@dev-spainews.co" # TODO: FIX ME
-      SMTP_USERNAME: "dashboard@dev-spainews.co" # TODO: FIX ME
-      SMTP_PASSWORD: "password" # TODO: FIX ME
-      REDIS_ADDRESS: "redis:6379"
-      MARIA_URL: "spainews:spainews@tcp(mariadb:3306)/spainews?parseTime=true"
-      MONGO_URL: "mongodb://spainews:spainews@mongo:27017/spainews"
-      LISTEN_ADDRESS: "api:5000"
-    ports:
-      - "127.0.0.1:5000:5000"
+    container_name: spainews-mailhog
+    restart: unless-stopped
+    image: mailhog/mailhog
   test-data:
     restart: on-failure
     networks:
@@ -82,3 +62,47 @@ services:
     build:
       context: .
       dockerfile: test-data.Dockerfile
+    volumes:
+      - type: bind
+        source: ./test-data
+        target: /test-data
+        read_only: true
+  builder:
+    build:
+      context: .
+      dockerfile: builder.Dockerfile
+    volumes:
+      - type: bind
+        source: ./api
+        target: /spAInews/api
+        read_only: true
+      - type: bind
+        source: ./build
+        target: /build
+  api:
+    depends_on:
+      - test-data
+      - smtp
+      - builder
+      - redis
+      - mariadb
+      - mongo
+    user: "api:api"
+    container_name: spainews-api
+    build:
+      context: .
+      dockerfile: api.Dockerfile
+    volumes:
+      - type: bind
+        source: ./build
+        target: /build
+        read_only: true
+      - type: bind
+        source: ./configs
+        target: /configs
+        read_only: true
+    restart: unless-stopped
+    networks:
+      - spainews
+    ports:
+      - "127.0.0.1:5000:5000"

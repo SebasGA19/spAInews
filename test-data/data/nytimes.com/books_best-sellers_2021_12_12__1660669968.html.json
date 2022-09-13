@@ -1,1 +1,28 @@
-{"authors": ["Will Smith With Mark Manson", "Matthew Mcconaughey", "Dave Grohl", "Edited Nikole Hannah-Jones", "Caitlin Roper", "Ilena Silverman", "Jake Silverstein", "Katie Couric", "Jonathan Karl", "David Graeber"], "date_download": "2022-08-16 17:12:48", "date_modify": "2022-08-16 17:12:48", "date_publish": "2021-12-12 00:00:00", "description": "The New York Times Best Sellers are up-to-date and authoritative lists of the most popular books in the United States, based on sales in the past week, including fiction, non-fiction, paperbacks, children’s books, audiobooks, graphic books and more.", "filename": "books_best-sellers_2021_12_12__1660669968.html", "image_url": "https://nytimes.com/vi-assets/static-assets/NYT-BestSeller-1200x675-699eb842421d5076f318fe0df3d903a5.png", "language": "en", "localpath": "C:\\Users\\USUARIO/news-please-repo//data/2022/08/16/nytimes.com/books_best-sellers_2021_12_12__1660669968.html", "title": "Audio Nonfiction", "title_page": "Audio Nonfiction Books - Best Sellers - Books - Dec. 12, 2021", "title_rss": "NULL", "source_domain": "nytimes.com", "maintext": "WILL\nby Will Smith with Mark Manson\nPenguin Audio\nThe actor, producer and musician tells his life story and lessons he learned along the way. Read by Will Smith. 16 hours, 16 minutes unabridged.", "url": "https://www.nytimes.com/books/best-sellers/2021/12/12/audio-nonfiction/"}
+{
+  "authors": [
+    "Will Smith With Mark Manson",
+    "Matthew Mcconaughey",
+    "Dave Grohl",
+    "Edited Nikole Hannah-Jones",
+    "Caitlin Roper",
+    "Ilena Silverman",
+    "Jake Silverstein",
+    "Katie Couric",
+    "Jonathan Karl",
+    "David Graeber"
+  ],
+  "date_download": "2022-08-16 17:12:48",
+  "date_modify": "2022-08-16 17:12:48",
+  "date_publish": "2021-12-12 00:00:00",
+  "description": "The New York Times Best Sellers are up-to-date and authoritative lists of the most popular books in the United States, based on sales in the past week, including fiction, non-fiction, paperbacks, childrenï¿½s books, audiobooks, graphic books and more.",
+  "filename": "books_best-sellers_2021_12_12__1660669968.html",
+  "image_url": "https://nytimes.com/vi-assets/static-assets/NYT-BestSeller-1200x675-699eb842421d5076f318fe0df3d903a5.png",
+  "language": "en",
+  "localpath": "C:\\Users\\USUARIO/news-please-repo//data/2022/08/16/nytimes.com/books_best-sellers_2021_12_12__1660669968.html",
+  "title": "Audio Nonfiction",
+  "title_page": "Audio Nonfiction Books - Best Sellers - Books - Dec. 12, 2021",
+  "title_rss": "NULL",
+  "source_domain": "nytimes.com",
+  "maintext": "WILL\nby Will Smith with Mark Manson\nPenguin Audio\nThe actor, producer and musician tells his life story and lessons he learned along the way. Read by Will Smith. 16 hours, 16 minutes unabridged.",
+  "url": "https://www.nytimes.com/books/best-sellers/2021/12/12/audio-nonfiction/"
+}

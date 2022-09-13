@@ -53,11 +53,24 @@ services:
       MARIADB_DATABASE: spainews
       MARIADB_USER: spainews
       MARIADB_PASSWORD: spainews
+  smtp:
+    networks:
+      - spainews
+    container_name: spainews-mailhog
+    restart: unless-stopped
+    image: mailhog/mailhog
+    ports:
+      - "127.0.0.1:25:1025"
   test-data:
     restart: on-failure
     networks:
       - spainews
     container_name: spainews-test-data
+    volumes:
+      - type: bind
+        source: ./test-data
+        target: /test-data
+        read_only: true
     build:
       context: .
       dockerfile: test-data.Dockerfile

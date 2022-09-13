@@ -1,1 +1,28 @@
-{"authors": ["Rachel Hollis", "Marie Kondo", "Mark Manson", "Lysa Terkeurst", "Jen Sincero", "David Goggins", "Samin Nosrat. Illustrated Wendy Macnaughton", "Gwyneth Paltrow", "Joanna Gaines", "Mike Bayer"], "date_download": "2022-08-16 17:13:04", "date_modify": "2022-08-16 17:13:04", "date_publish": "2019-02-03 00:00:00", "description": "The New York Times Best Sellers are up-to-date and authoritative lists of the most popular books in the United States, based on sales in the past week, including fiction, non-fiction, paperbacks, children’s books, audiobooks, graphic books and more.", "filename": "books_best-sellers_2019_02_03__1660669984.html", "image_url": "https://nytimes.com/vi-assets/static-assets/NYT-BestSeller-1200x675-699eb842421d5076f318fe0df3d903a5.png", "language": "en", "localpath": "C:\\Users\\USUARIO/news-please-repo//data/2022/08/16/nytimes.com/books_best-sellers_2019_02_03__1660669984.html", "title": "Advice, How-To & Miscellaneous", "title_page": "Advice, How-To & Miscellaneous Books - Best Sellers - Books - Feb. 3, 2019", "title_rss": "NULL", "source_domain": "nytimes.com", "maintext": "Up in Rank since last week\nDown in Rank since last week\nIf a book is not in a rank since the previous week , it will not have an arrow. The last few titles on the list known as the extended list, never have arrows.\nAn asterisk indicates that a book's sales are barely distinguishable from those of the book above it.", "url": "https://www.nytimes.com/books/best-sellers/2019/02/03/advice-how-to-and-miscellaneous/"}
+{
+  "authors": [
+    "Rachel Hollis",
+    "Marie Kondo",
+    "Mark Manson",
+    "Lysa Terkeurst",
+    "Jen Sincero",
+    "David Goggins",
+    "Samin Nosrat. Illustrated Wendy Macnaughton",
+    "Gwyneth Paltrow",
+    "Joanna Gaines",
+    "Mike Bayer"
+  ],
+  "date_download": "2022-08-16 17:13:04",
+  "date_modify": "2022-08-16 17:13:04",
+  "date_publish": "2019-02-03 00:00:00",
+  "description": "The New York Times Best Sellers are up-to-date and authoritative lists of the most popular books in the United States, based on sales in the past week, including fiction, non-fiction, paperbacks, childrenï¿½s books, audiobooks, graphic books and more.",
+  "filename": "books_best-sellers_2019_02_03__1660669984.html",
+  "image_url": "https://nytimes.com/vi-assets/static-assets/NYT-BestSeller-1200x675-699eb842421d5076f318fe0df3d903a5.png",
+  "language": "en",
+  "localpath": "C:\\Users\\USUARIO/news-please-repo//data/2022/08/16/nytimes.com/books_best-sellers_2019_02_03__1660669984.html",
+  "title": "Advice, How-To & Miscellaneous",
+  "title_page": "Advice, How-To & Miscellaneous Books - Best Sellers - Books - Feb. 3, 2019",
+  "title_rss": "NULL",
+  "source_domain": "nytimes.com",
+  "maintext": "Up in Rank since last week\nDown in Rank since last week\nIf a book is not in a rank since the previous week , it will not have an arrow. The last few titles on the list known as the extended list, never have arrows.\nAn asterisk indicates that a book's sales are barely distinguishable from those of the book above it.",
+  "url": "https://www.nytimes.com/books/best-sellers/2019/02/03/advice-how-to-and-miscellaneous/"
+}

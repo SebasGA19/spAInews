@@ -1,103 +1,75 @@
 package main
 
 import (
-	"context"
-	"database/sql"
 	"fmt"
 	"github.com/SebasGA19/spAInews/api/internal/config"
-	"github.com/go-redis/redis/v9"
 	_ "github.com/go-sql-driver/mysql"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
-	"go.mongodb.org/mongo-driver/mongo/readpref"
-	"log"
-	"net/smtp"
-	"net/url"
+	"github.com/joho/godotenv"
 	"os"
-	"time"
 )
 
-func mariaDB() *sql.DB {
-	mariaURL := os.Getenv(config.MariaURL)
-	sqlDB, err := sql.Open("mysql", mariaURL)
+var (
+	SQLUser  string
+	SQLPass  string
+	SQLHost  string
+	SQLPort  string
+	SQLDB    string
+	SQLExtra string
+	SQLTCP   bool
+)
+
+var (
+	MongoUser string
+	MongoPass string
+	MongoHost string
+	MongoPort string
+	MongoDB   string
+)
+
+var (
+	RedisHost string
+	RedisPort string
+)
+
+var (
+	SMTPFrom         string
+	SMTPUser         string
+	SMTPPass         string
+	SMTPHost         string
+	SMTPPort         string
+	SMTPDev          bool
+	SMTPDashboardURL string
+)
+
+func initSetup() {
+	m, err := godotenv.Read(os.Args[2:]...)
 	if err != nil {
-		log.Fatal(err)
+		_, _ = fmt.Fprintf(os.Stderr, err.Error())
+		os.Exit(1)
 	}
-	pingError := sqlDB.Ping()
-	if pingError != nil {
-		log.Fatal(pingError)
-	}
-	return sqlDB
-}
-
-func redisClients() (sessions, registrations, confirmEmails, resetPasswords *redis.Client) {
-	redisAddress := os.Getenv(config.RedisAddress)
-	sessions = redis.NewClient(
-		&redis.Options{
-			Addr: redisAddress,
-			DB:   0,
-		},
-	)
-	if _, err := sessions.Ping(context.Background()).Result(); err != nil {
-		log.Fatal(err)
-	}
-	registrations = redis.NewClient(
-		&redis.Options{
-			Addr: redisAddress,
-			DB:   1,
-		},
-	)
-	if _, err := registrations.Ping(context.Background()).Result(); err != nil {
-		log.Fatal(err)
-	}
-	confirmEmails = redis.NewClient(
-		&redis.Options{
-			Addr: redisAddress,
-			DB:   2,
-		},
-	)
-	if _, err := confirmEmails.Ping(context.Background()).Result(); err != nil {
-		log.Fatal(err)
-	}
-	resetPasswords = redis.NewClient(
-		&redis.Options{
-			Addr: redisAddress,
-			DB:   3,
-		},
-	)
-	if _, err := resetPasswords.Ping(context.Background()).Result(); err != nil {
-		log.Fatal(err)
-	}
-	return sessions, registrations, confirmEmails, resetPasswords
-}
-
-func emailSettings() (address, from string, auth smtp.Auth) {
-	auth = smtp.PlainAuth(
-		"",
-		os.Getenv(config.SMTPUsername),
-		os.Getenv(config.SMTPPassword),
-		os.Getenv(config.SMTPHost),
-	)
-	return fmt.Sprintf("%s:%s", os.Getenv(config.SMTPHost), os.Getenv(config.SMTPPort)), os.Getenv(config.SMTPFrom), auth
-}
-
-func mongoSettings() *mongo.Collection {
-	mongoURL := os.Getenv(config.MongoURL)
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	mongoClient, connectionError := mongo.Connect(ctx, options.Client().ApplyURI(mongoURL))
-	if connectionError != nil {
-		log.Fatal(connectionError)
-	}
-	var readPref readpref.ReadPref
-	pingError := mongoClient.Ping(context.Background(), &readPref)
-	if pingError != nil {
-		log.Fatal(pingError)
-	}
-	parseUrl, parseError := url.Parse(mongoURL)
-	if parseError != nil {
-		log.Fatal(parseError)
-	}
-	database := mongoClient.Database(parseUrl.RequestURI()[1:])
-	return database.Collection("news")
+	// SQL
+	SQLUser = m[config.SQLUser]
+	SQLPass = m[config.SQLPass]
+	SQLHost = m[config.SQLHost]
+	SQLPort = m[config.SQLPort]
+	SQLDB = m[config.SQLDB]
+	SQLExtra = m[config.SQLExtra]
+	SQLTCP = m[config.SQLTCP] == "true"
+	// Mongo
+	MongoUser = m[config.MongoUser]
+	MongoPass = m[config.MongoPass]
+	MongoHost = m[config.MongoHost]
+	MongoPort = m[config.MongoPort]
+	MongoDB = m[config.MongoDB]
+	// Redis
+	RedisHost = m[config.RedisHost]
+	RedisPort = m[config.RedisPort]
+	// SMTP
+	SMTPFrom = m[config.SMTPFrom]
+	SMTPUser = m[config.SMTPUser]
+	SMTPPass = m[config.SMTPPass]
+	SMTPHost = m[config.SMTPHost]
+	SMTPPort = m[config.SMTPPort]
+	SMTPDev = m[config.SMTPDev] == "true"
+	SMTPDashboardURL = m[config.SMTPDashboardURL]
 }

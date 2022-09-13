@@ -24,10 +24,10 @@ func (c *Controller) AddUpdateEmail(updateEmail UpdateEmail) error {
 	if err := cmd.Err(); err != nil {
 		return err
 	}
-	return c.Email.SendConfirmationEmail(resetCode)
+	return c.SMTP.SendConfirmationEmail(resetCode, updateEmail.NewEmail)
 }
 
-func (c Controller) UpdateEmail(resetCode string) error {
+func (c *Controller) UpdateEmail(resetCode string) error {
 	cmd := c.RedisConfirmEmails.GetDel(c.ctx, resetCode)
 	if err := cmd.Err(); err != nil {
 		return err

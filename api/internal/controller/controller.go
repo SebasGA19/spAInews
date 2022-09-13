@@ -3,7 +3,7 @@ package controller
 import (
 	"context"
 	"database/sql"
-	"github.com/SebasGA19/spAInews/api/internal/controller/email"
+	"github.com/SebasGA19/spAInews/api/internal/common"
 	"github.com/go-redis/redis/v9"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -15,7 +15,7 @@ type Controller struct {
 	RedisRegistrations  *redis.Client
 	RedisConfirmEmails  *redis.Client
 	RedisResetPasswords *redis.Client
-	Email               *email.Email
+	SMTP                *common.SMTP
 	ctx                 context.Context
 }
 
@@ -32,7 +32,7 @@ func NewController(
 	redisRegistrations *redis.Client,
 	redisConfirmEmails *redis.Client,
 	redisResetPasswords *redis.Client,
-	emailClient *email.Email,
+	smtpClient *common.SMTP,
 ) *Controller {
 	return &Controller{
 		SQL:                 sqlDB,
@@ -41,7 +41,7 @@ func NewController(
 		RedisRegistrations:  redisRegistrations,
 		RedisConfirmEmails:  redisConfirmEmails,
 		RedisResetPasswords: redisResetPasswords,
-		Email:               emailClient,
+		SMTP:                smtpClient,
 		ctx:                 context.Background(),
 	}
 }

@@ -1,4 +1,4 @@
-import { api_baseurl } from "../config";
+import {api_baseurl} from "../config";
 
 export async function confirmRegister(confirmCode: string) {
     const response = await fetch(
