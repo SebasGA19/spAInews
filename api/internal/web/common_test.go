@@ -34,7 +34,7 @@ func NewTestEngine() *TestEngine {
 		"127.0.0.1",
 		"3306",
 		"spainews",
-		"parseTime=true",
+		"parseTime=true&multiStatements=true",
 		true,
 	)
 	mongoCollection := common.ConnectMongo(

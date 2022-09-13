@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"github.com/SebasGA19/spAInews/api/internal/controller/email"
 	"github.com/emersion/go-sasl"
 	"github.com/emersion/go-smtp"
 	"github.com/go-redis/redis/v9"
@@ -52,7 +51,7 @@ func ConnectRedis(host, port string, db int) *redis.Client {
 	return client
 }
 
-func ConnectSMTP(from, username, password, host, port string) *email.SMTP {
+func ConnectSMTP(from, username, password, host, port string) *SMTP {
 	addr := fmt.Sprintf("%s:%s", host, port)
 	client, dialError := smtp.Dial(addr)
 	if dialError != nil {
@@ -64,7 +63,7 @@ func ConnectSMTP(from, username, password, host, port string) *email.SMTP {
 	if authError != nil {
 		panic(authError)
 	}
-	return &email.SMTP{
+	return &SMTP{
 		Addr: addr,
 		From: from,
 		Auth: auth,
