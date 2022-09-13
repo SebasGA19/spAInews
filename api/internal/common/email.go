@@ -21,6 +21,11 @@ func (s *SMTP) SendEmail(recipients []string, subject, message string) error {
 		fmt.Println(message)
 		return nil
 	}
-	body := strings.NewReader(fmt.Sprintf("Subject: %s\r\n\r\n%s\r\n", subject, message))
+	to := recipients[0]
+	if len(recipients) > 1 {
+		to += ", " + strings.Join(recipients[1:], ", ")
+	}
+	mime := "MIME-version: 1.0;\r\nContent-Type: text/html; charset=\"UTF-8\";"
+	body := strings.NewReader(fmt.Sprintf("To: %s\r\nSubject: %s\r\n%s\r\n%s\r\n", to, mime, subject, message))
 	return smtp.SendMail(s.Addr, s.Auth, s.From, recipients, body)
 }
