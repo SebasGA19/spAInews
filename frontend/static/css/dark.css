@@ -1,13 +1,16 @@
 .nav-link:hover {
     color: #148d8d;
 }
-#titulo{
+
+#titulo {
     color: white;
 }
-.article-body{
+
+.article-body {
     background-color: #405461;
     color: white;
 }
-.article-title{
+
+.article-title {
     color: white;
 }

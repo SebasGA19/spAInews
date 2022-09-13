@@ -1,1 +1,28 @@
-{"authors": ["With Related Materials The Washington Post", "Trevor Noah", "Yuval Noah Harari", "Bessel Van Der Kolk", "Robin Diangelo", "Malcolm Gladwell", "Bryan Stevenson", "George Takei", "Justin Eisinger", "Steven Scott. Illustrated Harmony Becker"], "date_download": "2022-08-16 17:13:02", "date_modify": "2022-08-16 17:13:02", "date_publish": "2019-08-11 00:00:00", "description": "The New York Times Best Sellers are up-to-date and authoritative lists of the most popular books in the United States, based on sales in the past week, including fiction, non-fiction, paperbacks, children’s books, audiobooks, graphic books and more.", "filename": "books_best-sellers_2019_08_11__1660669982.html", "image_url": "https://nytimes.com/vi-assets/static-assets/NYT-BestSeller-1200x675-699eb842421d5076f318fe0df3d903a5.png", "language": "en", "localpath": "C:\\Users\\USUARIO/news-please-repo//data/2022/08/16/nytimes.com/books_best-sellers_2019_08_11__1660669982.html", "title": "Paperback Nonfiction", "title_page": "Paperback Nonfiction Books - Best Sellers - Books - Aug. 11, 2019", "title_rss": "NULL", "source_domain": "nytimes.com", "maintext": "14 weeks on the list\nTHE MUELLER REPORT\nwith related materials by The Washington Post\nScribner\nRedacted findings from the special counsel’s investigation into Russian interference in the 2016 presidential election and potential obstruction of justice by the president.", "url": "https://www.nytimes.com/books/best-sellers/2019/08/11/paperback-nonfiction/"}
+{
+  "authors": [
+    "With Related Materials The Washington Post",
+    "Trevor Noah",
+    "Yuval Noah Harari",
+    "Bessel Van Der Kolk",
+    "Robin Diangelo",
+    "Malcolm Gladwell",
+    "Bryan Stevenson",
+    "George Takei",
+    "Justin Eisinger",
+    "Steven Scott. Illustrated Harmony Becker"
+  ],
+  "date_download": "2022-08-16 17:13:02",
+  "date_modify": "2022-08-16 17:13:02",
+  "date_publish": "2019-08-11 00:00:00",
+  "description": "The New York Times Best Sellers are up-to-date and authoritative lists of the most popular books in the United States, based on sales in the past week, including fiction, non-fiction, paperbacks, childrenï¿½s books, audiobooks, graphic books and more.",
+  "filename": "books_best-sellers_2019_08_11__1660669982.html",
+  "image_url": "https://nytimes.com/vi-assets/static-assets/NYT-BestSeller-1200x675-699eb842421d5076f318fe0df3d903a5.png",
+  "language": "en",
+  "localpath": "C:\\Users\\USUARIO/news-please-repo//data/2022/08/16/nytimes.com/books_best-sellers_2019_08_11__1660669982.html",
+  "title": "Paperback Nonfiction",
+  "title_page": "Paperback Nonfiction Books - Best Sellers - Books - Aug. 11, 2019",
+  "title_rss": "NULL",
+  "source_domain": "nytimes.com",
+  "maintext": "14 weeks on the list\nTHE MUELLER REPORT\nwith related materials by The Washington Post\nScribner\nRedacted findings from the special counselï¿½s investigation into Russian interference in the 2016 presidential election and potential obstruction of justice by the president.",
+  "url": "https://www.nytimes.com/books/best-sellers/2019/08/11/paperback-nonfiction/"
+}

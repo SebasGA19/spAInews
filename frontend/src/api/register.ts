@@ -1,4 +1,4 @@
-import { api_baseurl } from "../config";
+import {api_baseurl} from "../config";
 
 export async function register(username: string, email: string, password: string) {
     const payload = {

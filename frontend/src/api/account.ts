@@ -1,5 +1,5 @@
-import type { Account } from "src/common/types";
-import { api_baseurl } from "../config";
+import type {Account} from "src/common/types";
+import {api_baseurl} from "../config";
 
 export async function accountDetails(session: string): Promise<Account> {
     const response = await fetch(

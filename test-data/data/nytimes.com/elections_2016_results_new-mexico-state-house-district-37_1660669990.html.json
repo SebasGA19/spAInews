@@ -1,1 +1,19 @@
-{"authors": ["The New York Times"], "date_download": "2022-08-16 17:13:10", "date_modify": "2022-08-16 17:13:10", "date_publish": "2017-08-01 11:26:35", "description": "New Mexico election results from the 2016 general election.", "filename": "elections_2016_results_new-mexico-state-house-district-37_1660669990.html", "image_url": "https://int.nyt.com/applications/elections/2016/assets/e8ef61f66872/img/promo-new-mexico.png", "language": "en", "localpath": "C:\\Users\\USUARIO/news-please-repo//data/2022/08/16/nytimes.com/elections_2016_results_new-mexico-state-house-district-37_1660669990.html", "title": "New Mexico 37th District State House Results: Joanne Ferrary Wins", "title_page": "New Mexico 37th District State House Results: Joanne Ferrary Wins – Election Results 2016 – The New York Times", "title_rss": "NULL", "source_domain": "nytimes.com", "maintext": "Joanne Ferrary won the 37th District State House race in New Mexico on Tuesday. Joanne Ferrary is up by 5 points with all precincts reporting.\nView other New Mexico election results on our full New Mexico results page.", "url": "https://www.nytimes.com/elections/2016/results/new-mexico-state-house-district-37"}
+{
+  "authors": [
+    "The New York Times"
+  ],
+  "date_download": "2022-08-16 17:13:10",
+  "date_modify": "2022-08-16 17:13:10",
+  "date_publish": "2017-08-01 11:26:35",
+  "description": "New Mexico election results from the 2016 general election.",
+  "filename": "elections_2016_results_new-mexico-state-house-district-37_1660669990.html",
+  "image_url": "https://int.nyt.com/applications/elections/2016/assets/e8ef61f66872/img/promo-new-mexico.png",
+  "language": "en",
+  "localpath": "C:\\Users\\USUARIO/news-please-repo//data/2022/08/16/nytimes.com/elections_2016_results_new-mexico-state-house-district-37_1660669990.html",
+  "title": "New Mexico 37th District State House Results: Joanne Ferrary Wins",
+  "title_page": "New Mexico 37th District State House Results: Joanne Ferrary Wins ï¿½ Election Results 2016 ï¿½ The New York Times",
+  "title_rss": "NULL",
+  "source_domain": "nytimes.com",
+  "maintext": "Joanne Ferrary won the 37th District State House race in New Mexico on Tuesday. Joanne Ferrary is up by 5 points with all precincts reporting.\nView other New Mexico election results on our full New Mexico results page.",
+  "url": "https://www.nytimes.com/elections/2016/results/new-mexico-state-house-district-37"
+}

@@ -1,5 +1,5 @@
-import type { Words } from "src/common/types";
-import { api_baseurl } from "../config";
+import type {Words} from "src/common/types";
+import {api_baseurl} from "../config";
 
 export async function updateWords(words: Words, session: string) {
     const response = await fetch(

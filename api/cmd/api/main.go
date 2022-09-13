@@ -5,6 +5,7 @@ import (
 	"github.com/SebasGA19/spAInews/api/internal/common"
 	"github.com/SebasGA19/spAInews/api/internal/controller"
 	"github.com/SebasGA19/spAInews/api/internal/web"
+	"github.com/gin-gonic/gin"
 	"log"
 	"os"
 )
@@ -21,6 +22,7 @@ func init() {
 main: Set GIN_MODE=release for production
 */
 func main() {
+	gin.SetMode(gin.ReleaseMode)
 	mariadb := common.ConnectSQL(
 		SQLUser, SQLPass, SQLHost, SQLPort, SQLDB, SQLExtra, SQLTCP,
 	)

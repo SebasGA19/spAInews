@@ -1,1 +1,19 @@
-{"authors": ["The Associated Press"], "date_download": "2022-08-16 17:13:13", "date_modify": "2022-08-16 17:13:13", "date_publish": "2022-08-05 03:58:23", "description": "TALLAHASSEE, Fla. (AP) _ The winning numbers in Thursday evening's drawing of the Florida Lottery's \"Fantasy 5\" game were: 03-10-15-17-20 (three, ten, fifteen, seventeen, twenty)", "filename": "article_lotteries-2d812c56fe634e34bfc27dbb593930c2_1660669993.html", "image_url": "https://storage.googleapis.com/afs-prod/media/afs:Medium:751921853724/700.png", "language": "en", "localpath": "C:\\Users\\USUARIO/news-please-repo//data/2022/08/16/apnews.com/article_lotteries-2d812c56fe634e34bfc27dbb593930c2_1660669993.html", "title": "Winning numbers drawn in 'Fantasy 5' game", "title_page": "Winning numbers drawn in 'Fantasy 5' game | AP News", "title_rss": "NULL", "source_domain": "apnews.com", "maintext": "TALLAHASSEE, Fla. (AP) _ The winning numbers in Thursday evening’s drawing of the Florida Lottery’s “Fantasy 5” game were:\n03-10-15-17-20\n(three, ten, fifteen, seventeen, twenty)", "url": "https://apnews.com/article/lotteries-2d812c56fe634e34bfc27dbb593930c2"}
+{
+  "authors": [
+    "The Associated Press"
+  ],
+  "date_download": "2022-08-16 17:13:13",
+  "date_modify": "2022-08-16 17:13:13",
+  "date_publish": "2022-08-05 03:58:23",
+  "description": "TALLAHASSEE, Fla. (AP) _ The winning numbers in Thursday evening's drawing of the Florida Lottery's \"Fantasy 5\" game were: 03-10-15-17-20 (three, ten, fifteen, seventeen, twenty)",
+  "filename": "article_lotteries-2d812c56fe634e34bfc27dbb593930c2_1660669993.html",
+  "image_url": "https://storage.googleapis.com/afs-prod/media/afs:Medium:751921853724/700.png",
+  "language": "en",
+  "localpath": "C:\\Users\\USUARIO/news-please-repo//data/2022/08/16/apnews.com/article_lotteries-2d812c56fe634e34bfc27dbb593930c2_1660669993.html",
+  "title": "Winning numbers drawn in 'Fantasy 5' game",
+  "title_page": "Winning numbers drawn in 'Fantasy 5' game | AP News",
+  "title_rss": "NULL",
+  "source_domain": "apnews.com",
+  "maintext": "TALLAHASSEE, Fla. (AP) _ The winning numbers in Thursday eveningï¿½s drawing of the Florida Lotteryï¿½s ï¿½Fantasy 5ï¿½ game were:\n03-10-15-17-20\n(three, ten, fifteen, seventeen, twenty)",
+  "url": "https://apnews.com/article/lotteries-2d812c56fe634e34bfc27dbb593930c2"
+}

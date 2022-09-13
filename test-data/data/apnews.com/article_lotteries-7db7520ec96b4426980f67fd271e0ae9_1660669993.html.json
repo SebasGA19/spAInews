@@ -1,1 +1,19 @@
-{"authors": ["The Associated Press"], "date_download": "2022-08-16 17:13:13", "date_modify": "2022-08-16 17:13:13", "date_publish": "2022-08-05 03:52:19", "description": "ATLANTA (AP) _ The winning numbers in Thursday evening's drawing of the Georgia Lottery's \"Cash 3 Night\" game were: 9-3-8 (nine, three, eight)", "filename": "article_lotteries-7db7520ec96b4426980f67fd271e0ae9_1660669993.html", "image_url": "https://storage.googleapis.com/afs-prod/media/afs:Medium:751921853724/700.png", "language": "en", "localpath": "C:\\Users\\USUARIO/news-please-repo//data/2022/08/16/apnews.com/article_lotteries-7db7520ec96b4426980f67fd271e0ae9_1660669993.html", "title": "Winning numbers drawn in 'Cash 3 Night' game", "title_page": "Winning numbers drawn in 'Cash 3 Night' game | AP News", "title_rss": "NULL", "source_domain": "apnews.com", "maintext": "ATLANTA (AP) _ The winning numbers in Thursday evening’s drawing of the Georgia Lottery’s “Cash 3 Night” game were:\n9-3-8\n(nine, three, eight)", "url": "https://apnews.com/article/lotteries-7db7520ec96b4426980f67fd271e0ae9"}
+{
+  "authors": [
+    "The Associated Press"
+  ],
+  "date_download": "2022-08-16 17:13:13",
+  "date_modify": "2022-08-16 17:13:13",
+  "date_publish": "2022-08-05 03:52:19",
+  "description": "ATLANTA (AP) _ The winning numbers in Thursday evening's drawing of the Georgia Lottery's \"Cash 3 Night\" game were: 9-3-8 (nine, three, eight)",
+  "filename": "article_lotteries-7db7520ec96b4426980f67fd271e0ae9_1660669993.html",
+  "image_url": "https://storage.googleapis.com/afs-prod/media/afs:Medium:751921853724/700.png",
+  "language": "en",
+  "localpath": "C:\\Users\\USUARIO/news-please-repo//data/2022/08/16/apnews.com/article_lotteries-7db7520ec96b4426980f67fd271e0ae9_1660669993.html",
+  "title": "Winning numbers drawn in 'Cash 3 Night' game",
+  "title_page": "Winning numbers drawn in 'Cash 3 Night' game | AP News",
+  "title_rss": "NULL",
+  "source_domain": "apnews.com",
+  "maintext": "ATLANTA (AP) _ The winning numbers in Thursday eveningï¿½s drawing of the Georgia Lotteryï¿½s ï¿½Cash 3 Nightï¿½ game were:\n9-3-8\n(nine, three, eight)",
+  "url": "https://apnews.com/article/lotteries-7db7520ec96b4426980f67fd271e0ae9"
+}

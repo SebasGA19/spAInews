@@ -50,7 +50,7 @@ Requests a registration for a new user in the application. On success send confi
 
 - METHOD: `PUT`
 - Headers:
-  - `Content-Type: application/json`
+    - `Content-Type: application/json`
 - Body:
 
 ```json
@@ -85,7 +85,7 @@ Confirm register request.
 
 - Method: `POST`
 - Headers:
-  - `Confirm-Code: CONFIRMATION_CODE_SENT_BY_EMAIL`
+    - `Confirm-Code: CONFIRMATION_CODE_SENT_BY_EMAIL`
 
 #### Possible Errors
 
@@ -105,7 +105,7 @@ Returns a new session cookie related to the user.
 
 - Method: `GET`
 - Headers:
-  - `Authorization: Basic base64(<username>:<password>)`
+    - `Authorization: Basic base64(<username>:<password>)`
 
 #### Possible Errors
 
@@ -149,8 +149,8 @@ Changes the password of the account given the old one and the new one.
 
 - Method: `POST`
 - Headers:
-  - `Session: COOKIE`
-  - `Content-Type: application/json`
+    - `Session: COOKIE`
+    - `Content-Type: application/json`
 - Body:
 
 ```json
@@ -179,7 +179,7 @@ Returns account information of the related session given.
 
 - Method: `GET`
 - Headers:
-  - `Session: COOKIE`
+    - `Session: COOKIE`
 
 #### Possible Errors
 
@@ -203,13 +203,14 @@ Any non `200` response is considered an error.
 
 #### POST `/reset/password`
 
-Requests a password reset, useful in case the user forgets its credentials. It sent an email to the account with the code that will be used to reset the credentials.
+Requests a password reset, useful in case the user forgets its credentials. It sent an email to the account with the
+code that will be used to reset the credentials.
 
 #### Request
 
 - Method: `POST`
 - Headers:
-  - `Content-Type: application/json`
+    - `Content-Type: application/json`
 - Body:
 
 ```json
@@ -240,8 +241,8 @@ Ensures the reset of the credentials of the user using the CODE provided by emai
 
 - Method: `POST`
 - Headers:
-  - `Confirm-Code: RESET_CODE`
-  - `Content-Type: application/json`
+    - `Confirm-Code: RESET_CODE`
+    - `Content-Type: application/json`
 - Body:
 
 ```json
@@ -269,8 +270,8 @@ Requests an update for the email address. Send to the new email a confirmation U
 
 - Method: `POST`
 - Headers:
-  - `Session: COOKIE`
-  - `Content-Type: application/json`
+    - `Session: COOKIE`
+    - `Content-Type: application/json`
 - Body:
 
 ```json
@@ -303,7 +304,7 @@ Ensures the new email provided if owned by the user
 
 - Method: `POST`
 - Headers:
-  - `Confirm-Code: RESET_CODE`
+    - `Confirm-Code: RESET_CODE`
 
 #### Possible Errors
 
@@ -324,7 +325,7 @@ Return the configured key words for the current account.
 
 - Method: `GET`
 - Headers:
-  - `Session COOKIE`
+    - `Session COOKIE`
 
 #### Possible Errors
 
@@ -337,7 +338,7 @@ Any non `200` response is considered an error.
 
 - Status: 200
 - Headers:
-  - `Content-Type: application/json`
+    - `Content-Type: application/json`
 - Body:
 
 ```json
@@ -355,8 +356,8 @@ Updates the selected words for the application.
 
 - Method: `POST`
 - Headers:
-  - `Session: COOKIE`
-  - `Content-Type: application/json`
+    - `Session: COOKIE`
+    - `Content-Type: application/json`
 - Body:
 
 ```json
@@ -386,7 +387,7 @@ It will return 10 or less news as results
 #### Request
 
 - URI:
-  - `PAGE`: Integer with the page number, used for the pagination functionality
+    - `PAGE`: Integer with the page number, used for the pagination functionality
 - Method: `GET`
 
 #### Possible Errors
@@ -397,7 +398,7 @@ It will return 10 or less news as results
 
 - Status: `200`
 - Headers:
-  - `Content-Type: application/json`
+    - `Content-Type: application/json`
 - Body:
 
 ```json
@@ -425,10 +426,10 @@ It will return 10 or less news as results
 #### Request
 
 - URI:
-  - `PAGE`: Integer with the page number, used for the pagination functionality
+    - `PAGE`: Integer with the page number, used for the pagination functionality
 - Method: `GET`
 - Headers:
-  - `Content-Type: application/json`
+    - `Content-Type: application/json`
 - Body:
 
 ```json
@@ -442,7 +443,7 @@ It will return 10 or less news as results
 }
 ```
 
-`sort`: Could be `new-first` or `old-first` 
+`sort`: Could be `new-first` or `old-first`
 
 #### Possible Errors
 
@@ -452,7 +453,7 @@ It will return 10 or less news as results
 
 - Status: `200`
 - Headers:
-  - `Content-Type: application/json`
+    - `Content-Type: application/json`
 - Body:
 
 ```json

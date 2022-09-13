@@ -1,9 +1,11 @@
 .nav-link:hover {
     color: blue;
 }
-#titulo{
+
+#titulo {
     color: black;
 }
-#footerpro{
+
+#footerpro {
     border-top: 1px solid gray;
 }

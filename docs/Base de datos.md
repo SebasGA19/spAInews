@@ -1,6 +1,7 @@
 # Base de datos
 
-El proyecto manejara diversos gestores de base de datos para manejar las cuentas de los usuarios, las sesiones de los usuarios, los artículos recolectados.
+El proyecto manejara diversos gestores de base de datos para manejar las cuentas de los usuarios, las sesiones de los
+usuarios, los artículos recolectados.
 
 ## SQL (MariaDB)
 
@@ -46,15 +47,18 @@ erDiagram
 ### Funciones
 
 - `generar_salt() VARCHAR(1024)`: Retorna un salt para ser usado con la función hash.
-- `login(usuario, contrasena) id`: Esta función recibe de entrada el usuario y contraseña, retorna el `id` en caso de éxito y `-1` en caso de fracaso.
+- `login(usuario, contrasena) id`: Esta función recibe de entrada el usuario y contraseña, retorna el `id` en caso de
+  éxito y `-1` en caso de fracaso.
 - `usuario_disponible(usuario) BOOL`: Retorna verdadero si el usuario esta disponible para el registro.
 - `correo_disponible(usuario) BOOL`: Retorna verdadero si el correo esta disponible para el registro.
 
 ### Procedimientos
 
-- `registrar_usuario(usuario, correo, contrasena)`: Confirma que el correo, usuario y contraseña satisfacen las expresiones regulares, luego registra al usuario en la base de datos.
+- `registrar_usuario(usuario, correo, contrasena)`: Confirma que el correo, usuario y contraseña satisfacen las
+  expresiones regulares, luego registra al usuario en la base de datos.
 - `actualizar_palabras_clave(usuario_o_id, palabras_clave)`: Actualiza el registro de palabras clave para el usuario.
-- `usuarios_cambiar_contrasena(id_usuario, contrasena, nueva_contrasena)`: Cambia la contraseña actual del usuario por la especificada.
+- `usuarios_cambiar_contrasena(id_usuario, contrasena, nueva_contrasena)`: Cambia la contraseña actual del usuario por
+  la especificada.
 
 ## Redis
 
