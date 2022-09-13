@@ -4,5 +4,5 @@ WORKDIR /spAInews
 COPY go.mod .
 COPY go.sum .
 WORKDIR /spAInews/api
-CMD go build -mod=vendor -ldflags="-s -w" -trimpath -buildvcs=false -o /build ./cmd/...
+CMD go build -ldflags="-s -w" -trimpath -buildvcs=false -o /build ./cmd/...
 

@@ -31,7 +31,7 @@ func main() {
 	registrations := common.ConnectRedis(RedisHost, RedisPort, 1)
 	confirmEmails := common.ConnectRedis(RedisHost, RedisPort, 2)
 	resetPasswords := common.ConnectRedis(RedisHost, RedisPort, 3)
-	smtp := common.ConnectSMTP(SMTPFrom, SMTPUser, SMTPPass, SMTPHost, SMTPPort)
+	smtp := common.ConnectSMTP(SMTPFrom, SMTPUser, SMTPPass, SMTPHost, SMTPPort, SMTPDev)
 	c := controller.NewController(mariadb, mongoCollection, sessions, registrations, confirmEmails, resetPasswords, smtp)
 	engine := web.NewEngine(c)
 	log.Fatal(engine.Run(os.Args[1]))

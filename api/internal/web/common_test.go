@@ -54,8 +54,8 @@ func NewTestEngine() *TestEngine {
 		"password",
 		"localhost",
 		"25",
+		true,
 	)
-	smtp.Dev = true
 	c := controller.NewController(sqlDB, mongoCollection, sessions, registrations, confirmEmails, resetPasswords, smtp)
 	tests.ClearDB(sqlDB)
 	return &TestEngine{

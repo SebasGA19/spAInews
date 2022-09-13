@@ -11,7 +11,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
-	"os"
 	"time"
 )
 
@@ -38,10 +37,9 @@ func ConnectSQL(username, password, host, port, database, extraConfigs string, t
 
 func ConnectRedis(host, port string, db int) *redis.Client {
 	addr := fmt.Sprintf("%s:%s", host, port)
-	redisAddress := os.Getenv(addr)
 	client := redis.NewClient(
 		&redis.Options{
-			Addr: redisAddress,
+			Addr: addr,
 			DB:   db,
 		},
 	)
@@ -51,7 +49,7 @@ func ConnectRedis(host, port string, db int) *redis.Client {
 	return client
 }
 
-func ConnectSMTP(from, username, password, host, port string) *SMTP {
+func ConnectSMTP(from, username, password, host, port string, dev bool) *SMTP {
 	addr := fmt.Sprintf("%s:%s", host, port)
 	client, dialError := smtp.Dial(addr)
 	if dialError != nil {

@@ -37,10 +37,11 @@ var (
 	SMTPPass string
 	SMTPHost string
 	SMTPPort string
+	SMTPDev  bool
 )
 
 func initSetup() {
-	m, err := godotenv.Read(os.Args[1:]...)
+	m, err := godotenv.Read(os.Args[2:]...)
 	if err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, err.Error())
 		os.Exit(1)
@@ -68,4 +69,5 @@ func initSetup() {
 	SMTPPass = m[config.SMTPPass]
 	SMTPHost = m[config.SMTPHost]
 	SMTPPort = m[config.SMTPPort]
+	SMTPDev = m[config.SMTPDev] == "true"
 }

@@ -29,4 +29,5 @@ const (
 	SMTPFrom = "SMTP_FROM"
 	SMTPUser = "SMTP_USERNAME"
 	SMTPPass = "SMTP_PASSWORD"
+	SMTPDev  = "SMTP_DEV"
 )
