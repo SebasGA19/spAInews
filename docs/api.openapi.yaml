@@ -285,6 +285,8 @@ paths:
           $ref: "#/components/responses/server-error"
   /news/{page}:
     get:
+      tags:
+        - News
       summary: Requests the latest news obtained from the crawler.
       parameters:
         - in: path
@@ -331,6 +333,8 @@ paths:
           $ref: "#/components/responses/server-error"
   /search/{page}:
     get:
+      tags:
+        - News
       summary: Requests the latest news obtained from the crawler.
       parameters:
         - in: path
