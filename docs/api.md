@@ -1,6 +1,6 @@
 # API
 
-This documentation explains the setup and functionality of the API.
+This documentation explains the setup and functioonality of the API.
 
 ## Command line tool
 
