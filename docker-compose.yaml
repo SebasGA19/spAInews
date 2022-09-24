@@ -34,7 +34,7 @@ services:
   mariadb:
     networks:
       - spainews
-    container_name: spainnews-mariadb
+    container_name: spainews-mariadb
     restart: unless-stopped
     image: mariadb:latest
     volumes:
@@ -54,36 +54,9 @@ services:
     container_name: spainews-mailhog
     restart: unless-stopped
     image: mailhog/mailhog
-  test-data:
-    restart: on-failure
-    networks:
-      - spainews
-    container_name: spainews-test-data
-    build:
-      context: .
-      dockerfile: test-data.Dockerfile
-    volumes:
-      - type: bind
-        source: ./test-data
-        target: /test-data
-        read_only: true
-  builder:
-    build:
-      context: .
-      dockerfile: builder.Dockerfile
-    volumes:
-      - type: bind
-        source: ./api
-        target: /spAInews/api
-        read_only: true
-      - type: bind
-        source: ./build
-        target: /build
   api:
     depends_on:
-      - test-data
       - smtp
-      - builder
       - redis
       - mariadb
       - mongo
@@ -94,11 +67,7 @@ services:
       dockerfile: api.Dockerfile
     volumes:
       - type: bind
-        source: ./build
-        target: /build
-        read_only: true
-      - type: bind
-        source: ./configs
+        source: ./configs/api
         target: /configs
         read_only: true
     restart: unless-stopped
@@ -106,3 +75,18 @@ services:
       - spainews
     ports:
       - "127.0.0.1:5000:5000"
+  crawler:
+    depends_on:
+      - mongo
+    restart: on-failure
+    networks:
+      - spainews
+    container_name: spainews-crawler
+    volumes:
+      - type: bind
+        source: ./configs/crawler
+        target: /configs
+        read_only: true
+    build:
+      context: .
+      dockerfile: crawler.Dockerfile
