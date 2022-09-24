@@ -1,0 +1,96 @@
+# This docker compose will only be used by frontend developers since it isolates the database by the API interfaces
+# Ports:
+# - API -> 127.0.0.1:5000
+
+version: "3.3"
+
+networks:
+  spainews:
+    external: false
+
+services:
+  redis:
+    networks:
+      - spainews
+    container_name: spainews-redis
+    image: redis:latest
+    restart: unless-stopped
+  mongo:
+    container_name: spainews-mongo
+    image: mongo:latest
+    restart: unless-stopped
+    networks:
+      - spainews
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: spainews
+    volumes:
+      - type: bind
+        source: ./mongo-initdb.d
+        target: /docker-entrypoint-initdb.d
+        read_only: true
+      - ./mongo-data:/data
+  mariadb:
+    networks:
+      - spainews
+    container_name: spainews-mariadb
+    restart: unless-stopped
+    image: mariadb:latest
+    volumes:
+      - type: bind
+        source: ./mariadb-init.d
+        target: /docker-entrypoint-initdb.d
+        read_only: true
+      - ./mariadb-data:/var/lib/mysql
+    environment:
+      MARIADB_ROOT_PASSWORD: spainews
+      MARIADB_DATABASE: spainews
+      MARIADB_USER: spainews
+      MARIADB_PASSWORD: spainews
+  smtp:
+    networks:
+      - spainews
+    container_name: spainews-mailhog
+    restart: unless-stopped
+    image: mailhog/mailhog
+  api:
+    depends_on:
+      - smtp
+      - redis
+      - mariadb
+      - mongo
+    user: "api:api"
+    container_name: spainews-api
+    build:
+      context: .
+      dockerfile: api.Dockerfile
+    volumes:
+      - type: bind
+        source: ./configs/api
+        target: /configs
+        read_only: true
+    restart: unless-stopped
+    networks:
+      - spainews
+    ports:
+      - "127.0.0.1:5000:5000"
+  crawler:
+    depends_on:
+      - mongo
+    restart: on-failure
+    networks:
+      - spainews
+    container_name: spainews-crawler
+    volumes:
+      - type: bind
+        source: ./configs/crawler
+        target: /configs
+        read_only: true
+    deploy:
+      resources:
+        limits:
+          cpus: "0.2"
+    build:
+      context: .
+      dockerfile: crawler.Dockerfile
