@@ -6,6 +6,8 @@ Make sure you have `docker` and `docker-cli` installed (`docker desktop` should 
 
 ### Production
 
+It is important to check if the predefined configurations inside `configs/` directory are consistent with your deployment
+
 ```shell
 docker-compose -f ./docker-compose.yaml up -d --build
 ```

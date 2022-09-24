@@ -94,3 +94,21 @@ services:
     build:
       context: .
       dockerfile: crawler.Dockerfile
+  frontend:
+    depends_on:
+      - api
+    user: "frontend:frontend"
+    container_name: spainews-frontend
+    build:
+      context: .
+      dockerfile: frontend.Dockerfile
+    volumes:
+      - type: bind
+        source: ./configs/frontend
+        target: /configs
+        read_only: true
+    restart: unless-stopped
+    networks:
+      - spainews
+    ports:
+      - "127.0.0.1:8000:3000"
