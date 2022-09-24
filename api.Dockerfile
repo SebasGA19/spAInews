@@ -24,4 +24,4 @@ WORKDIR /apt/api
 COPY --from=builder /build/api /apt/api/server
 # Execute
 USER api:api
-CMD /apt/api "api:5000" /configs/api.env
+CMD /apt/api/server "api:5000" /configs/api.env

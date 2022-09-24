@@ -87,6 +87,10 @@ services:
         source: ./configs/crawler
         target: /configs
         read_only: true
+    deploy:
+      resources:
+        limits:
+          cpus: "0.2"
     build:
       context: .
       dockerfile: crawler.Dockerfile
