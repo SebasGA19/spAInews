@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"context"
 	"database/sql"
 	"github.com/SebasGA19/spAInews/api/internal/common"
 	"github.com/go-redis/redis/v9"
@@ -16,7 +15,6 @@ type Controller struct {
 	RedisConfirmEmails  *redis.Client
 	RedisResetPasswords *redis.Client
 	SMTP                *common.SMTP
-	ctx                 context.Context
 }
 
 func (c *Controller) Close() error {
@@ -42,6 +40,5 @@ func NewController(
 		RedisConfirmEmails:  redisConfirmEmails,
 		RedisResetPasswords: redisResetPasswords,
 		SMTP:                smtpClient,
-		ctx:                 context.Background(),
 	}
 }

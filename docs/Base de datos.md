@@ -89,7 +89,7 @@ La base de datos en la que depende la aplicación es `spainews` la colección `n
     "maintext": "",
     "authors": [],
     "category": "",
-    "date_publish": "31/12/2022",
+    "date_publish": "2022-09-24T19:02:56+00:00",
     "source_domain": "",
     "url": ""
 }

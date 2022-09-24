@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/SebasGA19/spAInews/api/internal/common"
 	"time"
@@ -20,7 +21,7 @@ func (c *Controller) AddUpdateEmail(updateEmail UpdateEmail) error {
 	if marshalError != nil {
 		return marshalError
 	}
-	cmd := c.RedisConfirmEmails.Set(c.ctx, resetCode, updateEmailJson, 24*time.Hour)
+	cmd := c.RedisConfirmEmails.Set(context.Background(), resetCode, updateEmailJson, 24*time.Hour)
 	if err := cmd.Err(); err != nil {
 		return err
 	}
@@ -28,7 +29,7 @@ func (c *Controller) AddUpdateEmail(updateEmail UpdateEmail) error {
 }
 
 func (c *Controller) UpdateEmail(resetCode string) error {
-	cmd := c.RedisConfirmEmails.GetDel(c.ctx, resetCode)
+	cmd := c.RedisConfirmEmails.GetDel(context.Background(), resetCode)
 	if err := cmd.Err(); err != nil {
 		return err
 	}
