@@ -7,3 +7,4 @@ mongo-data/*
 mariadb-data/*
 */venv/*
 build
+*/__pycache__/

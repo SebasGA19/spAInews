@@ -17,6 +17,6 @@ jobs:
       - name: Build
         run: go build -v ./...
       - name: Prepare environment
-        run: docker-compose -f ./compose-dev-back.yaml up -d --build
+        run: docker-compose -f ./compose-dev-databases.yaml up -d --build
       - name: Test
         run: go test -v ./...

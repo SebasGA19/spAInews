@@ -1,13 +1,14 @@
 package controller
 
 import (
+	"context"
 	"github.com/SebasGA19/spAInews/api/internal/common"
 	"time"
 )
 
 func (c *Controller) AddPendingReset(userId int) error {
 	resetCode := common.RandString(32)
-	cmd := c.RedisResetPasswords.Set(c.ctx, resetCode, userId, 6*time.Hour)
+	cmd := c.RedisResetPasswords.Set(context.Background(), resetCode, userId, 6*time.Hour)
 	if err := cmd.Err(); err != nil {
 		return err
 	}
@@ -19,7 +20,7 @@ func (c *Controller) AddPendingReset(userId int) error {
 }
 
 func (c *Controller) ResetPassword(resetCode, newPassword string) error {
-	cmd := c.RedisResetPasswords.GetDel(c.ctx, resetCode)
+	cmd := c.RedisResetPasswords.GetDel(context.Background(), resetCode)
 	if err := cmd.Err(); err != nil {
 		return err
 	}

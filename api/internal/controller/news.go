@@ -1,9 +1,11 @@
 package controller
 
 import (
+	"context"
 	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"strings"
 	"time"
 )
 
@@ -12,23 +14,24 @@ const (
 )
 
 type (
-	Article struct {
-		Title        string    `bson:"title"`
-		Description  string    `bson:"description"`
-		MainText     string    `bson:"maintext"`
-		Authors      []string  `bson:"authors"`
-		Category     string    `bson:"category"`
-		DatePublish  time.Time `bson:"date_publish"`
-		SourceDomain string    `bson:"source_domain"`
-		URL          string    `bson:"url"`
+	ArticleTime time.Time
+	Article     struct {
+		Title        string    `bson:"title,omitempty" json:"title,omitempty"`
+		Description  string    `bson:"description,omitempty" json:"description,omitempty"`
+		MainText     string    `bson:"maintext,omitempty" json:"maintext,omitempty"`
+		Authors      []string  `bson:"authors,omitempty" json:"authors,omitempty"`
+		Category     string    `bson:"category,omitempty" json:"category,omitempty"`
+		DatePublish  time.Time `bson:"date_publish,omitempty" json:"date_publish,omitempty"`
+		SourceDomain string    `bson:"source_domain,omitempty" json:"source_domain,omitempty"`
+		URL          string    `bson:"url,omitempty" json:"url,omitempty"`
 	}
 	SearchFilter struct {
-		StartDate     *time.Time
-		EndDate       *time.Time
-		Sources       []string
-		MainTextWords []string
-		TitleWords    []string
-		OldFirst      bool
+		StartDate     *time.Time `json:"start-date,omitempty"`
+		EndDate       *time.Time `json:"end-date,omitempty"`
+		Sources       []string   `json:"sources,omitempty"`
+		MainTextWords []string   `json:"maintext-words,omitempty"`
+		TitleWords    []string   `json:"title-words,omitempty"`
+		OldFirst      bool       `json:"old-first,omitempty"`
 	}
 )
 
@@ -37,7 +40,7 @@ func (c *Controller) LatestNews(page int64) ([]Article, error) {
 	opts := options.Find()
 	opts.Skip = &skip
 	opts.SetSort(bson.D{{"date_publish", -1}})
-	cursor, findError := c.Mongo.Find(c.ctx,
+	cursor, findError := c.Mongo.Find(context.Background(),
 		bson.D{},
 		opts,
 	)
@@ -48,7 +51,7 @@ func (c *Controller) LatestNews(page int64) ([]Article, error) {
 		article  Article
 		articles = make([]Article, 0, NumberOfResults)
 	)
-	for index := 0; index < NumberOfResults && cursor.Next(c.ctx); index++ {
+	for index := 0; index < NumberOfResults && cursor.Next(context.Background()); index++ {
 		decodeError := cursor.Decode(&article)
 		if decodeError != nil {
 			return nil, decodeError
@@ -61,29 +64,36 @@ func (c *Controller) LatestNews(page int64) ([]Article, error) {
 func (c *Controller) SearchNews(page int64, searchFilter SearchFilter) ([]Article, error) {
 	skip := NumberOfResults * page
 	// Filter
-	var andConditions, orConditions []bson.M
+	filter := bson.M{}
+	// Date Filter
+	datePublishFilter := bson.M{}
 	if searchFilter.StartDate != nil {
-		andConditions = append(andConditions, bson.M{
-			"date_publish": bson.M{"$gt": *searchFilter.StartDate},
-		})
+		datePublishFilter["$gt"] = *searchFilter.StartDate
+
 	}
 	if searchFilter.EndDate != nil {
-		andConditions = append(andConditions, bson.M{
-			"date_publish": bson.M{"$lt": *searchFilter.EndDate},
-		})
+		datePublishFilter["$lt"] = *searchFilter.EndDate
 	}
-	for _, mainTextWord := range searchFilter.MainTextWords {
-		andConditions = append(andConditions,
-			bson.M{"maintext": bson.M{"$regex": fmt.Sprintf(".*%s.*", mainTextWord)}})
+	if len(datePublishFilter) > 0 {
+		filter["date_publish"] = datePublishFilter
 	}
-	for _, titleWord := range searchFilter.TitleWords {
-		andConditions = append(andConditions,
-			bson.M{"title": bson.M{"$regex": fmt.Sprintf(".*%s.*", titleWord)}})
+	// Main text filter
+	if len(searchFilter.MainTextWords) > 0 {
+		filter["maintext"] = bson.M{
+			"$regex": fmt.Sprintf(".*%s.*", strings.Join(searchFilter.MainTextWords, ".*")),
+		}
 	}
-	for _, source := range searchFilter.Sources {
-		orConditions = append(orConditions,
-			bson.M{"source_domain": bson.M{"$regex": source}},
-		)
+	// Title filter
+	if len(searchFilter.TitleWords) > 0 {
+		filter["title"] = bson.M{
+			"$regex": fmt.Sprintf(".*%s.*", strings.Join(searchFilter.TitleWords, ".*")),
+		}
+	}
+	// Sources filter
+	if len(searchFilter.Sources) > 0 {
+		filter["source_domain"] = bson.M{
+			"$in": searchFilter.Sources,
+		}
 	}
 	// Options
 	opts := options.Find()
@@ -93,12 +103,10 @@ func (c *Controller) SearchNews(page int64, searchFilter SearchFilter) ([]Articl
 		order = 1
 	}
 	opts.SetSort(bson.D{{"date_publish", order}})
+
 	// Request
-	cursor, findError := c.Mongo.Find(c.ctx,
-		bson.M{
-			"$and": andConditions,
-			"$or":  orConditions,
-		},
+	cursor, findError := c.Mongo.Find(context.Background(),
+		filter,
 		opts,
 	)
 	if findError != nil {
@@ -108,7 +116,7 @@ func (c *Controller) SearchNews(page int64, searchFilter SearchFilter) ([]Articl
 		article  Article
 		articles = make([]Article, 0, NumberOfResults)
 	)
-	for index := 0; index < NumberOfResults && cursor.Next(c.ctx); index++ {
+	for index := 0; index < NumberOfResults && cursor.Next(context.Background()); index++ {
 		decodeError := cursor.Decode(&article)
 		if decodeError != nil {
 			return nil, decodeError

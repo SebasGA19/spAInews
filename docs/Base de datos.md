@@ -1,7 +1,6 @@
 # Base de datos
 
-El proyecto manejara diversos gestores de base de datos para manejar las cuentas de los usuarios, las sesiones de los
-usuarios, los artículos recolectados.
+El proyecto manejara diversos gestores de base de datos para manejar las cuentas de los usuarios, las sesiones de los usuarios, los artículos recolectados.
 
 ## SQL (MariaDB)
 
@@ -40,25 +39,31 @@ erDiagram
 
 ### Triggers
 
-#### BEFORE UPDATE `usuarios`
-
-- Usuarios desactivados no pueden actualizar atributos diferentes de `activo`.
+| Nombre                       | Acción          | Tabla            | Descripción                                                  |
+| ---------------------------- | --------------- | ---------------- | ------------------------------------------------------------ |
+| before_update_usuarios       | `BEFORE UPDATE` | `usuarios`       | Verifica que el usuario se encuentra desactivo antes de realizar la actualización |
+| after_insert_usuarios        | `AFTER UPDATE`  | `usuarios`       | Crea una nueva entrada para el usuario en `palabras_clave`   |
+| before_update_palabras_clave | `BEFORE UPDATE` | `palabras_clave` | Verifica que el usuario este activado, que no se modifique el id de la entrada, si las palabras clave esta desactivadas no se pueden actualizar |
 
 ### Funciones
 
-- `generar_salt() VARCHAR(1024)`: Retorna un salt para ser usado con la función hash.
-- `login(usuario, contrasena) id`: Esta función recibe de entrada el usuario y contraseña, retorna el `id` en caso de
-  éxito y `-1` en caso de fracaso.
-- `usuario_disponible(usuario) BOOL`: Retorna verdadero si el usuario esta disponible para el registro.
-- `correo_disponible(usuario) BOOL`: Retorna verdadero si el correo esta disponible para el registro.
+| Nombre                        | Argumentos              | Retorno            | Descripción                                                  |
+| ----------------------------- | ----------------------- | ------------------ | ------------------------------------------------------------ |
+| generar_salt                  | `N/A`                   | `VARCHAR(1024)`    | Generar un salt único                                        |
+| obtener_id_usuario_por_correo | `correo`                | `INTEGER UNSIGNED` | Retorna el id del usuario recibiendo como argumento el correo |
+| login                         | `usuario`, `contrasena` | `INTEGER UNSIGNED` | Retorna el id del usuario teniendo como referencia el usuario y contraseña |
+| usuario_disponible            | `usuario`               | `BOOL`             | Retorna verdadero si el usuario esta disponible falso si no. |
+| correo_disponible             | `correo`                | `BOOL`             | Retorna verdadero su el correo esta disponible, falso si no. |
 
 ### Procedimientos
 
-- `registrar_usuario(usuario, correo, contrasena)`: Confirma que el correo, usuario y contraseña satisfacen las
-  expresiones regulares, luego registra al usuario en la base de datos.
-- `actualizar_palabras_clave(usuario_o_id, palabras_clave)`: Actualiza el registro de palabras clave para el usuario.
-- `usuarios_cambiar_contrasena(id_usuario, contrasena, nueva_contrasena)`: Cambia la contraseña actual del usuario por
-  la especificada.
+| Nombre                      | Argumentos                                     | Descripción                                 |
+| --------------------------- | ---------------------------------------------- | ------------------------------------------- |
+| registrar_usuario           | `usuario`, `correo`, `contraseña`              | Registra usuario en la base de datos        |
+| usuarios_cambiar_contrasena | `id_usuario`, `contraseña`, `nueva_contraseña` | Actualiza la contraseña del usuario         |
+| usuarios_cambiar_correo     | `id_usuario`, `nuevo_correo`, `contraseña`     | Actualiza el correo del usuario             |
+| reset_contrasena            | `id_usuario`, `nueva_contraseña`               | Fuerza el cambio de contraseña del usuario  |
+| actualizar_palabras_clave   | `id_usuario`, `nuevas_palabras`, `automático`  | Actualiza las palabras actuales del usuario |
 
 ## Redis
 
@@ -70,3 +75,23 @@ erDiagram
 | 3      | Confirmar correos | Utilizado para confirmar la nuevas cuentas de correo configuradas | 24 horas |
 
 ## MongoDB
+
+La base de datos en la que depende la aplicación es `spainews` la colección `news`
+
+### Colecciones
+
+- `news`
+
+```json
+{
+	"title": "",
+	"description": "",
+    "maintext": "",
+    "authors": [],
+    "category": "",
+    "date_publish": "2022-09-24T19:02:56+00:00",
+    "source_domain": "",
+    "url": ""
+}
+```
+

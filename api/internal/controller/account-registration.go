@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/SebasGA19/spAInews/api/internal/common"
 	"time"
@@ -20,7 +21,7 @@ func (c *Controller) AddPendingRegistration(registrationData RegistrationData) e
 	if marshalError != nil {
 		return marshalError
 	}
-	status := c.RedisRegistrations.Set(c.ctx, code, registrationDataJson, 24*time.Hour)
+	status := c.RedisRegistrations.Set(context.Background(), code, registrationDataJson, 24*time.Hour)
 	if err := status.Err(); err != nil {
 		return err
 	}
@@ -28,7 +29,7 @@ func (c *Controller) AddPendingRegistration(registrationData RegistrationData) e
 }
 
 func (c *Controller) ConfirmEmail(code string) error {
-	cmd := c.RedisRegistrations.GetDel(c.ctx, code)
+	cmd := c.RedisRegistrations.GetDel(context.Background(), code)
 	if err := cmd.Err(); err != nil {
 		return err
 	}

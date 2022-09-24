@@ -85,7 +85,7 @@ paths:
             type: string
       responses:
         '200':
-          description: Registration cofirmed
+          description: Registration confirmed
         '403':
           description: Permission denied
         '500':
@@ -149,5 +149,260 @@ paths:
           description: Password updated
         '403':
           description: Permission denied
+        '500':
+          $ref: "#/components/responses/server-error"
+  /account:
+    get:
+      summary: Returns account information
+      tags:
+        - Authentication
+      security:
+        - session-key: [ ]
+      responses:
+        '200':
+          description: Account information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+                  email:
+                    type: string
+                  creation-date:
+                    type: string
+                    example: "31/12/2000"
+        '403':
+          description: Permission denied
+        '500':
+          $ref: "#/components/responses/server-error"
+  /reset/password:
+    post:
+      summary: Requests a password reset, useful in case the user forgets its credentials. It sent an email to the account with the code that will be used to reset the credentials.
+      tags:
+        - Authentication
+      security:
+        - session-key: [ ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+      responses:
+        '200':
+          description: Reset email sent
+        '500':
+          $ref: "#/components/responses/server-error"
+  /email:
+    post:
+      summary: Requests an update for the email address. Send to the new email a confirmation URL / CODE
+      tags:
+        - Authentication
+      security:
+        - session-key: [ ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                new-email:
+                  type: string
+      responses:
+        '200':
+          description: Confirmation email sent to new address
+        '500':
+          $ref: "#/components/responses/server-error"
+  /confirm/email:
+    post:
+      summary: Ensures the new email provided if owned by the user
+      tags:
+        - Authentication
+      security:
+        - session-key: [ ]
+      parameters:
+        - in: header
+          name: Confirm-Code
+          description: Confirm code
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Email confirmed
+        '500':
+          $ref: "#/components/responses/server-error"
+  /words:
+    post:
+      summary: Update words
+      tags:
+        - Authentication
+      security:
+        - session-key: [ ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                automatic:
+                  type: boolean
+                words:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Words updated
+        '500':
+          $ref: "#/components/responses/server-error"
+    get:
+      summary: Return the configured key words for the current account.
+      tags:
+        - Authentication
+      security:
+        - session-key: [ ]
+      responses:
+        '200':
+          description: Confirmation email sent to new address
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  automatic:
+                    type: boolean
+                  words:
+                    type: array
+                    items:
+                      type: string
+        '500':
+          $ref: "#/components/responses/server-error"
+  /news/{page}:
+    get:
+      tags:
+        - News
+      summary: Requests the latest news obtained from the crawler.
+      parameters:
+        - in: path
+          name: page
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Confirmation email sent to new address
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  current-page:
+                    type: integer
+                  number-of-results:
+                    type: integer
+                  news:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        description:
+                          type: string
+                        maintext:
+                          type: string
+                        authors:
+                          type: array
+                          items:
+                            type: string
+                        category:
+                          type: string
+                        date_publish:
+                          type: string
+                        source_domain:
+                          type: string
+                        url:
+                          type: string
+        '500':
+          $ref: "#/components/responses/server-error"
+  /search/{page}:
+    get:
+      tags:
+        - News
+      summary: Requests the latest news obtained from the crawler.
+      parameters:
+        - in: path
+          name: page
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                start-date:
+                  type: string
+                  example: "31/12/2022"
+                end-date:
+                  type: string
+                  example: "31/12/2022"
+                sources:
+                  type: array
+                  items:
+                    type: string
+                maitext-word:
+                  type: array
+                  items:
+                    type: string
+                title-words:
+                  type: array
+                  items:
+                    type: string
+                old-first:
+                  type: boolean
+
+      responses:
+        '200':
+          description: Confirmation email sent to new address
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  current-page:
+                    type: integer
+                  number-of-results:
+                    type: integer
+                  news:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                        description:
+                          type: string
+                        maintext:
+                          type: string
+                        authors:
+                          type: array
+                          items:
+                            type: string
+                        category:
+                          type: string
+                        date_publish:
+                          type: string
+                        source_domain:
+                          type: string
+                        url:
+                          type: string
         '500':
           $ref: "#/components/responses/server-error"
