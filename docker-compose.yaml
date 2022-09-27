@@ -30,7 +30,7 @@ services:
         source: ./mongo-initdb.d
         target: /docker-entrypoint-initdb.d
         read_only: true
-      - ./mongo-data:/data
+      - /opt/spAInews/mongo-data:/data
   mariadb:
     networks:
       - spainews
@@ -42,7 +42,7 @@ services:
         source: ./mariadb-init.d
         target: /docker-entrypoint-initdb.d
         read_only: true
-      - ./mariadb-data:/var/lib/mysql
+      - /opt/spAInews/mariadb-data:/var/lib/mysql
     environment:
       MARIADB_ROOT_PASSWORD: spainews
       MARIADB_DATABASE: spainews
