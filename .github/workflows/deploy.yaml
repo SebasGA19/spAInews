@@ -1,0 +1,47 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v3
+      - name: Prepare configs and environment
+        env:
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_FROM: ${{ secrets.SMTP_FROM }}
+          SMTP_USERNAME: ${{ secrets.SMTP_USER }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASS }}
+          SMTP_DASHBOARD_URL: ${{ secrets.SMTP_DASHBOARD_URL }}
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}
+        run: |
+          echo "REDIS_HOST = redis" > configs/api/api.env
+          echo "REDIS_PORT = 6379" >> configs/api/api.env
+          echo "SQL_USER = spainews" >> configs/api/api.env
+          echo "SQL_PASS = spainews" >> configs/api/api.env
+          echo "SQL_HOST = mariadb" >> configs/api/api.env
+          echo "SQL_PORT = 3306" >> configs/api/api.env
+          echo "SQL_DB = spainews" >> configs/api/api.env
+          echo "SQL_EXTRA = \"parseTime=true\"" >> configs/api/api.env
+          echo "SQL_TCP = true" >> configs/api/api.env
+          echo "MONGO_USER = spainews" >> configs/api/api.env
+          echo "MONGO_PASS = spainews" >> configs/api/api.env
+          echo "MONGO_HOST = mongo" >> configs/api/api.env
+          echo "MONGO_PORT = 27017" >> configs/api/api.env
+          echo "MONGO_DB = spainews" >> configs/api/api.env
+          echo "SMTP_HOST = $SMTP_HOST" >> configs/api/api.env
+          echo "SMTP_PORT = $SMTP_PORT" >> configs/api/api.env
+          echo "SMTP_FROM = $SMTP_FROM" >> configs/api/api.env
+          echo "SMTP_USERNAME = $SMTP_USERNAME" >> configs/api/api.env
+          echo "SMTP_PASSWORD = $SMTP_PASSWORD" >> configs/api/api.env
+          echo "SMTP_DASHBOARD_URL = $SMTP_DASHBOARD_URL" >> configs/api/api.env
+          echo "VITE_API_BASE_URL = $API_BASE_URL" > configs/frontend/frontend.env
+          chmod 777 setup.sh
+          chmod 777 spainews.sh
+      - name: Run setup
+        run: sudo ./setup.sh
