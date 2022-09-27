@@ -48,15 +48,8 @@ services:
       MARIADB_DATABASE: spainews
       MARIADB_USER: spainews
       MARIADB_PASSWORD: spainews
-  smtp:
-    networks:
-      - spainews
-    container_name: spainews-mailhog
-    restart: unless-stopped
-    image: mailhog/mailhog
   api:
     depends_on:
-      - smtp
       - redis
       - mariadb
       - mongo
