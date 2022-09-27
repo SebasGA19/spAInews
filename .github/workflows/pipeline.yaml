@@ -57,6 +57,7 @@ jobs:
           echo "SMTP_USERNAME = $SMTP_USERNAME" >> configs/api/api.env
           echo "SMTP_PASSWORD = $SMTP_PASSWORD" >> configs/api/api.env
           echo "SMTP_DASHBOARD_URL = $SMTP_DASHBOARD_URL" >> configs/api/api.env
+          echo "SMTP_DEV = false" >> configs/api/api.env
       - name: Prepare Frontend config
         env:
           API_BASE_URL: ${{ secrets.API_BASE_URL }}
