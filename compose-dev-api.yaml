@@ -90,7 +90,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.2"
+          cpus: "0.1"
     build:
       context: .
       dockerfile: crawler.Dockerfile

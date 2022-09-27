@@ -10,8 +10,10 @@
 	function loadContent() {
 		news(currentPage)
 			.then((results) => {
-				currentPage += 1;
-				articles = articles.concat(results.news);
+				if (results['number-of-results'] > 0) {
+					currentPage += 1;
+					articles = articles.concat(results.news);
+				}
 			})
 			.catch((error) => {});
 	}
