@@ -10,7 +10,8 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3
-      - name: Prepare configs and environment
+      - name: Prepare script permissions
+      - name: Prepare API config
         env:
           SMTP_HOST: ${{ secrets.SMTP_HOST }}
           SMTP_PORT: ${{ secrets.SMTP_PORT }}
@@ -18,7 +19,6 @@ jobs:
           SMTP_USERNAME: ${{ secrets.SMTP_USER }}
           SMTP_PASSWORD: ${{ secrets.SMTP_PASS }}
           SMTP_DASHBOARD_URL: ${{ secrets.SMTP_DASHBOARD_URL }}
-          API_BASE_URL: ${{ secrets.API_BASE_URL }}
         run: |
           echo "REDIS_HOST = redis" > configs/api/api.env
           echo "REDIS_PORT = 6379" >> configs/api/api.env
@@ -40,8 +40,10 @@ jobs:
           echo "SMTP_USERNAME = $SMTP_USERNAME" >> configs/api/api.env
           echo "SMTP_PASSWORD = $SMTP_PASSWORD" >> configs/api/api.env
           echo "SMTP_DASHBOARD_URL = $SMTP_DASHBOARD_URL" >> configs/api/api.env
+      - name: Prepare Frontend config
+        env:
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}
+        run: |
           echo "VITE_API_BASE_URL = $API_BASE_URL" > configs/frontend/frontend.env
-          chmod 777 setup.sh
-          chmod 777 spainews.sh
       - name: Run setup
         run: sudo ./setup.sh
