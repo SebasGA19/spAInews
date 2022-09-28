@@ -6,7 +6,8 @@
 
 <div class="card article-card">
 	<button
-		style="border: none; padding: 0;"
+		class="text-reset"
+		style="border: none; padding: 0; background-color: transparent;"
 		data-bs-toggle="modal"
 		data-bs-target="#{articleModalId}"
 	>
