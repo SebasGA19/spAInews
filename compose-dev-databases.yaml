@@ -33,7 +33,7 @@ services:
         source: ./mongo-initdb.d
         target: /docker-entrypoint-initdb.d
         read_only: true
-      - ./mongo-data:/data
+      - ./mongo-data:/data/db
   mariadb:
     networks:
       - spainews
