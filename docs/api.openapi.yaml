@@ -332,7 +332,7 @@ paths:
         '500':
           $ref: "#/components/responses/server-error"
   /search/{page}:
-    get:
+    post:
       tags:
         - News
       summary: Requests the latest news obtained from the crawler.
