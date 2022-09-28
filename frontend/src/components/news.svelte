@@ -7,9 +7,9 @@
 
 <div class="container">
 	<div class="row justify-content-center mt-5 mb-5">
-		{#each articles as article}
+		{#each articles as article, index}
 			<div class="col-md-5 col-sm-10 mb-3">
-				<NewsEntry {article} />
+				<NewsEntry article={article} articleModalId={`article-modal-${index}`}/>
 			</div>
 		{/each}
 	</div>
