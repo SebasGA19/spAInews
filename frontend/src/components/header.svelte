@@ -28,6 +28,7 @@
 
 <nav class="navbar navbar-expand-lg {darkModeChecked ? 'navbar-dark bg-dark' : 'bg-light'}">
 	<div class="container-fluid">
+		<a href="/" class="navbar-brand">spAInews</a>
 		<button
 			class="navbar-toggler"
 			type="button"
@@ -42,7 +43,7 @@
 		<div class="collapse navbar-collapse" id="navbarNav">
 			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 				<li class="nav-item">
-					<a href="/" class="nav-link">spAInews</a>
+					<a href="/search" class="nav-link">Search</a>
 				</li>
 			</ul>
 			<div class="d-flex" role="search">

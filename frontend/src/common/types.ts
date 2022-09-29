@@ -26,4 +26,13 @@ interface Words {
     words: string[];
 }
 
-export type {Article, Account, News, Words};
+interface SearchFilter {
+    "start-date"?: string,
+    "end-date"?: string,
+    "sources"?: string[],
+    "maintext-words"?: string[],
+    "title-words"?: string[],
+    "old-first"?: boolean
+}
+
+export type { Article, Account, News, Words, SearchFilter };
