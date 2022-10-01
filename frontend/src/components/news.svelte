@@ -5,12 +5,26 @@
 	export let articles: Article[] = [];
 </script>
 
-<div class="container">
-	<div class="row justify-content-center mt-5 mb-5">
-		{#each articles as article, index}
-			<div class="col-md-5 col-sm-10 mb-3">
-				<NewsEntry article={article} articleModalId={`article-modal-${index}`}/>
+<article class="col-md-12">
+	<div class="cards-1 section-gray">
+		<div class="container">
+			<div class="row justify-content-center">
+				{#each articles as article, index}
+					<div class="col-md-5 col-sm-10 mb-3">
+						<NewsEntry {article} articleModalId={`article-modal-${index}`} />
+					</div>
+				{/each}
 			</div>
-		{/each}
+		</div>
 	</div>
-</div>
+</article>
+
+<style>
+/*---------------------------------------------------------------------- /
+SECTIONS
+----------------------------------------------------------------------- */
+	.section-gray {
+		
+		padding: 60px 0 30px 0;
+	}
+</style>
