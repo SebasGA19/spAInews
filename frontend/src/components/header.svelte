@@ -74,8 +74,18 @@
 						</div>
 					{:else}
 						<li class="nav-item">
+							<button type="button" class="btn btn-outline-primary"
+								href="#"
+								on:click={() => {
+									darkModeChecked = !darkModeChecked;
+								}}>{darkModeChecked ? 'Dark' : 'Light'}</button
+							>
+						</li>
+
+						<li class="nav-item">
 							<Login />
 						</li>
+
 						<li class="nav-item">
 							<Register />
 						</li>
