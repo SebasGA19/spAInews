@@ -1,7 +1,21 @@
 <script lang="ts">
+	import { session } from '../stores/session';
 	import { darkMode } from '../stores/dark-mode';
 	import Header from '../components/header.svelte';
 	import Footer from '../components/footer.svelte';
+	import { onMount } from 'svelte';
+	import { accountDetails } from '../api/account';
+
+	onMount(() => {
+		if ($session !== '') {
+			accountDetails($session)
+				.then()
+				.catch((error) => {
+					alert('Session expired');
+					$session = '';
+				});
+		}
+	});
 </script>
 
 {#if $darkMode === 'dark'}

@@ -1,10 +1,17 @@
 <script lang="ts">
 	import { session, sessionUsername } from '../stores/session';
 	import { login } from '../api/login';
+	import { onMount } from 'svelte';
 
 	let username: string;
 	let password: string;
 	let errorMessage: string | undefined;
+	let loginModal: any;
+	onMount(() => {
+		loginModal = new bootstrap.Modal('#loginModal', {
+			keyboard: false
+		});
+	});
 
 	function handleLogin() {
 		login(username, password)
@@ -12,6 +19,7 @@
 				sessionUsername.set(username);
 				session.set(s);
 				location.reload();
+				loginModal.hide();
 			})
 			.catch((error) => {
 				errorMessage = error;
@@ -64,7 +72,9 @@
 						/>
 					</div>
 					<div class="mb-3">
-						<a href="/reset-password/request" class="text-reset">Forgot password?</a>
+						<a href="/reset-password/request" class="text-reset" on:click={loginModal.hide()}
+							>Forgot password?</a
+						>
 					</div>
 					<div class="text-center w-100">
 						<button type="submit" class="btn btn-primary">Submit</button>
