@@ -49,7 +49,7 @@
 			<div class="d-flex" role="search">
 				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 					{#if $session !== ''}
-						<li class="nav-item me-2">
+						<li class="nav-item me-2 mt-1">
 							<div class="dropdown-center">
 								<button
 									class="btn btn-primary dropdown-toggle"
@@ -66,15 +66,15 @@
 							</div>
 						</li>
 					{:else}
-						<li class="nav-item">
+						<li class="nav-item mt-1">
 							<Login />
 						</li>
 
-						<li class="nav-item">
+						<li class="nav-item mt-1">
 							<Register />
 						</li>
 					{/if}
-					<li class="nav-item">
+					<li class="nav-item mt-1">
 						<button
 							type="button"
 							class="btn btn-primary"
