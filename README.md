@@ -1,5 +1,7 @@
 # spAInews
 
+[![Test build and deploy](https://github.com/SebasGA19/spAInews/actions/workflows/pipeline.yaml/badge.svg)](https://github.com/SebasGA19/spAInews/actions/workflows/pipeline.yaml)
+
 ## Deploying
 
 Make sure you have `docker` and `docker-cli` installed (`docker desktop` should do the job on Windows).
