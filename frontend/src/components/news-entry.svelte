@@ -2,10 +2,22 @@
 	import type { Article } from 'src/common/types';
 	export let article: Article;
 	export let articleModalId: string;
+
+	function randomIntFromInterval(min: number, max: number): number {
+		// min and max included
+		return Math.floor(Math.random() * (max - min + 1) + min);
+	}
+
+	const articleImage: string = `/images/${article.category}-${randomIntFromInterval(1, 4)}.jpg`;
 </script>
+
 <div class="card card-blog">
 	<div class="card-image">
-		<img class="img" alt="..." src="/images/{article.category}-1.jpg" />
+		<img
+			class="img"
+			alt="..."
+			src="{articleImage}"
+		/>
 		<div class="ripple-cont" />
 	</div>
 	<div class="table">
@@ -86,7 +98,7 @@
 							{new Date(article.date_publish).toLocaleDateString()}
 						</div>
 					</div>
-					<img src="/images/{article.category}-1.jpg" class="card-img-top" alt="..." />
+					<img src="{articleImage}" class="card-img-top" alt="..." />
 					<p style="text-align: justify;" class="mt-5">
 						{#if article.maintext === undefined}
 							{article.description}
@@ -101,7 +113,7 @@
 </div>
 
 <style>
-/*---------------------------------------------------------------------- /
+	/*---------------------------------------------------------------------- /
 CARDS
 ----------------------------------------------------------------------- */
 	.card {
