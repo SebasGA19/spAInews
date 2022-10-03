@@ -1,6 +1,6 @@
 # spAInews
 
-[![Test build and deploy](https://github.com/SebasGA19/spAInews/actions/workflows/pipeline.yaml/badge.svg)](https://github.com/SebasGA19/spAInews/actions/workflows/pipeline.yaml)
+[![CI CD](https://github.com/SebasGA19/spAInews/actions/workflows/pipeline.yaml/badge.svg)](https://github.com/SebasGA19/spAInews/actions/workflows/pipeline.yaml)
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/SebasGA19/spAInews)](https://goreportcard.com/report/github.com/SebasGA19/spAInews)
 
