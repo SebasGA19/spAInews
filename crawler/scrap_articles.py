@@ -1,38 +1,31 @@
-from urllib.parse import urlparse
+from cmath import e
+from scrapper import noticia_cnn_solo , noticia_Huffpost_solo ,noticia_vice_solo , noticia_un_solo,noticia_tiempo_solo,noticia_today_solo
 
-import requests
-from newsplease import NewsPlease
-
-import common
-
-# {
-#   "title": "",
-#   "description": "",
-#   "maintext": "",
-#   "authors": [],
-#   "category": "finance",
-#   "date_publish": "DD/MM/YYYY",
-#   "source_domain": "abc.com",
-#   "url": "http://abc.com/article"
-# }
-
-
-def scrap(article_url: str) -> dict[str:any]:
+def scrap(article_url):
     try:
-        response = requests.get(article_url, headers=common.base_headers)
-        if response.status_code != 200:
+        if(str.__contains__(article_url,"edition.cnn")):
+            return noticia_cnn_solo(article_url)    
+        elif(str.__contains__(article_url,"vice.com")):
+            return noticia_vice_solo(article_url)
+        elif(str.__contains__(article_url,"huffpost.com")):
+            return noticia_Huffpost_solo(article_url)
+        elif(str.__contains__(article_url,"news.un.org")):
+            return noticia_un_solo(article_url)
+        elif(str.__contains__(article_url,"eltiempo.com")):
+            return noticia_tiempo_solo(article_url)
+        elif(str.__contains__(article_url,"usatoday.com")):
+            return noticia_today_solo(article_url)
+        else:
             return None
-        article_html = response.text
-        article = vars(NewsPlease.from_html(article_html))
-        return {
-            "title": article["title"],
-            "description": article["description"],
-            "maintext": article["maintext"],
-            "authors": article["authors"],
-            "date_publish": article["date_publish"],
-            "source_domain": urlparse(article_url).netloc,
-            "url": article_url
-        }
-    except Exception as e:
-        print(type(e), e)
-    return None
+    except:
+        print(e)
+   
+#p = print(scrap("https://edition.cnn.com/2022/09/30/business/nike-stock-discounts/index.html"))
+
+    
+
+
+
+
+
+    
