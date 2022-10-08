@@ -1,8 +1,7 @@
-from distutils.filelist import findall
 import json
-from operator import truediv
 from bs4 import BeautifulSoup
 import requests
+import datetime
 
 ##Páginas seleccionadas
 ##CNN 
@@ -21,10 +20,15 @@ def noticia_cnn_solo(url):
     contenido = resultado.text
     soup = BeautifulSoup(contenido,'html.parser')
     try:
+        fecha = (soup.find('div',class_="timestamp").get_text()).split(" ")
+        fecha_final = fecha[15]+"/" + fecha[14]+"/" + fecha[16]
+        fecha_final = ''.join( x for x in fecha_final if x not in ",")
+        fecha_final = ''.join( x for x in fecha_final if x not in "\n")
+        fecha_final_final = (datetime.datetime.strptime(fecha_final, '%d/%B/%Y'))
         cuerpo = soup.find('div',class_="article__content").get_text()
         p = {
-        "authors":soup.find('span',class_="byline__name").get_text(),
-        "date_publish":soup.find('div',class_="timestamp").get_text(),
+        "authors":[soup.find('span',class_="byline__name").get_text()],
+        "date_publish":fecha_final_final,
         "description":cuerpo.split(".")[0],
         "category":"",
         "language":"en",
@@ -35,9 +39,9 @@ def noticia_cnn_solo(url):
     }
     except:
         p = ""
-    return p   
+    return p 
     #data_principal.append(p)
-   
+
 ##CNN NEWS LINK
 def generar_cnn_varias(url):
     resultado = requests.get(url)
@@ -53,7 +57,7 @@ def generar_cnn_varias(url):
             print("NO SE PUDO")
 
 #generar_cnn_varias('https://edition.cnn.com/business')
-# noticia_cnn_solo('https://edition.cnn.com/2022/08/17/business/dodge-electric-muscle-car/index.html')
+#noticia_cnn_solo('https://edition.cnn.com/2022/08/17/business/dodge-electric-muscle-car/index.html')
 
 ##Huffpost
 ##Huffpost solo
@@ -63,9 +67,12 @@ def noticia_Huffpost_solo(url):
     soup = BeautifulSoup(contenido,'html.parser')
     try:
         cuerpo = soup.find('div',class_="entry__content-list-container js-cet-unit-buzz_body").get_text()
+        fecha = (soup.find('time')['datetime']).split("-")
+        fecha = fecha[1] + "/" + fecha[2][0:2] + "/" + fecha[0]
+        fecha = datetime.datetime.strptime(fecha, '%d/%m/%Y')
         p = {
-            "authors":soup.find('span',class_="entry-wirepartner__byline").get_text(),
-            "date_publish":soup.find('time').get_text(),
+            "authors":[soup.find('span',class_="entry-wirepartner__byline").get_text()],
+            "date_publish":fecha,
             "description":cuerpo.split(".")[0],
             "category":"",
             "language":"en",
@@ -77,9 +84,13 @@ def noticia_Huffpost_solo(url):
     except:
         try:
             cuerpo = soup.find('section',class_="entry__content-list js-entry-content js-cet-subunit").get_text()
+            cuerpo = soup.find('div',class_="entry__content-list-container js-cet-unit-buzz_body").get_text()
+            fecha = (soup.find('time')['datetime']).split("-")
+            fecha = fecha[1] + "/" + fecha[2][0:2] + "/" + fecha[0]
+            fecha = datetime.datetime.strptime(fecha, '%d/%m/%Y')
             p = {
-                "authors":soup.find('a',class_="js-entry-link cet-internal-link")['data-vars-item-name'],
-                "date_publish":soup.find('time')['datetime'],
+                "authors":[soup.find('a',class_="js-entry-link cet-internal-link")['data-vars-item-name']],
+                "date_publish":fecha,
                 "description":cuerpo.split(".")[0],
                 "category":"",
                 "language":"en",
@@ -90,7 +101,7 @@ def noticia_Huffpost_solo(url):
             }  
         except:
             p = ""
-    return p   
+    return p
     #data_principal.append(p)
 
 def generar_Huffpost_varias(url):
