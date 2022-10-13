@@ -1,3 +1,4 @@
+import datetime
 from urllib.parse import urlparse
 
 import requests
@@ -24,15 +25,28 @@ def scrap(article_url: str) -> dict[str:any]:
             return None
         article_html = response.text
         article = vars(NewsPlease.from_html(article_html))
+        date_publish = article["date_publish"]
+        now = datetime.datetime.now()
+        if now < date_publish:
+            date_publish = now
         return {
             "title": article["title"],
             "description": article["description"],
             "maintext": article["maintext"],
             "authors": article["authors"],
-            "date_publish": article["date_publish"],
+            "date_publish": date_publish,
             "source_domain": urlparse(article_url).netloc,
             "url": article_url
         }
     except Exception as e:
         print(type(e), e)
     return None
+
+
+def __main():
+    result = scrap("https://edition.cnn.com/2022/10/13/energy/opec-oil-prices-recession-iea/index.html")
+    print(result)
+
+
+if __name__ == "__main__":
+    __main()
