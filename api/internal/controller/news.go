@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	NumberOfResults = 9
+	NumberOfResults = 10
 )
 
 type (
