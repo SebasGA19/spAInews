@@ -4,7 +4,7 @@
 			<h5>SPAINEWS</h5>
 			<p>
 				<a href="https://github.com/SebasGA19/spAInews">SPAINEWS</a> is an OpenSource project. The word
-				is the combination of SPAIDER, AI and NEWS
+				is the combination of SPIDER, AI and NEWS
 			</p>
 		</div>
 		<div class="col">
