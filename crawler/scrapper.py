@@ -1,4 +1,6 @@
 import json
+from multiprocessing.util import sub_debug
+from time import time, time_ns
 from bs4 import BeautifulSoup
 import requests
 import datetime
@@ -128,9 +130,13 @@ def noticia_vice_solo(url):
     try:
         autor_sub = soup.find('div',class_="contributor__meta")
         cuerpo = soup.find('div',class_="article__body-components").get_text()
+        fecha = (soup.find('time')['datetime']).split("-")
+        subfecha = fecha[2][0:2]
+        fecha = subfecha+ "/" + fecha[1] +"/"+ fecha[0]
+        fecha = datetime.datetime.strptime(fecha, '%d/%m/%Y')
         p = {
-            "authors":autor_sub.findChild("a").get_text(),
-            "date_publish":soup.find('time')['datetime'],
+            "authors":[autor_sub.findChild("a").get_text()],
+            "date_publish":fecha,
             "description":cuerpo.split(".")[0],
             "category":"",
             "language":"en",
@@ -141,7 +147,7 @@ def noticia_vice_solo(url):
         }  
     except:
         p = ""
-      
+
     return p   
     #data_principal.append(p)
 
@@ -169,15 +175,17 @@ def noticia_un_solo(url):
     contenido = resultado.text
     soup = BeautifulSoup(contenido,'html.parser')
     try:
-        cuerpo_sub = soup.find('div',class_="clearfix text-formatted field field--name-field-text-column field--type-text-long field--label-hidden field__item")
         cuerpo_x = soup.findChildren('p')
+        fecha = (soup.find('time',class_="datetime").get_text()).split(" ")
+        fecha = fecha[0]+"/"+fecha[1]+"/"+fecha[2]
+        fecha = datetime.datetime.strptime(fecha, '%d/%B/%Y')
         cuerpo = ""
         for i in range(len(cuerpo_x)):
             if(not(str.__contains__(cuerpo_x[i].get_text(),"Twitter")) and not(str.__contains__(cuerpo_x[i].get_text(),"Email")) and not(str.__contains__(cuerpo_x[i].get_text(),"Facebook")) and not(str.__contains__(cuerpo_x[i].get_text(),"Print"))):
                 cuerpo = cuerpo + cuerpo_x[i].get_text() 
         p = {
-            "authors":soup.find('div',class_="field__item").get_text(),
-            "date_publish":soup.find('time',class_="datetime").get_text(),
+            "authors":["anonymous-un"],
+            "date_publish":fecha,
             "description":cuerpo.split(".")[0],
             "category":"",
             "language":"en",
@@ -187,10 +195,12 @@ def noticia_un_solo(url):
             "title":soup.find('span',class_="field field--name-title field--type-string field--label-hidden").get_text()
         } 
     except:
-            p = "sa"
-          
+            p = ""
+      
     return p   
     #data_principal.append(p)
+
+noticia_un_solo("https://news.un.org/en/story/2022/10/1129502")
         
 ##UN VARIAS
 def generar_un_varias(url):
@@ -216,23 +226,36 @@ def noticia_tiempo_solo(url):
     resultado = requests.get(url)
     contenido = resultado.text
     soup = BeautifulSoup(contenido,'html.parser')
-    contenedor_autor = soup.find('div',class_="author_data")
-    cuerpo_sub = soup.findAll('p',class_="contenido")
-    cuerpo = ""
-    for i in range(len(cuerpo_sub)):
-        cuerpo = cuerpo + cuerpo_sub[i].get_text()
-    p = {
-            "authors":contenedor_autor.findChild("span",class_="who-modulo who"),
-            "date_publish":contenedor_autor.findChild("span",class_="publishedAt").get_text(),
-            "description":cuerpo.split(".")[0],
-            "category":"",
-            "language":"en",
-            "source_domain":"TheTime",
-            "maintext":cuerpo,
-            "url":url,
-            "title":soup.find('h1',class_="titulo").get_text()
-        }  
-    return p   
+    try:
+        contenedor_autor = soup.find('div',class_="author_data")
+        cuerpo_sub = soup.findAll('p',class_="contenido")
+        cuerpo = ""
+        tiempo = soup.findChildren("span",class_="publishedAt")[2].get_text()
+        tiempo = ''.join( x for x in tiempo if x not in ',')
+        tiempo = tiempo.split(" ")
+        months = {1:"enero", 2: "febrero", 3:"marzo", 4:"abril", 5:"mayo", 6:"junio", 7:"julio", 8:"agosto",9:"septiembre",10:"octubre",11:"noviembre",12:"diciembre"}
+        for i in months:
+            if(months[i]==tiempo[2]):
+                tiempo[2] = str(i)
+        tiempo = tiempo[0]+"/"+tiempo[2]+"/"+tiempo[3]
+        tiempo = datetime.datetime.strptime(tiempo, '%d/%m/%Y')
+        for i in range(len(cuerpo_sub)):
+            cuerpo = cuerpo + cuerpo_sub[i].get_text()
+        p = {
+                "authors":[contenedor_autor.findChild("span",class_="nombre who").get_text()],
+                "date_publish":tiempo,
+                "description":cuerpo.split(".")[0],
+                "category":"",
+                "language":"en",
+                "source_domain":"TheTime",
+                "maintext":cuerpo,
+                "url":url,
+                "title":soup.find('h1',class_="titulo").get_text()
+            } 
+    except:
+        p=""
+
+    return p
     #data_principal.append(p)
 
 #El tiempo Varias
@@ -279,26 +302,35 @@ def noticia_today_solo(url):
     resultado = requests.get(url)
     contenido = resultado.text
     soup = BeautifulSoup(contenido,'html.parser')
-    cuerpo = soup.find_all("p",class_="gnt_ar_b_p")
-    cuerpo_principal = ""
-    for q in cuerpo:
-        cuerpo_principal = cuerpo_principal + "\n" + q.get_text()
-    p = {
-            "authors":soup.find("a",class_="gnt_ar_by_a").get_text(),
-            "date_publish":soup.find("div",class_="gnt_ar_dt")["aria-label"],
-            "description":cuerpo[0].get_text(),
-            "category":"",
-            "language":"en",
-            "source_domain":"usatoday.com",
-            "maintext":cuerpo_principal,
-            "url":url,
-            "title":soup.find("h1",class_="gnt_ar_hl").get_text()
-        }  
-    return p   
+    try:
+        cuerpo = soup.find_all("p",class_="gnt_ar_b_p")
+        cuerpo_principal = ""
+        tiempo = soup.find("div",class_="gnt_ar_dt")["aria-label"]
+        tiempo = ''.join( x for x in tiempo if x not in ',')
+        tiempo = ''.join( x for x in tiempo if x not in '.')
+        tiempo = tiempo.split(" ")
+        tiempo = tiempo[5]+"/"+ tiempo[4][0:3] + "/"+tiempo[6]
+        tiempo = datetime.datetime.strptime(tiempo, '%d/%b/%Y')
+        for q in cuerpo:
+            cuerpo_principal = cuerpo_principal + "\n" + q.get_text()
+        p = {
+                "authors":[soup.find("a",class_="gnt_ar_by_a").get_text()],
+                "date_publish":tiempo,
+                "description":cuerpo[0].get_text(),
+                "category":"",
+                "language":"en",
+                "source_domain":"usatoday.com",
+                "maintext":cuerpo_principal,
+                "url":url,
+                "title":soup.find("h1",class_="gnt_ar_hl").get_text()
+            }  
+    except:
+        p=""
+    return p
     #data_principal.append(p)
  
 #generar_today_varias("https://www.usatoday.com/")
-#noticia_today_solo("https://www.usatoday.com/story/news/politics/2022/09/19/pandemic-is-over-biden-comment-complicates-matters/10425981002/?gnt-cfr=1")
+#noticia_today_solo("https://www.usatoday.com/story/money/personalfinance/2022/10/15/buy-now-pay-later-affirm-afterpay-klarna/10462360002/?gnt-cfr=1")
 
 def main():
     generar_cnn_varias('https://edition.cnn.com/business')
