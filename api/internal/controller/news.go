@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	NumberOfResults = 9
+	NumberOfResults = 10
 )
 
 type (
@@ -80,13 +80,15 @@ func (c *Controller) SearchNews(page int64, searchFilter SearchFilter) ([]Articl
 	// Main text filter
 	if len(searchFilter.MainTextWords) > 0 {
 		filter["maintext"] = bson.M{
-			"$regex": fmt.Sprintf(".*%s.*", strings.Join(searchFilter.MainTextWords, ".*")),
+			"$regex":   fmt.Sprintf(".*%s.*", strings.Join(searchFilter.MainTextWords, ".*")),
+			"$options": "i",
 		}
 	}
 	// Title filter
 	if len(searchFilter.TitleWords) > 0 {
 		filter["title"] = bson.M{
-			"$regex": fmt.Sprintf(".*%s.*", strings.Join(searchFilter.TitleWords, ".*")),
+			"$regex":   fmt.Sprintf(".*%s.*", strings.Join(searchFilter.TitleWords, ".*")),
+			"$options": "i",
 		}
 	}
 	// Sources filter
