@@ -13,11 +13,7 @@
 
 <div class="card card-blog">
 	<div class="card-image">
-		<img
-			class="img"
-			alt="..."
-			src="{articleImage}"
-		/>
+		<img class="img" alt="..." src={articleImage} />
 		<div class="ripple-cont" />
 	</div>
 	<div class="table">
@@ -68,38 +64,45 @@
 				<div class="container-sm">
 					<div class="heading">
 						<h1><a href={article.url} target="_blank">{article.title}</a></h1>
-						<img style="width:100%; border-radius: 5px;" src="{articleImage}" alt="fotito">
-						<br><p class="modal-category"style="font-size: 18px; color: dodgerblue; text-align: left; font-family:'Times New Roman', Times, serif">{article.category}</p> 
-							<ul>   
-								<li><strong>Author:</strong>
-									{#if article.authors === undefined || article.authors.length === 0}
-                                        {article.source_domain}
-                                    {:else}
-                                        {article.authors[0]}
-                                        {#if article.authors.length > 1}
-                                            {#each article.authors.slice(1, article.authors.length) as author}
-                                                {author}
-                                            {/each}
-                                        {/if}
-                                    {/if}</li>
-								<li>|</li>
-								<li>{new Date(article.date_publish).toLocaleDateString()}</li>
-								<li>|</li>
-								<li><a href="http://{article.source_domain}">{article.source_domain}</a></li> 
-								
-							</ul>
-						</div>
-						
-						<div>
-							<hr>
-							<p class="news">
-								{#if article.maintext === undefined}
-                                {article.description}
+						<img style="width:100%; border-radius: 5px;" src={articleImage} alt="fotito" />
+						<br />
+						<p
+							class="modal-category"
+							style="font-size: 18px; color: dodgerblue; text-align: left; font-family:'Times New Roman', Times, serif"
+						>
+							{article.category}
+						</p>
+						<ul>
+							<li>
+								<strong>Author:</strong>
+								{#if article.authors === undefined || article.authors.length === 0}
+									{article.source_domain}
 								{:else}
-									{article.maintext}
+									{article.authors[0]}
+									{#if article.authors.length > 1}
+										{#each article.authors.slice(1, article.authors.length) as author}
+											{author}
+										{/each}
+									{/if}
 								{/if}
-							</p>
-						</div>
+							</li>
+							<li>|</li>
+							<li>{new Date(article.date_publish).toLocaleDateString()}</li>
+							<li>|</li>
+							<li><a href="http://{article.source_domain}">{article.source_domain}</a></li>
+						</ul>
+					</div>
+
+					<div>
+						<hr />
+						<p class="news">
+							{#if article.maintext === undefined}
+								{article.description}
+							{:else}
+								{article.maintext}
+							{/if}
+						</p>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -217,43 +220,32 @@ CARDS
 		text-align: justify;
 	}
 
-	.container-sm{
-    max-width:600px;
-}
-.modal-p{
-    font-family:Arial, Helvetica, sans-serif;
-    
-}
-.modal-a{
-    font-family:Arial, Helvetica, sans-serif;
-    font-weight: bold;
-    font-size: 30px;
-    text-decoration: none;
-}
+	.container-sm {
+		max-width: 600px;
+	}
 
-.news{
-    text-align: justify;
-}
+	.news {
+		text-align: justify;
+	}
 
-.heading ul{
-    list-style:none;
-    margin: 0;
-	display: inline-block;
-    padding: 0;
-}
-.heading li{
+	.heading ul {
+		list-style: none;
+		margin: 0;
+		display: inline-block;
+		padding: 0;
+	}
+	.heading li {
+		padding: 5px;
+		display: block;
+		float: left;
+		font-size: 12px;
+	}
 
-    padding: 5px ;
-    display: block;
-    float: left;
-    font-size: 12px;
-}
-
-.modal-category{
-	margin-top: 10px;
-	font-size: 18px; 
-	color: dodgerblue; 
-	text-align: left; 
-	font-family:'Times New Roman', Times, serif;
-}
+	.modal-category {
+		margin-top: 10px;
+		font-size: 18px;
+		color: dodgerblue;
+		text-align: left;
+		font-family: 'Times New Roman', Times, serif;
+	}
 </style>
