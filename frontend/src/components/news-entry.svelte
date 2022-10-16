@@ -59,53 +59,47 @@
 	aria-labelledby="{articleModalId}Label"
 	aria-hidden="true"
 >
-	<div class="modal-dialog modal-fullscreen">
+	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
 			</div>
 			<div class="modal-body">
-				<div class="container" style="max-width: 600px;">
-					<h2 style="text-align:justify;">
-						<a href={article.url} target="_blank">{article.title}</a>
-					</h2>
-					<div class="row">
-						<div class="col">
-							<strong>Category:</strong>
-							{article.category}
+				<div class="container-sm">
+					<div class="heading">
+						<h1><a href={article.url} target="_blank">{article.title}</a></h1>
+						<img style="width:100%; border-radius: 5px;" src="{articleImage}" alt="fotito">
+						<br><p class="modal-category"style="font-size: 18px; color: dodgerblue; text-align: left; font-family:'Times New Roman', Times, serif">{article.category}</p> 
+							<ul>   
+								<li><strong>Author:</strong>
+									{#if article.authors === undefined || article.authors.length === 0}
+                                        {article.source_domain}
+                                    {:else}
+                                        {article.authors[0]}
+                                        {#if article.authors.length > 1}
+                                            {#each article.authors.slice(1, article.authors.length) as author}
+                                                {author}
+                                            {/each}
+                                        {/if}
+                                    {/if}</li>
+								<li>|</li>
+								<li>{new Date(article.date_publish).toLocaleDateString()}</li>
+								<li>|</li>
+								<li><a href="http://{article.source_domain}">{article.source_domain}</a></li> 
+								
+							</ul>
 						</div>
-						<div class="col text-end">
-							<strong>News Source:</strong>
-							<a href="http://{article.source_domain}">{article.source_domain}</a>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col">
-							<strong>Author:</strong>
-							{#if article.authors === undefined || article.authors.length === 0}
-								{article.source_domain}
-							{:else}
-								{article.authors[0]}
-								{#if article.authors.length > 1}
-									{#each article.authors.slice(1, article.authors.length) as author}
-										{author}
-									{/each}
+						
+						<div>
+							<hr>
+							<p class="news">
+								{#if article.maintext === undefined}
+                                {article.description}
+								{:else}
+									{article.maintext}
 								{/if}
-							{/if}
+							</p>
 						</div>
-						<div class="col text-end">
-							<strong>Date Publish:</strong>
-							{new Date(article.date_publish).toLocaleDateString()}
-						</div>
-					</div>
-					<img src="{articleImage}" class="card-img-top" alt="..." />
-					<p style="text-align: justify;" class="mt-5">
-						{#if article.maintext === undefined}
-							{article.description}
-						{:else}
-							{article.maintext}
-						{/if}
-					</p>
 				</div>
 			</div>
 		</div>
@@ -222,4 +216,44 @@ CARDS
 		font-weight: 700;
 		text-align: justify;
 	}
+
+	.container-sm{
+    max-width:600px;
+}
+.modal-p{
+    font-family:Arial, Helvetica, sans-serif;
+    
+}
+.modal-a{
+    font-family:Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 30px;
+    text-decoration: none;
+}
+
+.news{
+    text-align: justify;
+}
+
+.heading ul{
+    list-style:none;
+    margin: 0;
+	display: inline-block;
+    padding: 0;
+}
+.heading li{
+
+    padding: 5px ;
+    display: block;
+    float: left;
+    font-size: 12px;
+}
+
+.modal-category{
+	margin-top: 10px;
+	font-size: 18px; 
+	color: dodgerblue; 
+	text-align: left; 
+	font-family:'Times New Roman', Times, serif;
+}
 </style>
