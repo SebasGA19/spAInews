@@ -11,37 +11,34 @@
 	const articleImage: string = `/images/${article.category}/${randomIntFromInterval(1, 4)}.jpg`;
 </script>
 
-<div class="card card-blog">
-	<div class="card-image">
+<div class="card w-100 article-card">
+	<div class="article-image">
 		<img class="img" alt="..." src={articleImage} />
-		<div class="ripple-cont" />
 	</div>
-	<div class="table">
-		<h6 class="category text-info">{article.category}</h6>
-		<h3 class="card-caption">
+	<div class="p-4 article-card-body">
+		<h6 class="mt-0 text-info mt-0 mb-0">{article.category}</h6>
+		<h4 class="card-title">
 			{article.title}
-		</h3>
+		</h4>
 		<p class="card-description">
 			{article.description}
 		</p>
-		<div class="ftr">
-			<div class="author">
+		<div class="row w-100 mt-0">
+			<div class="col article-card-author">
 				<strong>
 					{#if article.authors === undefined || article.authors.length === 0}
 						{article.source_domain}
 					{:else}
-						{#if article.authors[0].length <= 13}
 						{article.authors[0]}
 						{#if article.authors.length > 1}
-							...
-						{/if}
-						{:else}
-						...
+							{#each article.authors.slice(1, article.authors.length) as author}
+								, {author}
+							{/each}
 						{/if}
 					{/if}
 				</strong>
 			</div>
-			<div class="stats">
+			<div class="col w-100 d-flex justify-content-end">
 				<strong> {new Date(article.date_publish).toLocaleDateString()}</strong>
 			</div>
 		</div>
@@ -65,7 +62,7 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" />
 			</div>
 			<div class="modal-body">
-				<div class="container-sm">
+				<div class="container" style="max-width: 600px;">
 					<div class="heading">
 						<h1>
 							<a style="text-decoration: none;" href={article.url} target="_blank"
@@ -103,7 +100,7 @@
 
 					<div>
 						<hr />
-						<p class="news">
+						<p class="text-justify">
 							{#if article.maintext === undefined}
 								{article.description}
 							{:else}
@@ -118,193 +115,65 @@
 </div>
 
 <style>
-	/*---------------------------------------------------------------------- /
-CARDS
------------------------------------------------------------------------ */
-	@media screen and (width: 768px) {
-		.card {
-			display: inline-block;
-			box-sizing: border-box;
-			width: 28.5vh;
-		}
-	}
-	@media screen and (max-width: 360px) {
-		.card-description{
-			font-size: 10px;
-		}
-		.card-caption{
-			font-size: 15px;
-		}
-		
-	}
-	@media screen and (width: 375px) {
-		.card-description{
-			font-size: 10px;
-		}
-		.card-caption{
-			font-size: 15px;
-		}
-		
-	}
-	@media screen and (width: 414px) {
-		.card-description{
-			font-size: 10px;
-		}
-		.card-caption{
-			font-size: 15px;
-		}
-		
-	}
-	@media screen and (min-width: 2080px) {
-		.card-description{
-			font-size: 20px;
-		}
-		.card-caption{
-			font-size: 40px;
-		}
-	}
-	@media screen and (width:414px){
-		.card-description{
-			font-size: 12px;
-			overflow: hidden;
-			text-overflow: ellipsis;
-		}
-	}
-	@media screen and (width: 820px) {
-		.card {
-			display: block;
-			box-sizing: border-box;
-			width: 25vh;
-		}
-	}
-	.card {
-		height: 60vh;
-		display: inline-block;
-		position: relative;
-		margin-bottom: 40px;
+	/*
+	Card
+	*/
+	.article-card {
 		border-radius: 6px;
 		box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2),
 			0 1px 5px 0 rgba(0, 0, 0, 0.12);
 	}
 
-	.card .card-image {
-		height: 50%;
-		position: relative;
-		overflow: hidden;
-		margin-left: 2%;
-		margin-right: 2%;
-		margin-top: -10%;
+	.article-image {
+		transition: 1s;
+		height: 350px;
+		margin-left: 15px;
+		margin-right: 15px;
+		margin-top: -30px;
 		border-radius: 6px;
-		box-shadow: 0 16px 38px -12px rgba(0, 0, 0, 0.56), 0 4px 25px 0px rgba(0, 0, 0, 0.12),
+		box-shadow: 0 16px 10px -12px rgba(0, 0, 0, 0.56), 0 4px 25px 0px rgba(0, 0, 0, 0.12),
 			0 8px 10px -5px rgba(0, 0, 0, 0.2);
 	}
 
-	.card .card-image img {
-		border-radius: 6px;
-		pointer-events: none;
+	.article-image:hover {
+		transform: scale(1.02);
+	}
+
+	.article-image img {
+		object-fit: cover;
 		width: 100%;
 		height: 100%;
-		object-fit: cover;
-	}
-	.card .card-image .card-caption {
-		position: absolute;
-		bottom: 15px;
-		left: 15px;
-		font-size: 1.3em;
-		text-shadow: 0 2px 5px rgba(33, 33, 33, 0.5);
+		border-radius: 6px;
 	}
 
-	.card .ftr {
-		margin-top: 15px;
-	}
-
-	.card .ftr div {
-		display: inline-block;
-	}
-
-	.card .ftr .stats {
-		float: right;
-		line-height: 30px;
-	}
-	.card .ftr .author {
-		bottom: 80px;
-		position: absolute;
-		font-size: 14px;
-		margin-top: 5px;
-	}
-
-	.card .ftr .stats {
-		right: 22px;
-		bottom: 70px;
-		position: absolute;
-		font-size: 14px;
-	}
-
-	/* ============ Card Table ============ */
-
-	.table {
-		margin-bottom: 0px;
-	}
-
-	.card .table {
-		padding: 15px 30px;
-	}
-
-	/* ============ Card Blog ============ */
-
-	.card-blog {
-		margin-top: 30px;
-	}
-
-	/* ============ Card Category ============ */
-
-	.category {
-		position: relative;
-		line-height: 0;
-		margin: 15px 0;
-	}
-
-	/* ============ Card Author ============ */
-
-	.card .author a .ripple-cont {
-		display: none;
-	}
-
-	/* ============ Card Product ============ */
-
-	.card-product .ftr .stats {
-		margin-top: 4px;
-		top: 0;
+	.card-title {
+		text-align: justify;
+		height: 105px;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 
 	.card-description {
 		text-align: justify;
+		height: 105px;
 		overflow: hidden;
-		word-wrap: break-word;
-		display: -webkit-box;
-		-webkit-line-clamp: 3;
-		-webkit-box-orient: vertical;
-	}
-	.card-caption {
-		font-weight: 500;
-		text-align: justify;
-		overflow: hidden;
-		display: -webkit-box;
-		-webkit-line-clamp: 2;
-		-webkit-box-orient: vertical;
-	}
-	.btn {
-		bottom: 20px;
-		position: absolute;
+		text-overflow: ellipsis;
 	}
 
-	.container-sm {
-		max-width: 600px;
+	.article-card-author {
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 
-	.news {
-		text-align: justify;
+	ul li a,
+	p {
+		font-size: large;
 	}
+
+	/*
+	Modal
+	*/
 
 	.heading ul {
 		list-style: none;
@@ -320,15 +189,10 @@ CARDS
 	}
 
 	.modal-category {
+		margin-top: 10px;
+		font-size: 18px;
+		color: dodgerblue;
 		text-align: left;
 		font-family: 'Times New Roman', Times, serif;
-		margin-top: 10px;
-		color: dodgerblue;
-	}
-	ul li a {
-		font-size: 25px;
-	}
-	ul li p {
-		font-size: 25px;
 	}
 </style>
