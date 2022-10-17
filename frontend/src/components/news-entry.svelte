@@ -8,7 +8,7 @@
 		return Math.floor(Math.random() * (max - min + 1) + min);
 	}
 
-	const articleImage: string = `/images/${article.category}-${randomIntFromInterval(1, 4)}.jpg`;
+	const articleImage: string = `/images/${article.category}/${randomIntFromInterval(1, 4)}.jpg`;
 </script>
 
 <div class="card card-blog">
