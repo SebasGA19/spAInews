@@ -30,9 +30,13 @@
 					{#if article.authors === undefined || article.authors.length === 0}
 						{article.source_domain}
 					{:else}
+						{#if article.authors[0].length <= 13}
 						{article.authors[0]}
 						{#if article.authors.length > 1}
 							...
+						{/if}
+						{:else}
+						...
 						{/if}
 					{/if}
 				</strong>
