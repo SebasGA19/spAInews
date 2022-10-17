@@ -1,10 +1,8 @@
-# TODO: Mario implementa esto!!!!!!!!!!!
+import train_dataset
 
-import random
-
-
-categories = ["sports", "finance", "politics"]
 
 def analysis(article: dict[str:any]) -> dict[str:any]:
-    article["category"] = random.choice(categories) # TODO: FIX ME
+    body = article['maintext'] if 'maintext' in article.keys() else article['description']
+    category = train_dataset.check_news_type(body)
+    article["category"] = category
     return article

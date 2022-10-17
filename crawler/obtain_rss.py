@@ -10,7 +10,6 @@ pattern = re.compile(r'"https?://[0-9a-zA-Z_.-]+/[0-9a-zA-Z_./-]+\.?(?:rss|xml)"
 
 sources = [
     "https://edition.cnn.com/services/rss/",
-    "https://www.bbc.co.uk/news/10628494",
     "https://www.rt.com/rss-feeds/", # TODO: Fix me
     "https://www.foxnews.com/story/foxnews-com-rss-feeds"
 ]
@@ -32,3 +31,14 @@ def get_feeds() -> feedparser.util.FeedParserDict:
 def get_urls() -> str:
     for feed in get_feeds():
         yield feed["link"]
+
+
+def main():
+    for index, article in enumerate(get_feeds()):
+        print(article["title"], article["link"])
+        if index == 10:
+            break
+
+
+if __name__ == "__main__":
+    main()
