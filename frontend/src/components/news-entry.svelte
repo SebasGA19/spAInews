@@ -131,6 +131,33 @@ CARDS
 		.card-caption{
 			font-size: 15px;
 		}
+		
+	}
+	@media screen and (width: 375px) {
+		.card-description{
+			font-size: 10px;
+		}
+		.card-caption{
+			font-size: 15px;
+		}
+		
+	}
+	@media screen and (width: 414px) {
+		.card-description{
+			font-size: 10px;
+		}
+		.card-caption{
+			font-size: 15px;
+		}
+		
+	}
+	@media screen and (min-width: 2080px) {
+		.card-description{
+			font-size: 20px;
+		}
+		.card-caption{
+			font-size: 40px;
+		}
 	}
 	@media screen and (width:414px){
 		.card-description{
@@ -199,6 +226,7 @@ CARDS
 		bottom: 80px;
 		position: absolute;
 		font-size: 14px;
+		margin-top: 5px;
 	}
 
 	.card .ftr .stats {
