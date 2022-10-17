@@ -63,33 +63,37 @@
 			<div class="modal-body">
 				<div class="container-sm">
 					<div class="heading">
-						<h1><a href={article.url} target="_blank">{article.title}</a></h1>
+						<h1>
+							<a style="text-decoration: none;" href={article.url} target="_blank"
+								>{article.title}</a
+							>
+						</h1>
 						<img style="width:100%; border-radius: 5px;" src={articleImage} alt="fotito" />
 						<br />
-						<p
-							class="modal-category"
-							style="font-size: 18px; color: dodgerblue; text-align: left; font-family:'Times New Roman', Times, serif"
-						>
+						<p style="font-size:30px;" class="modal-category">
 							{article.category}
 						</p>
 						<ul>
+							{#if article.authors !== undefined && article.authors.length >= 1}
+								<li>
+									<p>
+										{article.authors[0]}
+										{#if article.authors.length > 1}
+											{#each article.authors.slice(1, article.authors.length) as author}
+												, {author}
+											{/each}
+										{/if}
+									</p>
+								</li>
+								<li><p>|</p></li>
+							{/if}
+							<li><p>{new Date(article.date_publish).toLocaleDateString()}</p></li>
+							<li><p>|</p></li>
 							<li>
-								<strong>Author:</strong>
-								{#if article.authors === undefined || article.authors.length === 0}
-									{article.source_domain}
-								{:else}
-									{article.authors[0]}
-									{#if article.authors.length > 1}
-										{#each article.authors.slice(1, article.authors.length) as author}
-											{author}
-										{/each}
-									{/if}
-								{/if}
+								<a style="text-decoration:none;" href="http://{article.source_domain}"
+									>{article.source_domain}</a
+								>
 							</li>
-							<li>|</li>
-							<li>{new Date(article.date_publish).toLocaleDateString()}</li>
-							<li>|</li>
-							<li><a href="http://{article.source_domain}">{article.source_domain}</a></li>
 						</ul>
 					</div>
 
@@ -113,10 +117,66 @@
 	/*---------------------------------------------------------------------- /
 CARDS
 ----------------------------------------------------------------------- */
+	@media screen and (width: 768px) {
+		.card {
+			display: inline-block;
+			box-sizing: border-box;
+			width: 28.5vh;
+		}
+	}
+	@media screen and (max-width: 360px) {
+		.card-description{
+			font-size: 10px;
+		}
+		.card-caption{
+			font-size: 15px;
+		}
+		
+	}
+	@media screen and (width: 375px) {
+		.card-description{
+			font-size: 10px;
+		}
+		.card-caption{
+			font-size: 15px;
+		}
+		
+	}
+	@media screen and (width: 414px) {
+		.card-description{
+			font-size: 10px;
+		}
+		.card-caption{
+			font-size: 15px;
+		}
+		
+	}
+	@media screen and (min-width: 2080px) {
+		.card-description{
+			font-size: 20px;
+		}
+		.card-caption{
+			font-size: 40px;
+		}
+	}
+	@media screen and (width:414px){
+		.card-description{
+			font-size: 12px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+	}
+	@media screen and (width: 820px) {
+		.card {
+			display: block;
+			box-sizing: border-box;
+			width: 25vh;
+		}
+	}
 	.card {
+		height: 60vh;
 		display: inline-block;
 		position: relative;
-		width: 100%;
 		margin-bottom: 40px;
 		border-radius: 6px;
 		box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2),
@@ -124,35 +184,30 @@ CARDS
 	}
 
 	.card .card-image {
-		height: 60%;
+		height: 50%;
 		position: relative;
 		overflow: hidden;
-		margin-left: 15px;
-		margin-right: 15px;
-		margin-top: -30px;
+		margin-left: 2%;
+		margin-right: 2%;
+		margin-top: -10%;
 		border-radius: 6px;
 		box-shadow: 0 16px 38px -12px rgba(0, 0, 0, 0.56), 0 4px 25px 0px rgba(0, 0, 0, 0.12),
 			0 8px 10px -5px rgba(0, 0, 0, 0.2);
 	}
 
 	.card .card-image img {
-		width: 100%;
-		height: 100%;
 		border-radius: 6px;
 		pointer-events: none;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
 	}
-
 	.card .card-image .card-caption {
 		position: absolute;
 		bottom: 15px;
 		left: 15px;
 		font-size: 1.3em;
 		text-shadow: 0 2px 5px rgba(33, 33, 33, 0.5);
-	}
-
-	.card img {
-		width: 100%;
-		height: auto;
 	}
 
 	.card .ftr {
@@ -167,10 +222,17 @@ CARDS
 		float: right;
 		line-height: 30px;
 	}
+	.card .ftr .author {
+		bottom: 80px;
+		position: absolute;
+		font-size: 14px;
+		margin-top: 5px;
+	}
 
 	.card .ftr .stats {
-		position: relative;
-		top: 1px;
+		right: 22px;
+		bottom: 70px;
+		position: absolute;
 		font-size: 14px;
 	}
 
@@ -213,11 +275,23 @@ CARDS
 
 	.card-description {
 		text-align: justify;
+		overflow: hidden;
+		word-wrap: break-word;
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;
 	}
-
 	.card-caption {
-		font-weight: 700;
+		font-weight: 500;
 		text-align: justify;
+		overflow: hidden;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+	}
+	.btn {
+		bottom: 20px;
+		position: absolute;
 	}
 
 	.container-sm {
@@ -242,10 +316,15 @@ CARDS
 	}
 
 	.modal-category {
-		margin-top: 10px;
-		font-size: 18px;
-		color: dodgerblue;
 		text-align: left;
 		font-family: 'Times New Roman', Times, serif;
+		margin-top: 10px;
+		color: dodgerblue;
+	}
+	ul li a {
+		font-size: 25px;
+	}
+	ul li p {
+		font-size: 25px;
 	}
 </style>
