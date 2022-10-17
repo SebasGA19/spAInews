@@ -4,7 +4,7 @@ import pickle
 
 import nltk
 
-nltk.download('omw-1.4')
+nltk.download('all')
 
 
 import pandas as pd
