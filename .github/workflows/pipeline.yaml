@@ -10,13 +10,13 @@ jobs:
     steps:
       - name: Clean environment
         run: rm -rf *
-      - name: Prepare environment
-        run: docker-compose -f ./compose-dev-databases.yaml down -v --remove-orphans -v && docker-compose -f ./compose-dev-databases.yaml up -d --build
       - uses: actions/checkout@v3
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
           go-version: 1.18
+      - name: Prepare environment
+        run: docker-compose -f ./compose-dev-databases.yaml down -v --remove-orphans -v && docker-compose -f ./compose-dev-databases.yaml up -d --build
       - name: Build
         run: go build -v ./...
       - name: Test
