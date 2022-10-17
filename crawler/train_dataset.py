@@ -2,11 +2,6 @@ import os
 import re
 import pickle
 
-import nltk
-
-nltk.download('all')
-
-
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from textblob import Word
