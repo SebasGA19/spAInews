@@ -84,8 +84,8 @@ La base de datos en la que depende la aplicación es `spainews` la colección `n
 
 ```json
 {
-	"title": "",
-	"description": "",
+    "title": "",
+    "description": "",
     "maintext": "",
     "authors": [],
     "category": "",

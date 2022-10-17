@@ -28,7 +28,12 @@
 
 <nav class="navbar navbar-expand-lg {darkModeChecked ? 'navbar-dark bg-dark' : 'bg-light'}">
 	<div class="container-fluid">
-		<a href="/" class="navbar-brand">spAInews</a>
+		{#if darkModeChecked}
+		<a href="/" class="navbar-brand"><img style="width:200px; height:auto;" src="/images/logo_dark_2.png" alt="logo"></a>
+		{:else}
+		<a href="/" class="navbar-brand"><img style="width:200px; height:auto;" src="/images/logo.png" alt="logo"></a>
+		{/if}
+		
 		<button
 			class="navbar-toggler"
 			type="button"
