@@ -10,7 +10,6 @@ pattern = re.compile(r'"https?://[0-9a-zA-Z_.-]+/[0-9a-zA-Z_./-]+\.?(?:rss|xml)"
 
 sources = [
     "https://edition.cnn.com/services/rss/",
-    "https://www.bbc.co.uk/news/10628494",
     "https://www.rt.com/rss-feeds/", # TODO: Fix me
     "https://www.foxnews.com/story/foxnews-com-rss-feeds"
 ]
