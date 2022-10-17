@@ -8,6 +8,8 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      - name: Clean environment
+        run: rm -rf *
       - uses: actions/checkout@v3
       - name: Set up Go
         uses: actions/setup-go@v3
