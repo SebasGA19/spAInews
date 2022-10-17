@@ -31,3 +31,14 @@ def get_feeds() -> feedparser.util.FeedParserDict:
 def get_urls() -> str:
     for feed in get_feeds():
         yield feed["link"]
+
+
+def main():
+    for index, article in enumerate(get_feeds()):
+        print(article["title"], article["link"])
+        if index == 10:
+            break
+
+
+if __name__ == "__main__":
+    main()
