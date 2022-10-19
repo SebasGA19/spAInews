@@ -17,12 +17,14 @@
 	</div>
 	<div class="p-4 article-card-body">
 		<h6 class="mt-0 text-info mt-0 mb-0">{article.category}</h6>
-		<h4 class="card-title">
-			{article.title}
-		</h4>
-		<p class="card-description">
-			{article.description}
-		</p>
+		<div class="article-card-details-block">
+			<h4 class="card-title">
+				{article.title}
+			</h4>
+			<p class="card-description">
+				{article.description}
+			</p>
+		</div>
 		<div class="row w-100 mt-0">
 			<div class="col article-card-author">
 				<strong>
@@ -146,17 +148,29 @@
 		border-radius: 6px;
 	}
 
+	.article-card-details-block {
+		height: 210px;
+		width: 100%;
+	}
 	.card-title {
+		max-height: 105px;
 		text-align: justify;
-		height: 105px;
 		overflow: hidden;
+		line-height: normal;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 3;
 		text-overflow: ellipsis;
 	}
 
 	.card-description {
+		max-height: 105px;
 		text-align: justify;
-		height: 105px;
 		overflow: hidden;
+		line-height: normal;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 3;
 		text-overflow: ellipsis;
 	}
 
