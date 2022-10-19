@@ -32,12 +32,12 @@ collection = db["news"]
 
 def insert_article(article: dict[str:any]) -> None:
     if collection.find_one(
-        {},
         {
             "title": article["title"],
             "maintext": article["maintext"],
             "authors": article["authors"],
             "source_domain": article["source_domain"],
+            "date_publish": article["date_publish"],
             "url": article["url"],
         }
     ) is not None:
