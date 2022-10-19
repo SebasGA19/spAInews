@@ -1,12 +1,11 @@
 import sys
-import os
 
 from pymongo import MongoClient
 from dotenv import dotenv_values
 
 if len(sys.argv) != 2:
     print(f"Usage: {sys.argv[0]} config.env", file=sys.stderr)
-    os.exit(1)
+    exit(1)
 
 env = dotenv_values(sys.argv[1])
 mongo_host = env["MONGO_HOST"]
@@ -20,8 +19,26 @@ client = MongoClient(mongoURL)
 db = client["spainews"]
 collection = db["news"]
 
+# {
+#   "title": "",
+#   "description": "",
+#   "maintext": "",
+#   "authors": [],
+#   "category": "finance",
+#   "date_publish": "DD/MM/YYYY",
+#   "source_domain": "abc.com",
+#   "url": "http://abc.com/article"
+# }
 
 def insert_article(article: dict[str:any]) -> None:
-    ref = article.copy()
-    del ref["category"]
-    collection.update_one(ref, {"$set": article}, upsert=True)
+    if collection.find_one(
+        {
+            "title": article["title"],
+            "maintext": article["maintext"],
+            "authors": article["authors"],
+            "source_domain": article["source_domain"],
+            "url": article["url"],
+        }
+    ) is not None:
+        return
+    collection.insert_one(article)

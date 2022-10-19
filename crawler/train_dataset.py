@@ -19,6 +19,8 @@ class Analysis(object):
 
 
 def clean_str(string):
+    if type(string) not in (str, bytes):
+        return ""
     """
     Tokenization/string cleaning for datasets.
     Original taken from https://github.com/yoonkim/CNN_sentence/blob/master/process_data.py

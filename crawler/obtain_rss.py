@@ -15,7 +15,7 @@ sources = [
 ]
 
 
-def get_feeds() -> feedparser.util.FeedParserDict:
+def __get_feeds() -> feedparser.util.FeedParserDict:
     for source in sources:
         try:
             response = requests.get(source, headers=common.base_headers)
@@ -29,15 +29,13 @@ def get_feeds() -> feedparser.util.FeedParserDict:
 
 
 def get_urls() -> str:
-    for feed in get_feeds():
+    for feed in __get_feeds():
         yield feed["link"]
 
 
 def main():
-    for index, article in enumerate(get_feeds()):
-        print(article["title"], article["link"])
-        if index == 10:
-            break
+    for url in get_urls():
+        print(url)
 
 
 if __name__ == "__main__":
