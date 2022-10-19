@@ -27,7 +27,7 @@ def scrap(article_url: str) -> dict[str:any]:
         article = vars(NewsPlease.from_html(article_html))
         date_publish = article["date_publish"]
         now = datetime.datetime.now()
-        if now < date_publish:
+        if date_publish is None or now < date_publish:
             date_publish = now
         return {
             "title": article["title"],
